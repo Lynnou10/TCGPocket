@@ -1,0 +1,68 @@
+[
+    {
+        "code": "Common",
+        "rarity": "◊",
+        "rarityOrder": 1,
+        "recycle": 0
+    },
+    {
+        "code": "Uncommon",
+        "rarity": "◊◊",
+        "rarityOrder": 2,
+        "recycle": 0
+    },
+    {
+        "code": "Rare",
+        "rarity": "◊◊◊",
+        "rarityOrder": 3,
+        "recycle": 25
+    },
+    {
+        "code": "Rare EX",
+        "rarity": "◊◊◊◊",
+        "rarityOrder": 4,
+        "recycle": 125
+    },
+    {
+        "code": "Full Art",
+        "rarity": "★",
+        "rarityOrder": 5,
+        "recycle": 100
+    },
+    {
+        "code": "Full Art EX/Support",
+        "rarity": "★★",
+        "rarityOrder": 6,
+        "recycle": 300
+    },
+    {
+        "code": "Immersive",
+        "rarity": "★★★",
+        "rarityOrder": 7,
+        "recycle": 300
+    },
+    {
+        "code": "Gold Crown",
+        "rarity": "♛",
+        "rarityOrder": 8,
+        "recycle": 1500
+    },
+    {
+        "code": "One shiny star",
+        "rarity": "✹",
+        "rarityOrder": 9,
+        "recycle": 250
+    },
+    {
+        "code": "Two shiny stars",
+        "rarity": "✹✹",
+        "rarityOrder": 10,
+        "recycle": 650
+    },
+    {
+        "code": "Promo",
+        "rarity": "Promo",
+        "rarityOrder": 100,
+        "recycle": 0
+    }
+]
