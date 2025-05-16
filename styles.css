@@ -50,7 +50,7 @@ body {
 
 .card {
     width: 183.5px;
-    height: 296px;
+    height: 286px;
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 10px;
@@ -70,7 +70,8 @@ body {
 
 .card-name {
     width: 183.5px;
-    height: 20px;
+    margin-top: 3px;
+    height: 25px;
     display: block;
 }
 

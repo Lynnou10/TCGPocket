@@ -120,7 +120,7 @@
             return (
                 <div>
                     <div className="menu">
-                        <button onClick={() => setPage('missing')}>Missing cards</button>
+                        <button onClick={() => setPage('missing')}>Missing Cards</button>
                         <button onClick={() => setPage('trade')}>Trade Cards</button>
                     </div>
                     { page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> : page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> : <div>TEMP</div>}

@@ -139,7 +139,8 @@ def groupTradeCards(cards):
         return cards
 
 def getTradeCards(collection):
-    tradeCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
+    tradeCards = collection[collection['quantity'] > 0]
+    tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
     tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < 6 and set_id != "PA" and set != "{active_extention}"')
     tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
     try:
