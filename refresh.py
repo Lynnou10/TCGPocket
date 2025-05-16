@@ -99,6 +99,8 @@ def getMissingCards(collection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
     missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder']]
     missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1 and set != "{active_extention}"').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
+    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder']]
+    missingCards = pd.concat([missingCards, oneStarMissing])
     try:
         remove('./output/missing_cards.csv')
     except OSError as error:

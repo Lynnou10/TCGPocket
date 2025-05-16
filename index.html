@@ -8,7 +8,7 @@
   </head>
   <body>
 
-    <div id="mydiv"></div>
+    <div id="app"></div>
 
     <script type="text/babel">
 
@@ -123,12 +123,9 @@
                         checked={missingCardsHeaderProps.filters.fullyMissing}
                         onChange={handleChange}
                         />
-                        
                     </label>
                 </div>
             )
-
-
         };
 
         const MissingCardsDashboard = () => {
@@ -224,7 +221,7 @@
         };
         // **********
 
-        const container = document.getElementById('mydiv');
+        const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
         Promise.all([missingCardsRequest, tradeCardsRequest]).then((results) => {
