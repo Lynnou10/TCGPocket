@@ -107,7 +107,7 @@ def getMissingCards(collection):
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF MISSING CARDS: {missingCards["set_id"].count()}')
-    missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id', 'rarityOrder'])
+    missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
     missingCards.to_csv('./output/missing_cards.csv', index=False, encoding='utf-8')
     missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
 
@@ -146,7 +146,7 @@ def getTradeCards(collection):
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
-    tradeCards = tradeCards.drop(columns=['set_id', 'rarityOrder', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities', 'card_name'])
+    tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities', 'card_name'])
     tradeCards.to_csv('./output/trade_cards.csv', index=False, encoding='utf-8') 
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
 

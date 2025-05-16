@@ -11,8 +11,6 @@
     <div id="app"></div>
 
     <script type="text/babel">
-
-        let displayedMissingCards = null
         const missingCardsRequest = fetch('./output/missing_cards.json').then((response) => response.json());
         const tradeCardsRequest = fetch('./output/trade_cards.json').then((response) => response.json());
         
@@ -21,8 +19,101 @@
         const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
         const isSetInCardsCollection = (cardsCollection, setKey) => Object.keys(cardsCollection).includes(setKey);
         const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
+        const formatCards = (cardsData, filters) => {
+            const cards = {};
+            cardsData.forEach((card) => {
+                if(filterCard(card, filters)) {
+                    const setKey = getSetFromCards(card.set)
+                    if(isSetInCardsCollection(cards, setKey)) {
+                        cards[setKey].cards.push(card);
+                    } else {
+                        cards[setKey] = {
+                            setName: card.set,
+                            cards: [card]
+                        };
+                    }
+                }
+            });
+            return cards
+        };
+        const filterCard = (card, filters) => {
+            const conditions = [true]
+            if(filters) {
+                if(filters.fullyMissing) {
+                    conditions.push(card.quantity === 0);
+                }
+                if(!filters.oneDiamond && card.rarityOrder === 1) {
+                    conditions.push(false);
+                }
+                if(!filters.twoDiamonds && card.rarityOrder === 2) {
+                    conditions.push(false);
+                }
+                if(!filters.threeDiamonds && card.rarityOrder === 3) {
+                    conditions.push(false);
+                }
+                if(!filters.fourDiamonds && card.rarityOrder === 4) {
+                    conditions.push(false);
+                }
+                if(!filters.oneStar && card.rarityOrder === 5) {
+                    conditions.push(false);
+                }
+                return conditions.reduce(
+                    (previousValue, currentValue) => previousValue && currentValue,
+                    true
+                );
+            } else {
+                return true
+            }
+        };
+        const CheckBoxfilter = (checkBoxfilterProps) => {
+            const {label, value, handleChange, filterName} = checkBoxfilterProps;
+            return (
+                <div className="filter">
+                    <label>
+                        {label}:
+                        <input
+                        type="checkbox"
+                        checked={value}
+                        onChange={() => handleChange(filterName, !value)}
+                        />
+                    </label>
+                </div>
+            )
+        };
+        const Filters = (filtersProps) => {
+            const {init, refresh, hide} = filtersProps;
+            const [filters, setFilters] = React.useState({
+                fullyMissing: false,
+                oneDiamond: true,
+                twoDiamonds: true,
+                threeDiamonds: true,
+                fourDiamonds: true,
+                oneStar: true
+            });
 
-        const App = () => {
+            const handleChange = (filterName, filterValue) => {
+                const newFilters = {
+                    ...filters
+                };
+                newFilters[filterName] = filterValue
+                setFilters(newFilters)
+                refresh(newFilters)
+            };
+
+            return (
+                <div className="filters">
+                    {hide && hide.fullyMissing ? <></> : <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/>}
+                    {hide && hide.oneDiamond ? <></> : <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/>}
+                    {hide && hide.twoDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/>}
+                    <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>
+                    <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>
+                    <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>
+                </div>
+            )
+        };
+
+        const App = (appProps) => {
+            const { missingCards, tradeCards} = appProps
             const [page, setPage] = React.useState('missing');
 
             return (
@@ -31,70 +122,45 @@
                         <button onClick={() => setPage('missing')}>Missing cards</button>
                         <button onClick={() => setPage('trade')}>Trade Cards</button>
                     </div>
-                    { page === 'missing' ? <MissingCardsDashboard/> : page === 'trade' ? <TradeCardsDashboard/> : <div>TEMP</div>}
+                    { page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> : page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> : <div>TEMP</div>}
                 </div>
             ); 
         };
         // **********
 
         //MISSING CARDS
-        let missingCardsData = [];
-        
-        const filterMissingCard = (missingCard, filters) => {
-            if(filters.fullyMissing) {
-                return missingCard.quantity === 0;
-            }
-            return true;
-        }
-
-        const formatMissingCards = (filters) => {
-            const missingCards = {};
-            missingCardsData.forEach((missingCard) => {
-                if(filterMissingCard(missingCard, filters)) {
-                    const setKey = getSetFromCards(missingCard.set)
-                    if(isSetInCardsCollection(missingCards, setKey)) {
-                        missingCards[setKey].cards.push(missingCard);
-                    } else {
-                        missingCards[setKey] = {
-                            setName: missingCard.set,
-                            cards: [missingCard]
-                        };
-                    }
-                }
-            });
-            return missingCards
-        }
-
         const MissingCard = (cardProps) => {
+            const {set, missingCard} = cardProps;
             return (
                 <div className="card">
                     <div className="card-image">
                         <img
-                            src={`${cardsBaseUrl}/${cardProps.set}/${cardProps.set}_${getCardNumberForDisplay(cardProps.missingCard.card_id)}_EN.webp`}
+                            src={`${cardsBaseUrl}/${set}/${set}_${getCardNumberForDisplay(missingCard.card_id)}_EN.webp`}
                         />
                     </div>
                     <div className="card-name">
-                        {cardProps.missingCard.card_id} - {cardProps.missingCard.name}
+                        {missingCard.card_id} - {missingCard.name}
                     </div>
                     <div className="card-counter">
-                        {cardProps.missingCard.quantity}
+                        {missingCard.quantity}
                     </div>
                     <div className="card-pack-name">
-                        {cardProps.missingCard.pack}
+                        {missingCard.pack}
                     </div>
                 </div>
             )
         };
 
         const MissingCards = (cardsProps) => {
+            const {missingCards} = cardsProps;
             return (
                 <div key="missing-cards">
                     {
-                        Object.keys(cardsProps.missingCards).sort().map(set => 
+                        Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className="set-name">{cardsProps.missingCards[set].setName}</div>
+                                <div className="set-name">{missingCards[set].setName}</div>
                                 {
-                                    cardsProps.missingCards[set].cards.map(
+                                    missingCards[set].cards.map(
                                         missingCard => <MissingCard
                                             key={`${set}-${missingCard.card_id}`}
                                             set={set}
@@ -109,40 +175,14 @@
             )
         };
 
-        const MissingCardsHeader = (missingCardsHeaderProps) => {
-            const handleChange = () => {
-                missingCardsHeaderProps.filtersChange({fullyMissing: !missingCardsHeaderProps.filters.fullyMissing})
-            };
-
-            return (
-                <div className="missing-filters">
-                    <label>
-                        Only missing: 
-                        <input
-                        type="checkbox"
-                        checked={missingCardsHeaderProps.filters.fullyMissing}
-                        onChange={handleChange}
-                        />
-                    </label>
-                </div>
-            )
-        };
-
-        const MissingCardsDashboard = () => {
-            const [filters, setFilters] = React.useState({
-                fullyMissing: true
-            });
-            const [missingCards, setMissingCards] = React.useState(formatMissingCards(filters));
-
-            const filtersChange = (newFilters) => {
-                setFilters(newFilters)
-                setMissingCards(formatMissingCards(newFilters))
-            };
+        const MissingCardsDashboard = (cardsDashboardProps) => {
+            const {cards} = cardsDashboardProps;
+            const [missingCards, setMissingCards] = React.useState(formatCards(cards));
 
             return (
                 <div>
                     <div className="page-title">Missing cards</div>
-                    <MissingCardsHeader filters={filters} filtersChange={filtersChange}/>
+                    <Filters refresh={(filters) => setMissingCards(formatCards(cards, filters))}/>
                     <MissingCards missingCards={missingCards}/>
                 </div>
             )
@@ -150,51 +190,35 @@
         // **********
 
         //TRADE CARDS
-        let tradeCardsData = [];
-
-        const formatTradeCards = () => {
-            const tradeCards = {};
-            tradeCardsData.forEach((tradeCard) => {
-                const setKey = getSetFromCards(tradeCard.set)
-                if(isSetInCardsCollection(tradeCards, setKey)) {
-                    tradeCards[setKey].cards.push(tradeCard);
-                } else {
-                    tradeCards[setKey] = {
-                        setName: tradeCard.set,
-                        cards: [tradeCard]
-                    };
-                }
-            });
-            return tradeCards
-        }
-
         const TradeCard = (cardProps) => {
+            const {set, tradeCard} = cardProps;
             return (
                 <div className="card">
                     <div className="card-image">
                         <img
-                            src={`${cardsBaseUrl}/${cardProps.set}/${cardProps.set}_${getCardNumberForDisplay(cardProps.tradeCard.card_id)}_EN.webp`}
+                            src={`${cardsBaseUrl}/${set}/${set}_${getCardNumberForDisplay(tradeCard.card_id)}_EN.webp`}
                         />
                     </div>
                     <div className="card-name">
-                        {cardProps.tradeCard.card_id} - {cardProps.tradeCard.name}
+                        {tradeCard.card_id} - {tradeCard.name}
                     </div>
                     <div className="card-counter">
-                        {cardProps.tradeCard.quantity}
+                        {tradeCard.quantity}
                     </div>
                 </div>
             )
         };
 
         const TradeCards = (cardsProps) => {
+            const {tradeCards} = cardsProps;
             return (
                 <div key="trade-cards">
                     {
-                        Object.keys(cardsProps.tradeCards).sort().map(set => 
+                        Object.keys(tradeCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className="set-name">{cardsProps.tradeCards[set].setName}</div>
+                                <div className="set-name">{tradeCards[set].setName}</div>
                                 {
-                                    cardsProps.tradeCards[set].cards.map(
+                                    tradeCards[set].cards.map(
                                         tradeCard => <TradeCard
                                             key={`${set}-${tradeCard.card_id}`}
                                             set={set}
@@ -209,12 +233,18 @@
             )
         };
 
-        const TradeCardsDashboard = () => {
-            const [tradeCards, setTradeCards] = React.useState(formatTradeCards());
+        const TradeCardsDashboard = (cardsDashboardProps) => {
+            const {cards} = cardsDashboardProps;
+            const [filters, setFilters] = React.useState({});
+            const [tradeCards, setTradeCards] = React.useState(formatCards(cards));
 
             return (
                 <div>
                     <div className="page-title">Trade cards</div>
+                    <Filters
+                        refresh={(filters) => setTradeCards(formatCards(cards, filters))}
+                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true}}
+                    />
                     <TradeCards tradeCards={tradeCards}/>
                 </div>
             )
@@ -225,9 +255,7 @@
         const root = ReactDOM.createRoot(container);
 
         Promise.all([missingCardsRequest, tradeCardsRequest]).then((results) => {
-            missingCardsData = results[0];
-            tradeCardsData = results[1];
-            root.render(<App />)
+            root.render(<App missingCards={results[0]} tradeCards={results[1]}/>)
         }).catch(function(err) {
             console.log(err);
         })

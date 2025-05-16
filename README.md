@@ -3,7 +3,6 @@ Python 3.11.3
 CARD DB: https://github.com/hugoburguete/pokemon-tcg-pocket-card-database/tree/main/cards/en
 
 GERER PAGE WEB AFFICHAGE DES CARTES:
-    MISSING + TARDE => FILTRE RARETE
     MISSING => COST PACK et COST ECHANGE
     MISSING => COST ECHANGE TOTAL POUR CE QUI EST AFFICHE
     RECYCLE (POUR UNE CARTE ET TOTAL PAR CARTE)
