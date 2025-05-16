@@ -1,72 +1,68 @@
-card_id,set,name,pack,quantity,rarity,rarityOrder
-33,Celestial Guardians (A3),Félinferno EX,Solgaleo,0,◊◊◊◊,4.0
-104,Celestial Guardians (A3),Quartermac EX,Lunala,0,◊◊◊◊,4.0
-22,Celestial Guardians (A3),Sarmuraï,Solgaleo,0,◊◊◊,3.0
-24,Celestial Guardians (A3),Tokotoro,Solgaleo,0,◊◊◊,3.0
-29,Celestial Guardians (A3),Flambusard,Solgaleo,0,◊◊◊,3.0
-65,Celestial Guardians (A3),Lucanon,Lunala,0,◊◊◊,3.0
-101,Celestial Guardians (A3),Lougaroc,Lunala,0,◊◊◊,3.0
-109,Celestial Guardians (A3),Persian d'Alola,Solgaleo,0,◊◊◊,3.0
-124,Celestial Guardians (A3),Draïeul,Solgaleo,0,◊◊◊,3.0
-127,Celestial Guardians (A3),Miraidon,Lunala,0,◊◊◊,3.0
-140,Celestial Guardians (A3),Gouroutan,Lunala,0,◊◊◊,3.0
-53,Celestial Guardians (A3),Tarenbulle,Solgaleo,0,◊◊,2.0
-23,Celestial Guardians (A3),Sinistrail EX,Solgaleo,1,◊◊◊◊,4.0
-49,Celestial Guardians (A3),Crabominable EX,Solgaleo,1,◊◊◊◊,4.0
-58,Celestial Guardians (A3),Raichu d'Alola EX,Solgaleo,1,◊◊◊◊,4.0
-87,Celestial Guardians (A3),Lunala EX,Lunala,1,◊◊◊◊,4.0
-111,Celestial Guardians (A3),Grotadmorv d'Alola EX,Lunala,1,◊◊◊◊,4.0
-59,Mythical Island (A1a),Roucarnage EX,Mew,1,◊◊◊◊,4.0
-67,Space-Time Smackdown (A2),Magirêve EX,Palkia,1,◊◊◊◊,4.0
-99,Space-Time Smackdown (A2),Dimoret EX,Palkia,1,◊◊◊◊,4.0
-37,Celestial Guardians (A3),Boumata,Lunala,1,◊◊◊,3.0
-61,Celestial Guardians (A3),Grolem d'Alola,Solgaleo,1,◊◊◊,3.0
-82,Celestial Guardians (A3),Trépassable,Solgaleo,1,◊◊◊,3.0
-88,Celestial Guardians (A3),Necrozma,Lunala,1,◊◊◊,3.0
-96,Celestial Guardians (A3),Bétochef,Lunala,1,◊◊◊,3.0
-112,Celestial Guardians (A3),Absol,Lunala,1,◊◊◊,3.0
-121,Celestial Guardians (A3),Trousselin,Solgaleo,1,◊◊◊,3.0
-139,Celestial Guardians (A3),Chelours,Lunala,1,◊◊◊,3.0
-22,Genetic Apex (A1),Noadkoko,Charizard,1,◊◊◊,3.0
-40,Genetic Apex (A1),Arcanin,Pikachu,1,◊◊◊,3.0
-46,Genetic Apex (A1),Sulfura,Charizard,1,◊◊◊,3.0
-61,Genetic Apex (A1),Tartard,Charizard,1,◊◊◊,3.0
-83,Genetic Apex (A1),Artikodin,Mewtwo,1,◊◊◊,3.0
-102,Genetic Apex (A1),Voltali,Pikachu,1,◊◊◊,3.0
-109,Genetic Apex (A1),Ohmassacre,Mewtwo,1,◊◊◊,3.0
-145,Genetic Apex (A1),Mackogneur,Charizard,1,◊◊◊,3.0
-149,Genetic Apex (A1),Grolem,Pikachu,1,◊◊◊,3.0
-159,Genetic Apex (A1),Kabutops,Charizard,1,◊◊◊,3.0
-182,Genetic Apex (A1),Melmetal,Charizard,1,◊◊◊,3.0
-203,Genetic Apex (A1),Kangourex,Charizard,1,◊◊◊,3.0
-210,Genetic Apex (A1),Ptéra,Mewtwo,1,◊◊◊,3.0
-45,Mythical Island (A1a),Grolem,Mew,1,◊◊◊,3.0
-12,Space-Time Smackdown (A2),Torterra,Palkia,1,◊◊◊,3.0
-20,Space-Time Smackdown (A2),Phyllali,Dialga,1,◊◊◊,3.0
-24,Space-Time Smackdown (A2),Maganon,Palkia,1,◊◊◊,3.0
-37,Space-Time Smackdown (A2),Pingoléon,Palkia,1,◊◊◊,3.0
-46,Space-Time Smackdown (A2),Givrali,Palkia,1,◊◊◊,3.0
-72,Space-Time Smackdown (A2),Noctunoir,Dialga,1,◊◊◊,3.0
-129,Space-Time Smackdown (A2),Porygon,Palkia,1,◊◊◊,3.0
-9,Triumphant Light (A2a),Vortente,Arceus,1,◊◊◊,3.0
-21,Triumphant Light (A2a),Blizzaroi,Arceus,1,◊◊◊,3.0
-55,Triumphant Light (A2a),Magnézone,Arceus,1,◊◊◊,3.0
-60,Triumphant Light (A2a),Dialga Forme Originelle,Arceus,1,◊◊◊,3.0
-8,Celestial Guardians (A3),Desséliande,Solgaleo,1,◊◊,2.0
-34,Celestial Guardians (A3),Plumeline,Lunala,1,◊◊,2.0
-60,Celestial Guardians (A3),Gravalanch d'Alola,Solgaleo,1,◊◊,2.0
-95,Celestial Guardians (A3),Ouvrifier,Lunala,1,◊◊,2.0
-126,Celestial Guardians (A3),Miraidon,Lunala,1,◊◊,2.0
-44,Triumphant Light (A2a),Charmina,Arceus,1,◊◊,2.0
-59,Celestial Guardians (A3),Racaillou d'Alola,Solgaleo,1,◊,1.0
-138,Celestial Guardians (A3),Nounourson,Lunala,1,◊,1.0
-157,Celestial Guardians (A3),Spododo,Lunala,0,★,5.0
-158,Celestial Guardians (A3),Sucreine,Solgaleo,0,★,5.0
-160,Celestial Guardians (A3),Ossatueur d'Alola,Lunala,0,★,5.0
-161,Celestial Guardians (A3),Boumata,Lunala,0,★,5.0
-163,Celestial Guardians (A3),Concombaffe,Lunala,0,★,5.0
-169,Celestial Guardians (A3),Bacabouh,Solgaleo,0,★,5.0
-171,Celestial Guardians (A3),Cosmog,Lunala,0,★,5.0
-177,Celestial Guardians (A3),Picassaut,Lunala,0,★,5.0
-178,Celestial Guardians (A3),Chelours,Lunala,0,★,5.0
-179,Celestial Guardians (A3),Dodoala,Solgaleo,0,★,5.0
+card_id,set,name,pack,quantity,rarity,rarityOrder,tradeCost,pointCost
+33,Celestial Guardians (A3),Félinferno EX,Solgaleo,0,◊◊◊◊,4.0,500.0,500.0
+104,Celestial Guardians (A3),Quartermac EX,Lunala,0,◊◊◊◊,4.0,500.0,500.0
+22,Celestial Guardians (A3),Sarmuraï,Solgaleo,0,◊◊◊,3.0,120.0,150.0
+24,Celestial Guardians (A3),Tokotoro,Solgaleo,0,◊◊◊,3.0,120.0,150.0
+29,Celestial Guardians (A3),Flambusard,Solgaleo,0,◊◊◊,3.0,120.0,150.0
+65,Celestial Guardians (A3),Lucanon,Lunala,0,◊◊◊,3.0,120.0,150.0
+101,Celestial Guardians (A3),Lougaroc,Lunala,0,◊◊◊,3.0,120.0,150.0
+109,Celestial Guardians (A3),Persian d'Alola,Solgaleo,0,◊◊◊,3.0,120.0,150.0
+124,Celestial Guardians (A3),Draïeul,Solgaleo,0,◊◊◊,3.0,120.0,150.0
+127,Celestial Guardians (A3),Miraidon,Lunala,0,◊◊◊,3.0,120.0,150.0
+140,Celestial Guardians (A3),Gouroutan,Lunala,0,◊◊◊,3.0,120.0,150.0
+53,Celestial Guardians (A3),Tarenbulle,Solgaleo,0,◊◊,2.0,0.0,70.0
+23,Celestial Guardians (A3),Sinistrail EX,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
+49,Celestial Guardians (A3),Crabominable EX,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
+58,Celestial Guardians (A3),Raichu d'Alola EX,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
+87,Celestial Guardians (A3),Lunala EX,Lunala,1,◊◊◊◊,4.0,500.0,500.0
+111,Celestial Guardians (A3),Grotadmorv d'Alola EX,Lunala,1,◊◊◊◊,4.0,500.0,500.0
+59,Mythical Island (A1a),Roucarnage EX,Mew,1,◊◊◊◊,4.0,500.0,500.0
+67,Space-Time Smackdown (A2),Magirêve EX,Palkia,1,◊◊◊◊,4.0,500.0,500.0
+99,Space-Time Smackdown (A2),Dimoret EX,Palkia,1,◊◊◊◊,4.0,500.0,500.0
+37,Celestial Guardians (A3),Boumata,Lunala,1,◊◊◊,3.0,120.0,150.0
+61,Celestial Guardians (A3),Grolem d'Alola,Solgaleo,1,◊◊◊,3.0,120.0,150.0
+82,Celestial Guardians (A3),Trépassable,Solgaleo,1,◊◊◊,3.0,120.0,150.0
+88,Celestial Guardians (A3),Necrozma,Lunala,1,◊◊◊,3.0,120.0,150.0
+96,Celestial Guardians (A3),Bétochef,Lunala,1,◊◊◊,3.0,120.0,150.0
+112,Celestial Guardians (A3),Absol,Lunala,1,◊◊◊,3.0,120.0,150.0
+121,Celestial Guardians (A3),Trousselin,Solgaleo,1,◊◊◊,3.0,120.0,150.0
+139,Celestial Guardians (A3),Chelours,Lunala,1,◊◊◊,3.0,120.0,150.0
+22,Genetic Apex (A1),Noadkoko,Charizard,1,◊◊◊,3.0,120.0,150.0
+40,Genetic Apex (A1),Arcanin,Pikachu,1,◊◊◊,3.0,120.0,150.0
+46,Genetic Apex (A1),Sulfura,Charizard,1,◊◊◊,3.0,120.0,150.0
+61,Genetic Apex (A1),Tartard,Charizard,1,◊◊◊,3.0,120.0,150.0
+83,Genetic Apex (A1),Artikodin,Mewtwo,1,◊◊◊,3.0,120.0,150.0
+102,Genetic Apex (A1),Voltali,Pikachu,1,◊◊◊,3.0,120.0,150.0
+109,Genetic Apex (A1),Ohmassacre,Mewtwo,1,◊◊◊,3.0,120.0,150.0
+145,Genetic Apex (A1),Mackogneur,Charizard,1,◊◊◊,3.0,120.0,150.0
+149,Genetic Apex (A1),Grolem,Pikachu,1,◊◊◊,3.0,120.0,150.0
+159,Genetic Apex (A1),Kabutops,Charizard,1,◊◊◊,3.0,120.0,150.0
+182,Genetic Apex (A1),Melmetal,Charizard,1,◊◊◊,3.0,120.0,150.0
+203,Genetic Apex (A1),Kangourex,Charizard,1,◊◊◊,3.0,120.0,150.0
+210,Genetic Apex (A1),Ptéra,Mewtwo,1,◊◊◊,3.0,120.0,150.0
+12,Space-Time Smackdown (A2),Torterra,Palkia,1,◊◊◊,3.0,120.0,150.0
+20,Space-Time Smackdown (A2),Phyllali,Dialga,1,◊◊◊,3.0,120.0,150.0
+24,Space-Time Smackdown (A2),Maganon,Palkia,1,◊◊◊,3.0,120.0,150.0
+37,Space-Time Smackdown (A2),Pingoléon,Palkia,1,◊◊◊,3.0,120.0,150.0
+46,Space-Time Smackdown (A2),Givrali,Palkia,1,◊◊◊,3.0,120.0,150.0
+72,Space-Time Smackdown (A2),Noctunoir,Dialga,1,◊◊◊,3.0,120.0,150.0
+129,Space-Time Smackdown (A2),Porygon,Palkia,1,◊◊◊,3.0,120.0,150.0
+21,Triumphant Light (A2a),Blizzaroi,Arceus,1,◊◊◊,3.0,120.0,150.0
+55,Triumphant Light (A2a),Magnézone,Arceus,1,◊◊◊,3.0,120.0,150.0
+60,Triumphant Light (A2a),Dialga Forme Originelle,Arceus,1,◊◊◊,3.0,120.0,150.0
+8,Celestial Guardians (A3),Desséliande,Solgaleo,1,◊◊,2.0,0.0,70.0
+34,Celestial Guardians (A3),Plumeline,Lunala,1,◊◊,2.0,0.0,70.0
+60,Celestial Guardians (A3),Gravalanch d'Alola,Solgaleo,1,◊◊,2.0,0.0,70.0
+95,Celestial Guardians (A3),Ouvrifier,Lunala,1,◊◊,2.0,0.0,70.0
+126,Celestial Guardians (A3),Miraidon,Lunala,1,◊◊,2.0,0.0,70.0
+59,Celestial Guardians (A3),Racaillou d'Alola,Solgaleo,1,◊,1.0,0.0,35.0
+138,Celestial Guardians (A3),Nounourson,Lunala,1,◊,1.0,0.0,35.0
+157,Celestial Guardians (A3),Spododo,Lunala,0,★,5.0,400.0,400.0
+158,Celestial Guardians (A3),Sucreine,Solgaleo,0,★,5.0,400.0,400.0
+161,Celestial Guardians (A3),Boumata,Lunala,0,★,5.0,400.0,400.0
+163,Celestial Guardians (A3),Concombaffe,Lunala,0,★,5.0,400.0,400.0
+169,Celestial Guardians (A3),Bacabouh,Solgaleo,0,★,5.0,400.0,400.0
+171,Celestial Guardians (A3),Cosmog,Lunala,0,★,5.0,400.0,400.0
+177,Celestial Guardians (A3),Picassaut,Lunala,0,★,5.0,400.0,400.0
+178,Celestial Guardians (A3),Chelours,Lunala,0,★,5.0,400.0,400.0
+179,Celestial Guardians (A3),Dodoala,Solgaleo,0,★,5.0,400.0,400.0

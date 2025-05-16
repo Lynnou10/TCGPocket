@@ -85,6 +85,8 @@ def getCollection():
     collection = pd.concat(collection)
     collection['set_id'] = collection['set_id'].str.upper()
     collection['set_id'] = collection['set_id'].str.replace('P-A', 'PA')
+    # Old amber is duplicated in the game
+    collection = collection[(collection['card_name'] != 'Vieil Ambre') | (collection['set_id'] == 'A1')]
     return collection.drop_duplicates()
 
 def groupMissingCards(cards):
@@ -97,9 +99,9 @@ def groupMissingCards(cards):
 
 def getMissingCards(collection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder']]
+    missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1 and set != "{active_extention}"').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
-    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder']]
+    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
     try:
         remove('./output/missing_cards.csv')

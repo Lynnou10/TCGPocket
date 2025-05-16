@@ -33,6 +33,10 @@ body {
     font-size: 40px;
 }
 
+.total-trade-points {
+    padding: 10px;
+}
+
 .set {
     padding: 5px;
     background-color: rgba(0, 0, 0, 0.3);
@@ -46,7 +50,7 @@ body {
 
 .card {
     width: 183.5px;
-    height: 276px;
+    height: 296px;
     display: inline-block;
     margin-right: 5px;
     margin-bottom: 10px;
@@ -68,6 +72,33 @@ body {
     width: 183.5px;
     height: 20px;
     display: block;
+}
+
+.card-costs {
+    width: 183.5px;
+    height: 20px;
+    position: absolute;
+    display: flex;
+    justify-content: right;
+    color: rgba(0, 0, 0);
+    font-size: 15px;
+    top: 245px;
+    left: 0;
+    z-index: 10;
+    font-size: 10px;
+    font-weight: bold;
+
+    .trade {
+        width: 100px;
+        display: inline-block;
+        text-align: left
+    }
+
+    .pack {
+        width: 83.5px;
+        display: inline-block;
+        text-align: right
+    }
 }
 
 .card-counter {
@@ -92,7 +123,7 @@ body {
     justify-content: right;
     color: rgba(0, 0, 0, 0.9);
     font-size: 15px;
-    top: 236px;
+    top: 230px;
     left: 0;
     z-index: 10
 }

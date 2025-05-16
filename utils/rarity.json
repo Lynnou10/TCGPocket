@@ -3,66 +3,88 @@
         "code": "Common",
         "rarity": "◊",
         "rarityOrder": 1,
-        "recycle": 0
+        "recycle": 0,
+        "tradeCost": 0,
+        "pointCost": 35
     },
     {
         "code": "Uncommon",
         "rarity": "◊◊",
         "rarityOrder": 2,
-        "recycle": 0
+        "recycle": 0,
+        "tradeCost": 0,
+        "pointCost": 70
     },
     {
         "code": "Rare",
         "rarity": "◊◊◊",
         "rarityOrder": 3,
-        "recycle": 25
+        "recycle": 25,
+        "tradeCost": 120,
+        "pointCost": 150
     },
     {
         "code": "Rare EX",
         "rarity": "◊◊◊◊",
         "rarityOrder": 4,
-        "recycle": 125
+        "recycle": 125,
+        "tradeCost": 500,
+        "pointCost": 500
     },
     {
         "code": "Full Art",
         "rarity": "★",
         "rarityOrder": 5,
-        "recycle": 100
+        "recycle": 100,
+        "tradeCost": 400,
+        "pointCost": 400
     },
     {
         "code": "Full Art EX/Support",
         "rarity": "★★",
         "rarityOrder": 6,
-        "recycle": 300
+        "recycle": 300,
+        "tradeCost": -1,
+        "pointCost": 1250
     },
     {
         "code": "Immersive",
         "rarity": "★★★",
         "rarityOrder": 7,
-        "recycle": 300
+        "recycle": 300,
+        "tradeCost": -1,
+        "pointCost": 1500
     },
     {
         "code": "Gold Crown",
         "rarity": "♛",
         "rarityOrder": 8,
-        "recycle": 1500
+        "recycle": 1500,
+        "tradeCost": -1,
+        "pointCost": 2500
     },
     {
         "code": "One shiny star",
         "rarity": "✹",
         "rarityOrder": 9,
-        "recycle": 250
+        "recycle": 250,
+        "tradeCost": -1,
+        "pointCost": 1000
     },
     {
         "code": "Two shiny stars",
         "rarity": "✹✹",
         "rarityOrder": 10,
-        "recycle": 650
+        "recycle": 650,
+        "tradeCost": -1,
+        "pointCost": 1350
     },
     {
         "code": "Promo",
         "rarity": "Promo",
         "rarityOrder": 100,
-        "recycle": 0
+        "recycle": 0,
+        "tradeCost": -1,
+        "pointCost": -1
     }
 ]

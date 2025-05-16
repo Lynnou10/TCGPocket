@@ -19,6 +19,7 @@
         const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
         const isSetInCardsCollection = (cardsCollection, setKey) => Object.keys(cardsCollection).includes(setKey);
         const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
+        const calculateTotalTradePoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.tradeCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
         const formatCards = (cardsData, filters) => {
             const cards = {};
             cardsData.forEach((card) => {
@@ -141,6 +142,10 @@
                     <div className="card-name">
                         {missingCard.card_id} - {missingCard.name}
                     </div>
+                    <div className="card-costs">
+                        <div className="trade">Echange: {missingCard.tradeCost}</div>
+                        <div className="pack">Pack points: {missingCard.pointCost}</div>
+                    </div>
                     <div className="card-counter">
                         {missingCard.quantity}
                     </div>
@@ -155,6 +160,7 @@
             const {missingCards} = cardsProps;
             return (
                 <div key="missing-cards">
+                    <div className="total-trade-points">Total trade points required: <strong>{calculateTotalTradePoint(missingCards)}</strong></div>
                     {
                         Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
