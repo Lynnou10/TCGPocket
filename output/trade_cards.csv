@@ -11,6 +11,7 @@ card_id,quantity,name,set,rarity
 81,2,Shaymin,Triumphant Light (A2a),★
 76,2,Tag-Tag,Shining Revelry (A2b),★
 77,2,Gromago,Shining Revelry (A2b),★
+165,2,Plumeline,Celestial Guardians (A3),★
 228,1,Ortide,Genetic Apex (A1),★
 229,1,Scarabrute,Genetic Apex (A1),★
 230,1,Salamèche,Genetic Apex (A1),★
@@ -31,9 +32,7 @@ card_id,quantity,name,set,rarity
 173,1,Cradopaud,Space-Time Smackdown (A2),★
 176,1,Étouraptor,Space-Time Smackdown (A2),★
 79,1,Simularbre,Triumphant Light (A2a),★
-165,1,Plumeline,Celestial Guardians (A3),★
 172,1,Rocabot,Celestial Guardians (A3),★
-210,1,Bulbizarre,Celestial Guardians (A3),★
 54,3,Forgelina EX,Shining Revelry (A2b),◊◊◊◊
 18,2,Léviator EX,Mythical Island (A1a),◊◊◊◊
 22,2,Givrali EX,Triumphant Light (A2a),◊◊◊◊
@@ -68,6 +67,7 @@ card_id,quantity,name,set,rarity
 20,2,Oyacata,Shining Revelry (A2b),◊◊◊
 31,2,Alakazam,Shining Revelry (A2b),◊◊◊
 20,2,Sucreine,Celestial Guardians (A3),◊◊◊
+48,2,Oratoria,Celestial Guardians (A3),◊◊◊
 3,1,Florizarre,Genetic Apex (A1),◊◊◊
 55,1,Tortank,Genetic Apex (A1),◊◊◊
 177,1,Smogogo,Genetic Apex (A1),◊◊◊
@@ -81,5 +81,5 @@ card_id,quantity,name,set,rarity
 69,1,Shaymin,Triumphant Light (A2a),◊◊◊
 12,1,Maganon,Shining Revelry (A2b),◊◊◊
 2,1,Noadkoko d'Alola,Celestial Guardians (A3),◊◊◊
-48,1,Oratoria,Celestial Guardians (A3),◊◊◊
 66,1,Plumeline,Celestial Guardians (A3),◊◊◊
+68,1,Tokorico,Celestial Guardians (A3),◊◊◊

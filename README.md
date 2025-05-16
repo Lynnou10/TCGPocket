@@ -1,6 +1,6 @@
 Python 3.11.3
 
-CARD DB: https://github.com/flibustier/pokemon-tcg-pocket-database/blob/main/dist/cards.json
+CARD DB: https://github.com/hugoburguete/pokemon-tcg-pocket-card-database/tree/main/cards/en
 
 GERER LES DOUBLONS PROMO OK
 GERER CARTES MANQUANTES OK

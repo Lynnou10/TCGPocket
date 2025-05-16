@@ -1,0 +1,86 @@
+body {
+    font-family: 'Roboto';
+    margin: 0;
+    background-color: #FFFAA0;
+}
+
+.menu{
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.page-title {
+    padding: 10px;
+    font-size: 40px;
+}
+
+.set {
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
+}
+
+.set-name {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.card {
+    width: 183.5px;
+    height: 276px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.card-image {
+    width: 183.5px;
+    height: 256px;
+    display: block;
+
+    img {
+        width: 183.5px;
+        height: 256px;
+    }
+}
+
+.card-name {
+    width: 183.5px;
+    height: 20px;
+    display: block;
+}
+
+.card-counter {
+    width: 183.5px;
+    height: 256px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 60px;
+    top: 0;
+    left: 0;
+    z-index: 10
+}
+
+.card-pack-name {
+    width: 183.5px;
+    height: 20px;
+    position: absolute;
+    display: flex;
+    justify-content: right;
+    color: rgba(0, 0, 0, 0.9);
+    font-size: 15px;
+    top: 236px;
+    left: 0;
+    z-index: 10
+}
+
+.missing-filters {
+    padding: 10px;
+    font-size: 25px;
+}

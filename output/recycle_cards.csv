@@ -18,6 +18,7 @@ card_id,name,set,quantity,rarity,recycle,total
 81,Shaymin,Triumphant Light (A2a),1,★,100.0,100.0
 76,Tag-Tag,Shining Revelry (A2b),1,★,100.0,100.0
 77,Gromago,Shining Revelry (A2b),1,★,100.0,100.0
+165,Plumeline,Celestial Guardians (A3),1,★,100.0,100.0
 53,Magnézone,Space-Time Smackdown (A2),4,◊◊◊,25.0,100.0
 61,Grodoudou,Shining Revelry (A2b),4,◊◊◊,25.0,100.0
 7,Miascarade,Shining Revelry (A2b),3,◊◊◊,25.0,75.0
@@ -28,8 +29,8 @@ card_id,name,set,quantity,rarity,recycle,total
 109,Darkrai,Space-Time Smackdown (A2),2,◊◊◊,25.0,50.0
 31,Alakazam,Shining Revelry (A2b),2,◊◊◊,25.0,50.0
 51,Tag-Tag,Shining Revelry (A2b),2,◊◊◊,25.0,50.0
+48,Oratoria,Celestial Guardians (A3),2,◊◊◊,25.0,50.0
 57,Élekable,Space-Time Smackdown (A2),1,◊◊◊,25.0,25.0
 12,Maganon,Shining Revelry (A2b),1,◊◊◊,25.0,25.0
 20,Oyacata,Shining Revelry (A2b),1,◊◊◊,25.0,25.0
 20,Sucreine,Celestial Guardians (A3),1,◊◊◊,25.0,25.0
-48,Oratoria,Celestial Guardians (A3),1,◊◊◊,25.0,25.0
