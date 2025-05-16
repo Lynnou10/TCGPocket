@@ -105,7 +105,9 @@ def getMissingCards(collection):
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF MISSING CARDS: {missingCards["set_id"].count()}')
-    missingCards.replace(-1, 'No Data').drop(columns=['set_id', 'rarityOrder']).to_csv('./output/missing_cards.csv', index=False, encoding='utf-8')
+    missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id', 'rarityOrder'])
+    missingCards.to_csv('./output/missing_cards.csv', index=False, encoding='utf-8')
+    missingCards.to_json('./output/missing_cards.json', orient="records", force_ascii=False)
 
 def getRecycleCards(collection):
     recycleCards = collection.query('quantity > 2 and set_id != "PA" and rarityOrder > 2')

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+
+    <div id="mydiv"></div>
+
+    <script type="text/babel">
+
+        let displayedMissingCards = null
+        const missingCardsRequest = fetch('./output/missing_cards.json').then((response) => { return response.json();});
+        
+        // GLOBALS
+        const cardsBaseUrl = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket';
+        const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
+        const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
+        // **********
+
+        //MISSING CARDS
+        let missingCards = {};
+        const isSetInMissingCards = (setKey) => Object.keys(missingCards).includes(setKey);
+
+        const formatDisplayedMissingCards = (missingCardsData) => {
+            missingCards = {};
+            missingCardsData.forEach((missingCard) => {
+                const setKey = getSetFromCards(missingCard['set'])
+                if(isSetInMissingCards(setKey)) {
+                    missingCards[setKey].cards.push(missingCard);
+                } else {
+                    missingCards[setKey] = {
+                        setName: missingCard['set'],
+                        cards: [missingCard]
+                    };
+                }
+            });
+        }
+
+        const MissingCards = () => {
+            return <div key="missing-cards">
+                {
+                    Object.keys(missingCards).map(set => 
+                        <div key={set}>
+                            <div>{missingCards[set].setName}</div>
+                            {
+                                missingCards[set].cards.map(
+                                    missingCard => <img
+                                        key={`${set}-${missingCard.card_id}`}
+                                        src={`${cardsBaseUrl}/${set}/${set}_${getCardNumberForDisplay(missingCard.card_id)}_EN.webp`}
+                                    />
+                                )
+                            }
+                        </div> 
+                    )
+                }
+            </div>;
+        }
+
+        
+        // **********
+
+    
+
+        const container = document.getElementById('mydiv');
+        const root = ReactDOM.createRoot(container);
+
+        Promise.all([missingCardsRequest]).then((results) => {
+            formatDisplayedMissingCards(results[0]);
+
+
+            console.log(missingCards);
+
+
+            root.render(<MissingCards />)
+
+        }).catch(function(err) {
+            console.log("returns just the 1st failure ...");
+            console.log(err);
+        })
+       
+    </script>
+
+    
+
+  </body>
+</html>
