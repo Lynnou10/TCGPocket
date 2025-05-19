@@ -52,7 +52,7 @@ body {
     width: 183.5px;
     height: 286px;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 8px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -151,4 +151,9 @@ body {
         vertical-align: middle;
         background: #FFC300;
     }
+}
+
+.recyclable-tradable {
+    border: 3px solid #b20d78;
+    border-radius: 10px;
 }

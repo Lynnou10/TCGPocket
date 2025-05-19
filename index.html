@@ -13,12 +13,20 @@
     <script type="text/babel">
         const missingCardsRequest = fetch('./output/missing_cards.json').then((response) => response.json());
         const tradeCardsRequest = fetch('./output/trade_cards.json').then((response) => response.json());
+        const recycleCardsRequest = fetch('./output/recycle_cards.json').then((response) => response.json());
         
         // GLOBALS
         const cardsBaseUrl = 'https://assets.tcgdex.net/';
+        const tradeThreshold = 6;
         const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
         const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set}/${getCardNumberForDisplay(cardId)}/low.png`;
         const isSetInCardsCollection = (cardsCollection, setKey) => Object.keys(cardsCollection).includes(setKey);
+        const isRecycleCardTradeble = (recycleCard) => {
+            if(recycleCard.rarityOrder < 5) {
+                return recycleCard.trade_quantity > recycleCard.quantity;
+            }
+            return true;
+        };
         const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
         const calculateTotalTradePoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.tradeCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
         const formatCards = (cardsData, filters) => {
@@ -26,10 +34,10 @@
             cardsData.forEach((card) => {
                 if(filterCard(card, filters)) {
                     const setKey = getSetFromCards(card.set)
-
-                    card.displayName = filters && filters.language == 'fr' ? card.french_name : card.name;
-                    card.packDisplayName = filters && filters.language == 'fr' ? card.pack_french_name : card.pack;
-                    card.language = filters && filters.language === 'fr' ? 'fr' : 'en';
+                    
+                    card.displayName = filters && filters.language == 'en' ? card.name : card.french_name ;
+                    card.packDisplayName = filters && filters.language == 'en' ? card.pack : card.pack_french_name;
+                    card.language = filters && filters.language === 'en' ? 'en' : 'fr' ;
                     
                     if(isSetInCardsCollection(cards, setKey)) {
                         cards[setKey].cards.push(card);
@@ -62,6 +70,9 @@
                     conditions.push(false);
                 }
                 if(!filters.oneStar && card.rarityOrder === 5) {
+                    conditions.push(false);
+                }
+                if(!filters.veryRare && card.rarityOrder >= tradeThreshold) {
                     conditions.push(false);
                 }
                 return conditions.reduce(
@@ -107,7 +118,8 @@
                 threeDiamonds: true,
                 fourDiamonds: true,
                 oneStar: true,
-                language: 'en'
+                veryRare: true,
+                language: 'fr'
             });
 
             const handleChange = (filterName, filterValue) => {
@@ -128,6 +140,7 @@
                         <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>
                         <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>
                         <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>
+                        {hide && hide.veryRare ? <></> : <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/>}
                         <Selectfilter
                             label='Card language'
                             value={filters.language}
@@ -140,7 +153,7 @@
         };
 
         const App = (appProps) => {
-            const { missingCards, tradeCards} = appProps
+            const { missingCards, tradeCards, recycleCards} = appProps
             const [page, setPage] = React.useState('missing');
 
             return (
@@ -148,8 +161,13 @@
                     <div className="menu">
                         <button onClick={() => setPage('missing')}>Missing Cards</button>
                         <button onClick={() => setPage('trade')}>Trade Cards</button>
+                        <button onClick={() => setPage('recycle')}>Recycle Cards</button>
                     </div>
-                    { page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> : page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> : <div>TEMP</div>}
+                    { 
+                        page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> :
+                        page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> :
+                        <RecycleCardsDashboard cards={recycleCards}/>
+                    }
                 </div>
             ); 
         };
@@ -169,7 +187,7 @@
                         {missingCard.card_id} - {missingCard.displayName}
                     </div>
                     <div className="card-costs">
-                        <div className="trade">Echange: {missingCard.tradeCost}</div>
+                        <div className="trade">Trade: {missingCard.tradeCost}</div>
                         <div className="pack">Pack points: {missingCard.pointCost}</div>
                     </div>
                     <div className="card-counter">
@@ -214,7 +232,10 @@
             return (
                 <div>
                     <div className="page-title">Missing cards</div>
-                    <Filters refresh={(filters) => setMissingCards(formatCards(cards, filters))}/>
+                    <Filters 
+                        refresh={(filters) => setMissingCards(formatCards(cards, filters))}
+                        hide={{veryRare: true}}
+                    />
                     <MissingCards missingCards={missingCards}/>
                 </div>
             )
@@ -274,9 +295,74 @@
                     <div className="page-title">Trade cards</div>
                     <Filters
                         refresh={(filters) => setTradeCards(formatCards(cards, filters))}
-                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true}}
+                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true, veryRare: true}}
                     />
                     <TradeCards tradeCards={tradeCards}/>
+                </div>
+            )
+        };
+        // **********
+
+        //RECYCLE CARDS
+        const RecycleCard = (cardProps) => {
+            const {set, recycleCard} = cardProps;
+            return (
+                <div className="card">
+                    <div className={`card-image ${isRecycleCardTradeble(recycleCard) ? 'recyclable-tradable' : ''}`}>
+                        <img
+                            src={getCardUrl(set, recycleCard.card_id, recycleCard.language)}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {recycleCard.card_id} - {recycleCard.displayName}
+                    </div>
+                    <div className="card-costs">
+                        <div className="trade">Tokens: {recycleCard.recycle}</div>
+                        <div className="pack">Total: {recycleCard.total}</div>
+                    </div>
+                    <div className="card-counter">
+                        {recycleCard.quantity}
+                    </div>
+                </div>
+            )
+        };
+
+        const RecycleCards = (cardsProps) => {
+            const {recycleCards} = cardsProps;
+            return (
+                <div key="trade-cards">
+                    {
+                        Object.keys(recycleCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className="set-name">{recycleCards[set].setName}</div>
+                                {
+                                    recycleCards[set].cards.map(
+                                        recycleCard => <RecycleCard
+                                            key={`${set}-${recycleCard.card_id}`}
+                                            set={set}
+                                            recycleCard={recycleCard}
+                                        />
+                                    )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const RecycleCardsDashboard = (cardsDashboardProps) => {
+            const {cards} = cardsDashboardProps;
+            const [recycleCards, setRecycleCards] = React.useState(() => formatCards(cards));
+
+            return (
+                <div>
+                    <div className="page-title">Recycle cards</div>
+                    <Filters
+                        refresh={(filters) => setRecycleCards(formatCards(cards, filters))}
+                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true}}
+                    />
+                    <RecycleCards recycleCards={recycleCards}/>
                 </div>
             )
         };
@@ -285,8 +371,8 @@
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([missingCardsRequest, tradeCardsRequest]).then((results) => {
-            root.render(<App missingCards={results[0]} tradeCards={results[1]}/>)
+        Promise.all([missingCardsRequest, tradeCardsRequest, recycleCardsRequest]).then((results) => {
+            root.render(<App missingCards={results[0]} tradeCards={results[1]} recycleCards={results[2]}/>)
         }).catch(function(err) {
             console.log(err);
         })

@@ -11,6 +11,7 @@ pd.set_option("display.max_rows", 500)
 
 # active_extention = 'Celestial Guardians (A3)'
 active_extention = 'Unknown'
+trade_rarity_threshold = 6
 
 with open("./utils/french.json", encoding="utf-8") as f:
     french = json.load(f)
@@ -113,12 +114,14 @@ def getMissingCards(collection):
     missingCards.to_csv('./output/missing_cards.csv', index=False, encoding='utf-8')
     missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
 
-def getRecycleCards(collection):
+def getRecycleCards(collection, tradeCards):
     recycleCards = collection.query('quantity > 2 and set_id != "PA" and rarityOrder > 2')
     recycleCards['quantity'] = recycleCards['quantity'] - 2
     recycleCards['total'] = recycleCards['quantity'] * recycleCards['recycle']
     recycleCards = recycleCards.sort_values(by=['total', 'rarityOrder', 'set_id', 'card_id'], ascending=[False, False, True, True])
-    recycleCards = recycleCards[['card_id', 'name', 'set', 'quantity', 'rarity', 'recycle', 'total']]
+    recycleCards = recycleCards[['card_id', 'name', 'french_name', 'pack', 'pack_french_name', 'set', 'quantity', 'rarity', 'rarityOrder', 'recycle', 'total']]
+    recycleCards = pd.merge(recycleCards, tradeCards, left_on=['set', 'card_id'], right_on=['set', 'card_id'], how='left')
+    recycleCards = recycleCards.rename(columns={"quantity_x": "quantity", "quantity_y": "trade_quantity"})
     print(f'TOTAL TRADING POINTS AVAILABLE: {recycleCards["total"].sum()}')
     try:
         remove('./output/recycle_cards.csv')
@@ -126,6 +129,7 @@ def getRecycleCards(collection):
         print(error)
         print("File path can not be removed")
     recycleCards.to_csv('./output/recycle_cards.csv', index=False, encoding='utf-8')
+    recycleCards.sort_values(by=['card_id']).to_json('./output/recycle_cards.json', orient="records", force_ascii=False)
 
 def groupTradeCards(cards):
     cardQuantity = cards['quantity'].sum()
@@ -141,7 +145,7 @@ def groupTradeCards(cards):
 def getTradeCards(collection):
     tradeCards = collection[collection['quantity'] > 0]
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
-    tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < 6 and set_id != "PA" and set != "{active_extention}"')
+    tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA" and set != "{active_extention}"')
     tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
     try:
         remove('./output/trade_cards.csv')
@@ -152,6 +156,7 @@ def getTradeCards(collection):
     tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities', 'card_name'])
     tradeCards.to_csv('./output/trade_cards.csv', index=False, encoding='utf-8') 
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
+    return tradeCards
 
 # GET COLLECTION
 cards = getCards()
@@ -167,9 +172,8 @@ print(f'NUMBER OF CARDS: {collection["quantity"].sum()}')
 # GET MISSING CARDS
 getMissingCards(collection)
 
-# GET RECYCLE CARDS
-getRecycleCards(collection)
-
 # GET TRADE CARDS
-getTradeCards(collection)
+tradeCards = getTradeCards(collection)
 
+# GET RECYCLE CARDS
+getRecycleCards(collection, tradeCards[['card_id', 'set', 'quantity']])
