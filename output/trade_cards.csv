@@ -1,85 +1,85 @@
-card_id,quantity,name,set,rarity,rarityOrder,tradeCost,pointCost
-73,4,Miascarade,Shining Revelry (A2b),★,5.0,400.0,400.0
-78,4,Grodoudou,Shining Revelry (A2b),★,5.0,400.0,400.0
-78,3,Zarbi,Triumphant Light (A2a),★,5.0,400.0,400.0
-80,3,Magnéti,Triumphant Light (A2a),★,5.0,400.0,400.0
-74,3,Mustébouée,Shining Revelry (A2b),★,5.0,400.0,400.0
-233,2,Léviator,Genetic Apex (A1),★,5.0,400.0,400.0
-241,2,Nidoking,Genetic Apex (A1),★,5.0,400.0,400.0
-74,2,Marshadow,Mythical Island (A1a),★,5.0,400.0,400.0
-177,2,Keunotor,Space-Time Smackdown (A2),★,5.0,400.0,400.0
-81,2,Shaymin,Triumphant Light (A2a),★,5.0,400.0,400.0
-76,2,Tag-Tag,Shining Revelry (A2b),★,5.0,400.0,400.0
-77,2,Gromago,Shining Revelry (A2b),★,5.0,400.0,400.0
-165,2,Plumeline,Celestial Guardians (A3),★,5.0,400.0,400.0
-228,1,Ortide,Genetic Apex (A1),★,5.0,400.0,400.0
-229,1,Scarabrute,Genetic Apex (A1),★,5.0,400.0,400.0
-230,1,Salamèche,Genetic Apex (A1),★,5.0,400.0,400.0
-231,1,Galopa,Genetic Apex (A1),★,5.0,400.0,400.0
-236,1,Alakazam,Genetic Apex (A1),★,5.0,400.0,400.0
-237,1,Ramoloss,Genetic Apex (A1),★,5.0,400.0,400.0
-243,1,Smogogo,Genetic Apex (A1),★,5.0,400.0,400.0
-244,1,Dracolosse,Genetic Apex (A1),★,5.0,400.0,400.0
-247,1,Métamorph,Genetic Apex (A1),★,5.0,400.0,400.0
-248,1,Évoli,Genetic Apex (A1),★,5.0,400.0,400.0
-249,1,Porygon,Genetic Apex (A1),★,5.0,400.0,400.0
-250,1,Ronflex,Genetic Apex (A1),★,5.0,400.0,400.0
-69,1,Noadkoko,Mythical Island (A1a),★,5.0,400.0,400.0
-71,1,Tritox,Mythical Island (A1a),★,5.0,400.0,400.0
-72,1,Aquali,Mythical Island (A1a),★,5.0,400.0,400.0
-73,1,Dedenne,Mythical Island (A1a),★,5.0,400.0,400.0
-165,1,Baudrive,Space-Time Smackdown (A2),★,5.0,400.0,400.0
-173,1,Cradopaud,Space-Time Smackdown (A2),★,5.0,400.0,400.0
-176,1,Étouraptor,Space-Time Smackdown (A2),★,5.0,400.0,400.0
-79,1,Simularbre,Triumphant Light (A2a),★,5.0,400.0,400.0
-172,1,Rocabot,Celestial Guardians (A3),★,5.0,400.0,400.0
-54,3,Forgelina EX,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0
-22,2,Givrali EX,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0
-51,2,Froussardine EX,Celestial Guardians (A3),◊◊◊◊,4.0,500.0,500.0
-76,1,Staross EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-84,1,Artikodin EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-96,1,Pikachu EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-104,1,Électhor EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-123,1,Ectoplasma EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-129,1,Mewtwo EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-153,1,Ossatueur EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-195,1,Grodoudou EX,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0
-18,1,Léviator EX,Mythical Island (A1a),◊◊◊◊,4.0,500.0,500.0
-32,1,Mew EX,Mythical Island (A1a),◊◊◊◊,4.0,500.0,500.0
-47,1,Carchacrok EX,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0
-71,1,Arceus EX,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0
-19,1,Triopikeau EX,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0
-35,1,Giratina EX,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0
-43,1,Lucario EX,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0
-48,1,Terraiste de Paldéa EX,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0
-39,8,Mackogneur,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-28,7,Pohmarmotte,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-61,5,Grodoudou,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-53,4,Magnézone,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-7,4,Miascarade,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-57,4,Gromago,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-33,3,Mammochon,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-76,3,Créfollet,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-51,3,Tag-Tag,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-57,2,Élekable,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-65,2,Togekiss,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-109,2,Darkrai,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-31,2,Alakazam,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-48,2,Oratoria,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0
-3,1,Florizarre,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0
-55,1,Tortank,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0
-177,1,Smogogo,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0
-211,1,Ronflex,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0
-6,1,Majaspic,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0
-14,1,Pyrax,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0
-19,1,Aquali,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0
-31,1,Mew,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0
-79,1,Cresselia,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-143,1,Regigigas,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0
-69,1,Shaymin,Triumphant Light (A2a),◊◊◊,3.0,120.0,150.0
-12,1,Maganon,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-20,1,Oyacata,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0
-2,1,Noadkoko d'Alola,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0
-20,1,Sucreine,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0
-66,1,Plumeline,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0
-68,1,Tokorico,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0
+card_id,quantity,name,set,rarity,rarityOrder,tradeCost,pointCost,french_name,pack_french_name
+73,4,Meowscarada,Shining Revelry (A2b),★,5.0,400.0,400.0,Miascarade,No Data
+78,4,Wigglytuff,Shining Revelry (A2b),★,5.0,400.0,400.0,Grodoudou,No Data
+78,3,Unown,Triumphant Light (A2a),★,5.0,400.0,400.0,Zarbi,Arceus
+80,3,Magnemite,Triumphant Light (A2a),★,5.0,400.0,400.0,Magnéti,Arceus
+74,3,Buizel,Shining Revelry (A2b),★,5.0,400.0,400.0,Mustébouée,No Data
+233,2,Gyarados,Genetic Apex (A1),★,5.0,400.0,400.0,Léviator,Pikachu
+241,2,Nidoking,Genetic Apex (A1),★,5.0,400.0,400.0,Nidoking,Pikachu
+74,2,Marshadow,Mythical Island (A1a),★,5.0,400.0,400.0,Marshadow,Mew
+177,2,Bidoof,Space-Time Smackdown (A2),★,5.0,400.0,400.0,Keunotor,Dialga
+81,2,Shaymin,Triumphant Light (A2a),★,5.0,400.0,400.0,Shaymin,Arceus
+76,2,Grafaiai,Shining Revelry (A2b),★,5.0,400.0,400.0,Tag-Tag,No Data
+77,2,Gholdengo,Shining Revelry (A2b),★,5.0,400.0,400.0,Gromago,No Data
+165,2,Oricorio,Celestial Guardians (A3),★,5.0,400.0,400.0,Plumeline,Solgaleo
+228,1,Gloom,Genetic Apex (A1),★,5.0,400.0,400.0,Ortide,Dracaufeu
+229,1,Pinsir,Genetic Apex (A1),★,5.0,400.0,400.0,Scarabrute,Dracaufeu
+230,1,Charmander,Genetic Apex (A1),★,5.0,400.0,400.0,Salamèche,Dracaufeu
+231,1,Rapidash,Genetic Apex (A1),★,5.0,400.0,400.0,Galopa,Dracaufeu
+236,1,Alakazam,Genetic Apex (A1),★,5.0,400.0,400.0,Alakazam,Dracaufeu
+237,1,Slowpoke,Genetic Apex (A1),★,5.0,400.0,400.0,Ramoloss,Dracaufeu
+243,1,Weezing,Genetic Apex (A1),★,5.0,400.0,400.0,Smogogo,Mewtwo
+244,1,Dragonite,Genetic Apex (A1),★,5.0,400.0,400.0,Dracolosse,Mewtwo
+247,1,Ditto,Genetic Apex (A1),★,5.0,400.0,400.0,Métamorph,Mewtwo
+248,1,Eevee,Genetic Apex (A1),★,5.0,400.0,400.0,Évoli,Pikachu
+249,1,Porygon,Genetic Apex (A1),★,5.0,400.0,400.0,Porygon,Mewtwo
+250,1,Snorlax,Genetic Apex (A1),★,5.0,400.0,400.0,Ronflex,Pikachu
+69,1,Exeggutor,Mythical Island (A1a),★,5.0,400.0,400.0,Noadkoko,Mew
+71,1,Salandit,Mythical Island (A1a),★,5.0,400.0,400.0,Tritox,Mew
+72,1,Vaporeon,Mythical Island (A1a),★,5.0,400.0,400.0,Aquali,Mew
+73,1,Dedenne,Mythical Island (A1a),★,5.0,400.0,400.0,Dedenne,Mew
+165,1,Drifloon,Space-Time Smackdown (A2),★,5.0,400.0,400.0,Baudrive,Dialga
+173,1,Croagunk,Space-Time Smackdown (A2),★,5.0,400.0,400.0,Cradopaud,Dialga
+176,1,Staraptor,Space-Time Smackdown (A2),★,5.0,400.0,400.0,Étouraptor,Palkia
+79,1,Sudowoodo,Triumphant Light (A2a),★,5.0,400.0,400.0,Simularbre,Arceus
+172,1,Rockruff,Celestial Guardians (A3),★,5.0,400.0,400.0,Rocabot,Solgaleo
+54,3,Tinkaton ex,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0,Forgelina EX,No Data
+22,2,Glaceon ex,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0,Givrali EX,Arceus
+51,2,Wishiwashi ex,Celestial Guardians (A3),◊◊◊◊,4.0,500.0,500.0,Froussardine EX,Lunala
+76,1,Starmie ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Staross EX,Dracaufeu
+84,1,Articuno ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Artikodin EX,Mewtwo
+96,1,Pikachu ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Pikachu EX,Pikachu
+104,1,Zapdos ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Électhor EX,Pikachu
+123,1,Gengar ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Ectoplasma EX,Mewtwo
+129,1,Mewtwo ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Mewtwo EX,Mewtwo
+153,1,Marowak ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Ossatueur EX,Mewtwo
+195,1,Wigglytuff ex,Genetic Apex (A1),◊◊◊◊,4.0,500.0,500.0,Grodoudou EX,Pikachu
+18,1,Gyarados ex,Mythical Island (A1a),◊◊◊◊,4.0,500.0,500.0,Léviator EX,Mew
+32,1,Mew ex,Mythical Island (A1a),◊◊◊◊,4.0,500.0,500.0,Mew EX,Mew
+47,1,Garchomp ex,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0,Carchacrok EX,Arceus
+71,1,Arceus ex,Triumphant Light (A2a),◊◊◊◊,4.0,500.0,500.0,Arceus EX,Arceus
+19,1,Wugtrio ex,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0,Triopikeau EX,No Data
+35,1,Giratina ex,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0,Giratina EX,No Data
+43,1,Lucario ex,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0,Lucario EX,No Data
+48,1,Paldean Clodsire ex,Shining Revelry (A2b),◊◊◊◊,4.0,500.0,500.0,Terraiste de Paldéa EX,No Data
+39,8,Machamp,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Mackogneur,No Data
+28,7,Pawmot,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Pohmarmotte,No Data
+61,5,Wigglytuff,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Grodoudou,No Data
+53,4,Magnezone,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Magnézone,No Data
+7,4,Meowscarada,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Miascarade,No Data
+57,4,Gholdengo,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Gromago,No Data
+33,3,Mamoswine,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Mammochon,Dialga
+76,3,Mesprit,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Créfollet,No Data
+51,3,Grafaiai,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Tag-Tag,No Data
+57,2,Electivire,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Élekable,Dialga
+65,2,Togekiss,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Togekiss,No Data
+109,2,Darkrai,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Darkrai,Dialga
+31,2,Alakazam,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Alakazam,No Data
+48,2,Primarina,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0,Oratoria,Lunala
+3,1,Venusaur,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0,Florizarre,Mewtwo
+55,1,Blastoise,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0,Tortank,Pikachu
+177,1,Weezing,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0,Smogogo,Mewtwo
+211,1,Snorlax,Genetic Apex (A1),◊◊◊,3.0,120.0,150.0,Ronflex,Pikachu
+6,1,Serperior,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0,Majaspic,Mew
+14,1,Volcarona,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0,Pyrax,Mew
+19,1,Vaporeon,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0,Aquali,Mew
+31,1,Mew,Mythical Island (A1a),◊◊◊,3.0,120.0,150.0,Mew,Mew
+79,1,Cresselia,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Cresselia,Palkia
+143,1,Regigigas,Space-Time Smackdown (A2),◊◊◊,3.0,120.0,150.0,Regigigas,No Data
+69,1,Shaymin,Triumphant Light (A2a),◊◊◊,3.0,120.0,150.0,Shaymin,Arceus
+12,1,Magmortar,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Maganon,No Data
+20,1,Dondozo,Shining Revelry (A2b),◊◊◊,3.0,120.0,150.0,Oyacata,No Data
+2,1,Alolan Exeggutor,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0,Noadkoko d'Alola,Lunala
+20,1,Tsareena,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0,Sucreine,Solgaleo
+66,1,Oricorio,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0,Plumeline,Solgaleo
+68,1,Tapu Koko,Celestial Guardians (A3),◊◊◊,3.0,120.0,150.0,Tokorico,Solgaleo

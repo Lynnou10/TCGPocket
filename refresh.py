@@ -99,9 +99,9 @@ def groupMissingCards(cards):
 
 def getMissingCards(collection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+    missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1 and set != "{active_extention}"').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
-    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'pack','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
     try:
         remove('./output/missing_cards.csv')
@@ -160,7 +160,8 @@ collection = getCollection()
 collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
 collection = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
 collection.fillna(-1, inplace = True)
-collection['name'] = collection['name'].map(translateName)
+collection['french_name'] = collection['name'].map(translateName)
+collection['pack_french_name'] = collection['pack'].map(translateName)
 print(f'NUMBER OF CARDS: {collection["quantity"].sum()}')
 
 # GET MISSING CARDS

@@ -15,8 +15,9 @@
         const tradeCardsRequest = fetch('./output/trade_cards.json').then((response) => response.json());
         
         // GLOBALS
-        const cardsBaseUrl = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket';
+        const cardsBaseUrl = 'https://assets.tcgdex.net/';
         const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
+        const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set}/${getCardNumberForDisplay(cardId)}/low.png`;
         const isSetInCardsCollection = (cardsCollection, setKey) => Object.keys(cardsCollection).includes(setKey);
         const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
         const calculateTotalTradePoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.tradeCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
@@ -25,6 +26,11 @@
             cardsData.forEach((card) => {
                 if(filterCard(card, filters)) {
                     const setKey = getSetFromCards(card.set)
+
+                    card.displayName = filters && filters.language == 'fr' ? card.french_name : card.name;
+                    card.packDisplayName = filters && filters.language == 'fr' ? card.pack_french_name : card.pack;
+                    card.language = filters && filters.language === 'fr' ? 'fr' : 'en';
+                    
                     if(isSetInCardsCollection(cards, setKey)) {
                         cards[setKey].cards.push(card);
                     } else {
@@ -81,6 +87,17 @@
                 </div>
             )
         };
+        const Selectfilter = (selectfilterProps) => {
+            const {label, value, options, handleChange, filterName} = selectfilterProps;
+            return (
+                <div className="filter">
+                    {label} :
+                    <select onChange={(e) => handleChange(filterName, e.target.value)} value={value}>
+                        {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </select>
+                </div>
+            )
+        };
         const Filters = (filtersProps) => {
             const {init, refresh, hide} = filtersProps;
             const [filters, setFilters] = React.useState({
@@ -89,7 +106,8 @@
                 twoDiamonds: true,
                 threeDiamonds: true,
                 fourDiamonds: true,
-                oneStar: true
+                oneStar: true,
+                language: 'en'
             });
 
             const handleChange = (filterName, filterValue) => {
@@ -103,12 +121,20 @@
 
             return (
                 <div className="filters">
-                    {hide && hide.fullyMissing ? <></> : <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/>}
-                    {hide && hide.oneDiamond ? <></> : <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/>}
-                    {hide && hide.twoDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/>}
-                    <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>
-                    <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>
-                    <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>
+                    <div>
+                        {hide && hide.fullyMissing ? <></> : <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/>}
+                        {hide && hide.oneDiamond ? <></> : <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/>}
+                        {hide && hide.twoDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/>}
+                        <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>
+                        <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>
+                        <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>
+                        <Selectfilter
+                            label='Card language'
+                            value={filters.language}
+                            filterName='language'
+                            options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
+                            handleChange={handleChange}/>
+                    </div>
                 </div>
             )
         };
@@ -136,11 +162,11 @@
                 <div className="card">
                     <div className="card-image">
                         <img
-                            src={`${cardsBaseUrl}/${set}/${set}_${getCardNumberForDisplay(missingCard.card_id)}_EN.webp`}
+                            src={getCardUrl(set, missingCard.card_id, missingCard.language)}
                         />
                     </div>
                     <div className="card-name">
-                        {missingCard.card_id} - {missingCard.name}
+                        {missingCard.card_id} - {missingCard.displayName}
                     </div>
                     <div className="card-costs">
                         <div className="trade">Echange: {missingCard.tradeCost}</div>
@@ -150,7 +176,7 @@
                         {missingCard.quantity}
                     </div>
                     <div className="card-pack-name">
-                        {missingCard.pack}
+                        {missingCard.packDisplayName}
                     </div>
                 </div>
             )
@@ -183,7 +209,7 @@
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
             const {cards} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(formatCards(cards));
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards));
 
             return (
                 <div>
@@ -202,11 +228,11 @@
                 <div className="card">
                     <div className="card-image">
                         <img
-                            src={`${cardsBaseUrl}/${set}/${set}_${getCardNumberForDisplay(tradeCard.card_id)}_EN.webp`}
+                            src={getCardUrl(set, tradeCard.card_id, tradeCard.language)}
                         />
                     </div>
                     <div className="card-name">
-                        {tradeCard.card_id} - {tradeCard.name}
+                        {tradeCard.card_id} - {tradeCard.displayName}
                     </div>
                     <div className="card-counter">
                         {tradeCard.quantity}
@@ -241,8 +267,7 @@
 
         const TradeCardsDashboard = (cardsDashboardProps) => {
             const {cards} = cardsDashboardProps;
-            const [filters, setFilters] = React.useState({});
-            const [tradeCards, setTradeCards] = React.useState(formatCards(cards));
+            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards));
 
             return (
                 <div>
