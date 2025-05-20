@@ -11,18 +11,29 @@
     <div id="app"></div>
 
     <script type="text/babel">
+        const collectionRequest = fetch('./output/collection.json').then((response) => response.json());
         const missingCardsRequest = fetch('./output/missing_cards.json').then((response) => response.json());
         const tradeCardsRequest = fetch('./output/trade_cards.json').then((response) => response.json());
         const recycleCardsRequest = fetch('./output/recycle_cards.json').then((response) => response.json());
         
         // GLOBALS
+        // CONFIGUTRATION
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
         // VARIABLES
         const cardsBaseUrl = 'https://assets.tcgdex.net/';
         const tradeThreshold = 6;
 
         // FUNCTIONS
-        const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
-        const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set}/${getCardNumberForDisplay(cardId)}/low.png`;
+        const getSetFromCards = (setName) => {
+            if(setName.includes("(")) {
+                return setName.split(' (')[1].replace(')', '');
+            }
+            else {
+                return setName;
+            }
+        };
+        const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
             if(recycleCard.rarityOrder < 5) {
@@ -170,12 +181,13 @@
             )
         };
         const App = (appProps) => {
-            const { missingCards, tradeCards, recycleCards} = appProps
+            const { collection, missingCards, tradeCards, recycleCards} = appProps
             const [page, setPage] = React.useState('missing');
 
             return (
                 <div>
                     <div className="menu">
+                        <button onClick={() => setPage('collection')}>Collection</button>
                         <button onClick={() => setPage('missing')}>Missing Cards</button>
                         <button onClick={() => setPage('trade')}>Trade Cards</button>
                         <button onClick={() => setPage('recycle')}>Recycle Cards</button>
@@ -183,7 +195,8 @@
                     { 
                         page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> :
                         page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> :
-                        <RecycleCardsDashboard cards={recycleCards}/>
+                        page === 'recycle' ? <RecycleCardsDashboard cards={recycleCards}/> :
+                        <CollectionDashboard cards={collection}/>
                     }
                 </div>
             ); 
@@ -392,11 +405,113 @@
         };
         // **********
 
+        //COLLECTION CARDS
+        const CollectionCard = (cardProps) => {
+            const {set, collectionCard, updateCardQuantity} = cardProps;
+            const [card, setCard] = React.useState(collectionCard);
+
+            const handleClick = (e) => {
+                if (e.type === 'click') {
+                    setCard({...card, quantity: card.quantity + 1})
+                    updateCardQuantity(set, collectionCard.card_id, 1);
+                } else if (e.type === 'contextmenu') {
+                    setCard({...card, quantity: card.quantity -1})
+                    updateCardQuantity(set, collectionCard.card_id, -1);
+                }
+            };
+
+            return (
+                <button onClick={handleClick} onContextMenu={handleClick}>
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                src={getCardUrl(set, card.card_id, card.language)}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {card.card_id} - {card.displayName}
+                        </div>
+                        <div className="card-counter">
+                            {card.quantity}
+                        </div>
+                    </div>
+                </button>
+            )
+        };
+
+        const CollectionCards = (cardsProps) => {
+            const {collectionCards} = cardsProps;
+
+            const [collection, setCollection] = React.useState(collectionCards);
+            const [hideSet, setHideSet] = React.useState({});
+
+            const updateCardQuantity = (set, cardId, deltaQuantity) => {
+                const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
+                if (cardIndex !== undefined) {
+                    collection[set].cards[cardIndex].quantity += deltaQuantity;
+                }
+                setCollection(collection);
+            };
+
+            return (
+                <div key="collection-cards">
+                    {
+                        Object.keys(collection).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className = "set-info-container">
+                                    <div className="set-name">{collection[set].setName}</div>
+                                    <div className="hide-set">
+                                        <button onClick={() => {
+                                            let value = true;
+                                            if(hideSet[set]) {
+                                                value = false;
+                                            }
+                                            setHideSet({...hideSet, [set]: value});
+                                        }}>{hideSet[set] ? "Show" : "Hide"}</button>
+                                    </div>
+                                </div>
+                                { 
+                                    hideSet[set] ? 
+                                        <></> :
+                                        collection[set].cards.map(
+                                            collectionCard => <CollectionCard
+                                                key={`${set}-${collectionCard.card_id}`}
+                                                set={set}
+                                                collectionCard={collectionCard}
+                                                updateCardQuantity={updateCardQuantity}
+                                            />
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const CollectionDashboard = (cardsDashboardProps) => {
+            const {cards} = cardsDashboardProps;
+            const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards));
+
+            return (
+                <div>
+                    <div className="page-title">Collection</div>
+                    <CollectionCards collectionCards={collectionCards}/>
+                </div>
+            )
+        };
+        // **********
+
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([missingCardsRequest, tradeCardsRequest, recycleCardsRequest]).then((results) => {
-            root.render(<App missingCards={results[0]} tradeCards={results[1]} recycleCards={results[2]}/>)
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest]).then((results) => {
+            root.render(<App 
+                collection={results[0]}
+                missingCards={results[1]}
+                tradeCards={results[2]}
+                recycleCards={results[3]}
+            />)
         }).catch(function(err) {
             console.log(err);
         })

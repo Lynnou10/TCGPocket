@@ -38,6 +38,8 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 51,Celestial Guardians (A3),Wishiwashi ex,Froussardine EX,Lunala,Lunala,1,◊◊◊◊,4.0,500.0,500.0
 58,Celestial Guardians (A3),Alolan Raichu ex,Raichu d'Alola EX,Solgaleo,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
 41,Genetic Apex (A1),Arcanine ex,Arcanin EX,Pikachu,Pikachu,1,◊◊◊◊,4.0,500.0,500.0
+56,Genetic Apex (A1),Blastoise ex,Tortank EX,Pikachu,Pikachu,1,◊◊◊◊,4.0,500.0,500.0
+195,Genetic Apex (A1),Wigglytuff ex,Grodoudou EX,Pikachu,Pikachu,1,◊◊◊◊,4.0,500.0,500.0
 18,Mythical Island (A1a),Gyarados ex,Léviator EX,Mew,Mew,1,◊◊◊◊,4.0,500.0,500.0
 59,Mythical Island (A1a),Pidgeot ex,Roucarnage EX,Mew,Mew,1,◊◊◊◊,4.0,500.0,500.0
 3,Shining Revelry (A2b),Beedrill ex,Dardargnan EX,Charizard,Dracaufeu,1,◊◊◊◊,4.0,500.0,500.0
@@ -125,7 +127,6 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 178,Celestial Guardians (A3),Bewear,Chelours,Lunala,Lunala,0,★,5.0,400.0,400.0
 241,Genetic Apex (A1),Nidoking,Nidoking,Pikachu,Pikachu,0,★,5.0,400.0,400.0
 244,Genetic Apex (A1),Dragonite,Dracolosse,Mewtwo,Mewtwo,0,★,5.0,400.0,400.0
-74,Mythical Island (A1a),Marshadow,Marshadow,Mew,Mew,0,★,5.0,400.0,400.0
 156,Space-Time Smackdown (A2),Tangrowth,Bouldeneu,Dialga,Dialga,0,★,5.0,400.0,400.0
 163,Space-Time Smackdown (A2),Shinx,Lixy,Dialga,Dialga,0,★,5.0,400.0,400.0
 167,Space-Time Smackdown (A2),Giratina,Giratina,Palkia,Palkia,0,★,5.0,400.0,400.0

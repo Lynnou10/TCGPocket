@@ -80,15 +80,7 @@ def getCards():
     return cards
 
 def getCollection():
-    collection = []
-    files = next(walk('./collection'), (None, None, []))[2]
-    for file in files:
-        collection.append(pd.read_csv(f'./collection/{file}'))
-    collection = pd.concat(collection)
-    collection['set_id'] = collection['set_id'].str.upper()
-    collection['set_id'] = collection['set_id'].str.replace('P-A', 'PA')
-    # Old amber is duplicated in the game
-    collection = collection[(collection['card_name'] != 'Vieil Ambre') | (collection['set_id'] == 'A1')]
+    collection = pd.read_csv(f'./collection/collection.csv')
     return collection.drop_duplicates()
 
 def groupMissingCards(cards):
@@ -154,7 +146,7 @@ def getTradeCards(collection):
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
-    tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities', 'card_name'])
+    tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
     tradeCards.to_csv('./output/trade_cards.csv', index=False, encoding='utf-8') 
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
     return tradeCards
@@ -164,17 +156,25 @@ cards = getCards()
 rarity = getRarity()
 collection = getCollection()
 collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
-collection = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
 collection.fillna(-1, inplace = True)
 collection['french_name'] = collection['name'].map(translateName)
 collection['pack_french_name'] = collection['pack'].map(translateName)
-print(f'NUMBER OF CARDS: {collection["quantity"].sum()}')
+
+# EXPORT COLLECTION DATA
+collection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
+
+# PREPARE DATA TO CALCULATE
+
+collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
+collection.fillna(-1, inplace = True)
+collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
+print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
 
 # GET MISSING CARDS
-getMissingCards(collection)
+getMissingCards(collectionWithInfo)
 
 # GET TRADE CARDS
-tradeCards = getTradeCards(collection)
+tradeCards = getTradeCards(collectionWithInfo)
 
 # GET RECYCLE CARDS
-getRecycleCards(collection, tradeCards[['card_id', 'set', 'quantity']])
+getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
