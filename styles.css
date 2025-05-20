@@ -46,6 +46,7 @@ body {
 .set-name {
     font-size: 30px;
     margin-bottom: 15px;
+    display: inline-block;
 }
 
 .card {
@@ -150,6 +151,18 @@ body {
         font-weight: bold;
         vertical-align: middle;
         background: #FFC300;
+    }
+}
+
+.missing-cards-set-info {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
+
+    div {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 20px;
     }
 }
 

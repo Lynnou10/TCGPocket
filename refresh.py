@@ -9,6 +9,7 @@ warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
  
 pd.set_option("display.max_rows", 500)
 
+# 8652622458979642
 # active_extention = 'Celestial Guardians (A3)'
 active_extention = 'Unknown'
 trade_rarity_threshold = 6

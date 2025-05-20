@@ -16,11 +16,14 @@
         const recycleCardsRequest = fetch('./output/recycle_cards.json').then((response) => response.json());
         
         // GLOBALS
+        // VARIABLES
         const cardsBaseUrl = 'https://assets.tcgdex.net/';
         const tradeThreshold = 6;
+
+        // FUNCTIONS
         const getSetFromCards = (setName) => setName.split(' (')[1].replace(')', '');
         const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set}/${getCardNumberForDisplay(cardId)}/low.png`;
-        const isSetInCardsCollection = (cardsCollection, setKey) => Object.keys(cardsCollection).includes(setKey);
+        const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
             if(recycleCard.rarityOrder < 5) {
                 return recycleCard.trade_quantity > recycleCard.quantity;
@@ -39,7 +42,7 @@
                     card.packDisplayName = filters && filters.language == 'en' ? card.pack : card.pack_french_name;
                     card.language = filters && filters.language === 'en' ? 'en' : 'fr' ;
                     
-                    if(isSetInCardsCollection(cards, setKey)) {
+                    if(isKeyInCardsCollection(cards, setKey)) {
                         cards[setKey].cards.push(card);
                     } else {
                         cards[setKey] = {
@@ -82,6 +85,21 @@
             } else {
                 return true
             }
+        };
+       
+        // COMPONENTS
+        const MissingCardsByPack = (cardProps) => {
+            const packMissingCard = {}
+            cardProps.setMissingCards.forEach((card) => {    
+                if(isKeyInCardsCollection(packMissingCard, card.packDisplayName)) {
+                    packMissingCard[card.packDisplayName] += 1;
+                } else {
+                    packMissingCard[card.packDisplayName] = 1
+                }
+            });
+            return (<div className="missing-cards-set-info">{
+                Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack]}</strong></div>)
+            }</div>)
         };
         const CheckBoxfilter = (checkBoxfilterProps) => {
             const {label, value, handleChange, filterName} = checkBoxfilterProps;
@@ -151,7 +169,6 @@
                 </div>
             )
         };
-
         const App = (appProps) => {
             const { missingCards, tradeCards, recycleCards} = appProps
             const [page, setPage] = React.useState('missing');
@@ -208,7 +225,10 @@
                     {
                         Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className="set-name">{missingCards[set].setName}</div>
+                                <div className = "set-info-container">
+                                    <div className="set-name">{missingCards[set].setName}</div>
+                                    <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
+                                </div>
                                 {
                                     missingCards[set].cards.map(
                                         missingCard => <MissingCard
@@ -269,7 +289,9 @@
                     {
                         Object.keys(tradeCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className="set-name">{tradeCards[set].setName}</div>
+                                <div className = "set-info-container">
+                                    <div className="set-name">{tradeCards[set].setName}</div>
+                                </div>
                                 {
                                     tradeCards[set].cards.map(
                                         tradeCard => <TradeCard
@@ -334,7 +356,9 @@
                     {
                         Object.keys(recycleCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className="set-name">{recycleCards[set].setName}</div>
+                                <div className = "set-info-container">
+                                    <div className="set-name">{recycleCards[set].setName}</div>
+                                </div>
                                 {
                                     recycleCards[set].cards.map(
                                         recycleCard => <RecycleCard

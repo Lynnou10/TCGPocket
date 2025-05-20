@@ -7,7 +7,7 @@
     "subtype": "Basic",
     "health": 50,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Multiply",
@@ -32,7 +32,7 @@
     "subtype": "Stage 1",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "String Shot",
@@ -57,7 +57,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Crushing Spear",
@@ -83,7 +83,7 @@
     "subtype": "Basic",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Guillotine Rush",
@@ -110,7 +110,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Cry for Help",
@@ -135,7 +135,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Slash",
@@ -161,7 +161,7 @@
     "subtype": "Stage 2",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Fighting Claws",
@@ -187,7 +187,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Combustion",
@@ -212,7 +212,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Combustion",
@@ -238,7 +238,7 @@
     "subtype": "Stage 2",
     "health": 180,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Stoke",
@@ -275,7 +275,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Flare",
@@ -300,7 +300,7 @@
     "subtype": "Stage 1",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Smoke Bomb",
@@ -327,7 +327,7 @@
     "subtype": "Basic",
     "health": 110,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Blaze Tackle",
@@ -354,7 +354,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rain Splash",
@@ -379,7 +379,7 @@
     "subtype": "Stage 1",
     "health": 100,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Wave Splash",
@@ -404,7 +404,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Water Gun",
@@ -429,7 +429,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Water Arrow",
@@ -454,7 +454,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Spring Out",
@@ -479,7 +479,7 @@
     "subtype": "Stage 1",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Pop Out Throughout",
@@ -506,7 +506,7 @@
     "subtype": "Basic",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Ocean Cyclone",
@@ -534,7 +534,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rain Splash",
@@ -564,7 +564,7 @@
     "subtype": "Basic",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Thunderbolt",
@@ -591,7 +591,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Lightning Ball",
@@ -616,7 +616,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Tumbling Attack",
@@ -642,7 +642,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Plasma",
@@ -667,7 +667,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Punch",
@@ -692,7 +692,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Punch",
@@ -718,7 +718,7 @@
     "subtype": "Stage 2",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Electric Punch",
@@ -749,7 +749,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Psyshot",
@@ -774,7 +774,7 @@
     "subtype": "Stage 1",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Psyshot",
@@ -799,7 +799,7 @@
     "subtype": "Stage 2",
     "health": 130,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Psychic Suppression",
@@ -825,7 +825,7 @@
     "subtype": "Basic",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Juggling 20x",
@@ -851,7 +851,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Ram",
@@ -876,7 +876,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Gust",
@@ -901,7 +901,7 @@
     "subtype": "Basic",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Chaotic Impact",
@@ -934,7 +934,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Chest-ouflage",
@@ -959,7 +959,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Low Kick",
@@ -984,7 +984,7 @@
     "subtype": "Stage 1",
     "health": 100,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Pummel",
@@ -1010,7 +1010,7 @@
     "subtype": "Stage 2",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Power Press",
@@ -1036,7 +1036,7 @@
     "subtype": "Basic",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Kick",
@@ -1061,7 +1061,7 @@
     "subtype": "Basic",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Magnum Punch",
@@ -1088,7 +1088,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Punch",
@@ -1114,7 +1114,7 @@
     "subtype": "Stage 1",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Aura Sphere",
@@ -1141,7 +1141,7 @@
     "subtype": "Basic",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Double Kick",
@@ -1167,7 +1167,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Ram",
@@ -1193,7 +1193,7 @@
     "subtype": "Stage 1",
     "health": 110,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Venomous Fang",
@@ -1220,7 +1220,7 @@
     "subtype": "Basic",
     "health": 50,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Poison Jab",
@@ -1245,7 +1245,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Venoshock",
@@ -1271,7 +1271,7 @@
     "subtype": "Basic",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Confuse Ray",
@@ -1296,7 +1296,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Gnaw",
@@ -1321,7 +1321,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Bite",
@@ -1352,7 +1352,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Corkscrew Punch",
@@ -1377,7 +1377,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Tenacious Hammer",
@@ -1403,7 +1403,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Terrific Thumping",
@@ -1430,7 +1430,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Headbutt",
@@ -1455,7 +1455,7 @@
     "subtype": "Stage 1",
     "health": 110,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Spinning Drift",
@@ -1482,7 +1482,7 @@
     "subtype": "Stage 1",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Scintillating Surfing",
@@ -1509,7 +1509,7 @@
     "subtype": "Basic",
     "health": 50,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Tackle",
@@ -1534,7 +1534,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Tackle",
@@ -1560,7 +1560,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rollout",
@@ -1585,7 +1585,7 @@
     "subtype": "Stage 1",
     "health": 100,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Gentle Slap",
@@ -1616,7 +1616,7 @@
     "subtype": "Basic",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rollout",
@@ -1642,7 +1642,7 @@
     "subtype": "Stage 1",
     "health": 130,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rollout",
@@ -1669,7 +1669,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Headbutt",
@@ -1695,7 +1695,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Carefree Press",
@@ -1723,7 +1723,7 @@
     "subtype": "Basic",
     "health": 50,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Pound",
@@ -1748,7 +1748,7 @@
     "subtype": "Stage 1",
     "health": 100,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Hopping Shot",
@@ -1773,7 +1773,7 @@
     "subtype": "Basic",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Overacceleration",
@@ -1798,7 +1798,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -1814,7 +1814,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -1830,7 +1830,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -1846,7 +1846,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -1862,7 +1862,7 @@
     "subtype": "Stage 2",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Fighting Claws",
@@ -1888,7 +1888,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Water Gun",
@@ -1913,7 +1913,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Rain Splash",
@@ -1943,7 +1943,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Bite",
@@ -1974,7 +1974,7 @@
     "subtype": "Stage 1",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Scintillating Surfing",
@@ -2001,7 +2001,7 @@
     "subtype": "Stage 1",
     "health": 100,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Gentle Slap",
@@ -2032,7 +2032,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Crushing Spear",
@@ -2058,7 +2058,7 @@
     "subtype": "Stage 2",
     "health": 180,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Stoke",
@@ -2095,7 +2095,7 @@
     "subtype": "Stage 1",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Pop Out Throughout",
@@ -2122,7 +2122,7 @@
     "subtype": "Basic",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Thunderbolt",
@@ -2149,7 +2149,7 @@
     "subtype": "Basic",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Chaotic Impact",
@@ -2182,7 +2182,7 @@
     "subtype": "Stage 1",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Aura Sphere",
@@ -2209,7 +2209,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Venoshock",
@@ -2235,7 +2235,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Terrific Thumping",
@@ -2262,7 +2262,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Carefree Press",
@@ -2290,7 +2290,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -2306,7 +2306,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -2322,7 +2322,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -2338,7 +2338,7 @@
     "subtype": "Supporter",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
@@ -2354,7 +2354,7 @@
     "subtype": "Basic",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Thunderbolt",
@@ -2381,7 +2381,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Venoshock",
@@ -2407,7 +2407,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Terrific Thumping",
@@ -2434,7 +2434,7 @@
     "subtype": "Stage 1",
     "health": 160,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Carefree Press",
@@ -2462,7 +2462,7 @@
     "subtype": "Basic",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Chaotic Impact",
@@ -2495,7 +2495,7 @@
     "subtype": "Basic",
     "health": 50,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Multiply",
@@ -2520,7 +2520,7 @@
     "subtype": "Stage 1",
     "health": 80,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "String Shot",
@@ -2545,7 +2545,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Combustion",
@@ -2570,7 +2570,7 @@
     "subtype": "Stage 1",
     "health": 90,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Combustion",
@@ -2596,7 +2596,7 @@
     "subtype": "Basic",
     "health": 60,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Spring Out",
@@ -2621,7 +2621,7 @@
     "subtype": "Basic",
     "health": 120,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Ocean Cyclone",
@@ -2649,7 +2649,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Plasma",
@@ -2674,7 +2674,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Punch",
@@ -2700,7 +2700,7 @@
     "subtype": "Basic",
     "health": 70,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Headbutt",
@@ -2725,7 +2725,7 @@
     "subtype": "Stage 1",
     "health": 110,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Spinning Drift",
@@ -2752,7 +2752,7 @@
     "subtype": "Stage 2",
     "health": 170,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Crushing Spear",
@@ -2778,7 +2778,7 @@
     "subtype": "Stage 2",
     "health": 180,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Stoke",
@@ -2815,7 +2815,7 @@
     "subtype": "Stage 1",
     "health": 140,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Pop Out Throughout",
@@ -2842,7 +2842,7 @@
     "subtype": "Stage 1",
     "health": 150,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [
       {
         "name": "Aura Sphere",
@@ -2869,7 +2869,7 @@
     "subtype": "Item",
     "health": null,
     "set": "Shining Revelry (A2b)",
-    "pack": null,
+    "pack": "Charizard",
     "attacks": [],
     "retreatCost": null,
     "weakness": null,
