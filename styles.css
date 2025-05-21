@@ -27,7 +27,7 @@ body {
     z-index: 10000;
 
     button {
-        background-color: grey; /* Green */
+        background-color: grey;
         border: none;
         color: white;
         padding: 15px 32px;
@@ -182,6 +182,32 @@ body {
     opacity: 50%;
 }
 
+.copy-clipboard {
+    position: fixed;
+    z-index: 10000000000;
+    top: 65px;
+    right: 20px;
+
+    button {
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 3px 10px 5px 10px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: lightblue;
+        color: black;
+    }
+}
+
 
 
 /* COLLECTION */
@@ -208,7 +234,7 @@ body {
     z-index: 100000;
 
     button {
-        background-color: darkblue; /* Green */
+        background-color: darkblue;
         border: none;
         color: white;
         padding: 15px 32px;

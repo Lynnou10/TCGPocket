@@ -109,6 +109,28 @@
         };
        
         // COMPONENTS
+        const ContentToClipboard = (contentToClipboardProps) => {
+            const {content} = contentToClipboardProps;
+            const [showMessage, setShowMessage] = React.useState(false);
+
+            return (
+                <div className="copy-clipboard">
+                    {showMessage ? <span>Cards copied to clipboard!</span> : <></>}
+                    <button onClick={() => {
+                        navigator.clipboard.writeText(content).then(function() {
+                            setShowMessage(true);
+                            setTimeout(() => setShowMessage(false), 3000);
+                        }, function(err) {
+                            console.error('Could not copy text: ', err);
+                        });
+                    }}>
+                        &#128203;
+                    </button>
+                </div>
+            )
+            // 
+            // COPY
+        };
         const SetHider = (hiderProps) => {
             const {set, hideSet, setHideSet, defaultOpened} = hiderProps;
 
@@ -356,6 +378,15 @@
 
             return (
                 <div key="trade-cards">
+                    <ContentToClipboard
+                        content={
+                            Object.keys(tradeCards).sort().map(
+                                set => tradeCards[set].cards.map(
+                                    card => `${card.displayName} ${card.rarity} (${set})`
+                                ).join('\r\n')
+                            ).join('\r\n')
+                        }
+                    />
                     {
                         Object.keys(tradeCards).sort().map(set => 
                             <div key={set} className="set">
@@ -392,7 +423,8 @@
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
-                            language: true
+                            language: true,
+                            lastExtension: true
                         }}
                     />
                     <TradeCards tradeCards={tradeCards}/>
@@ -493,7 +525,7 @@
                 <div className="set-info">
                     Set cards count: 
                     <strong>
-                        { refreshCounter > 0 ? collection[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
+                        { refreshCounter > 0 ? collection[set].cards.filter(card => !(set === 'A1' && card.card_id === 283)).map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
                     </strong>
                 </div>
             )

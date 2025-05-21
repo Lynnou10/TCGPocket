@@ -189,7 +189,7 @@ def refreshAppData():
 class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
-            self.path = 'mywebpage.html'
+            self.path = 'index.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
     
 
