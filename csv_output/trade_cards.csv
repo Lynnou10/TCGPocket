@@ -42,6 +42,8 @@ card_id,quantity,name,set,french_name,pack_french_name,rarity,rarityOrder,tradeC
 10,1,Leafeon ex,Triumphant Light (A2a),Phyllali EX,Arceus,◊◊◊◊,4.0,500.0,500.0
 19,1,Wugtrio ex,Shining Revelry (A2b),Triopikeau EX,Dracaufeu,◊◊◊◊,4.0,500.0,500.0
 48,1,Paldean Clodsire ex,Shining Revelry (A2b),Terraiste de Paldéa EX,Dracaufeu,◊◊◊◊,4.0,500.0,500.0
+33,1,Incineroar ex,Celestial Guardians (A3),Félinferno EX,Solgaleo,◊◊◊◊,4.0,500.0,500.0
+104,1,Passimian ex,Celestial Guardians (A3),Quartermac EX,Lunala,◊◊◊◊,4.0,500.0,500.0
 47,5,Marshadow,Mythical Island (A1a),Marshadow,Mew,◊◊◊,3.0,120.0,150.0
 7,5,Meowscarada,Shining Revelry (A2b),Miascarade,Dracaufeu,◊◊◊,3.0,120.0,150.0
 6,3,Serperior,Mythical Island (A1a),Majaspic,Mew,◊◊◊,3.0,120.0,150.0
@@ -66,3 +68,4 @@ card_id,quantity,name,set,french_name,pack_french_name,rarity,rarityOrder,tradeC
 26,1,Raichu,Triumphant Light (A2a),Raichu,Arceus,◊◊◊,3.0,120.0,150.0
 70,1,Arceus,Triumphant Light (A2a),Arceus,Arceus,◊◊◊,3.0,120.0,150.0
 12,1,Magmortar,Shining Revelry (A2b),Maganon,Dracaufeu,◊◊◊,3.0,120.0,150.0
+20,1,Tsareena,Celestial Guardians (A3),Sucreine,Solgaleo,◊◊◊,3.0,120.0,150.0

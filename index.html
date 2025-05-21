@@ -23,6 +23,8 @@
         // VARIABLES
         const cardsBaseUrl = 'https://assets.tcgdex.net/';
         const tradeThreshold = 6;
+        const promos = ['PA'];
+        let lastExtension = '';
 
         // FUNCTIONS
         const getSetFromCards = (setName) => {
@@ -32,6 +34,11 @@
             else {
                 return setName;
             }
+        };
+        const setLastExtension = (collection) => {
+            let extensions = [...new Set(collection.map(card => card.set_id))].sort();
+            extensions = extensions.filter(extension => !promos.includes(extension));
+            lastExtension = extensions[extensions.length -1]
         };
         const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
@@ -89,6 +96,9 @@
                 if(!filters.veryRare && card.rarityOrder >= tradeThreshold) {
                     conditions.push(false);
                 }
+                if(!filters.lastExtension) {
+                    conditions.push(!card.set.includes(lastExtension));
+                }
                 return conditions.reduce(
                     (previousValue, currentValue) => previousValue && currentValue,
                     true
@@ -142,7 +152,7 @@
             )
         };
         const Filters = (filtersProps) => {
-            const {init, refresh, hide} = filtersProps;
+            const {init, refresh, show} = filtersProps;
             const [filters, setFilters] = React.useState({
                 fullyMissing: false,
                 oneDiamond: true,
@@ -151,7 +161,8 @@
                 fourDiamonds: true,
                 oneStar: true,
                 veryRare: true,
-                language: 'fr'
+                language: 'fr',
+                lastExtension: true
             });
 
             const handleChange = (filterName, filterValue) => {
@@ -166,19 +177,20 @@
             return (
                 <div className="filters">
                     <div>
-                        {hide && hide.fullyMissing ? <></> : <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/>}
-                        {hide && hide.oneDiamond ? <></> : <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/>}
-                        {hide && hide.twoDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/>}
-                        {hide && hide.threeDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>}
-                        {hide && hide.fourDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>}
-                        {hide && hide.oneStar ? <></> : <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>}
-                        {hide && hide.veryRare ? <></> : <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/>}
-                        {hide && hide.language ? <></> : <Selectfilter
+                        {show && show.fullyMissing ? <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/> : <></>}
+                        {show && show.oneDiamond ? <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/> : <></>}
+                        {show && show.twoDiamonds ? <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.threeDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.fourDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.oneStar ? <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/> : <></>}
+                        {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
+                        {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
+                        {show && show.language ? <Selectfilter
                             label='Language'
                             value={filters.language}
                             filterName='language'
                             options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
-                            handleChange={handleChange}/>
+                            handleChange={handleChange}/>  : <></>
                         }
                     </div>
                 </div>
@@ -224,9 +236,12 @@
                     }
                 }
             });
-            return (<div className="set-info">{
-                Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
-            }</div>)
+            return (<div className="set-info">
+                <div>Cards: <strong>{missingCardsProps.setMissingCards.length}</strong></div>
+                {
+                    Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
+                }
+            </div>)
         };
 
         const MissingCard = (cardProps) => {
@@ -261,7 +276,10 @@
 
             return (
                 <div key="missing-cards">
-                    <div className="global-stats">Total trade points required: <strong>{calculateTotalTradePoint(missingCards)}</strong></div>
+                    <div className="global-stats">
+                        <div className="global-stats-element">Cards: <strong>{Object.keys(missingCards).map(set => missingCards[set].cards.length).reduce((partialSum, a) => partialSum + a, 0)}</strong></div> 
+                        <div className="global-stats-element">Trade points needed: <strong>{calculateTotalTradePoint(missingCards)}</strong></div> 
+                    </div>
                     {
                         Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
@@ -295,7 +313,16 @@
                 <div>
                     <Filters 
                         refresh={(filters) => setMissingCards(formatCards(cards, filters))}
-                        hide={{veryRare: true}}
+                        show={{
+                            fullyMissing: true,
+                            oneDiamond: true,
+                            twoDiamonds: true,
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            language: true,
+                            lastExtension: true
+                        }}
                     />
                     <MissingCards missingCards={missingCards}/>
                 </div>
@@ -361,7 +388,12 @@
                 <div>
                     <Filters
                         refresh={(filters) => setTradeCards(formatCards(cards, filters))}
-                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true, veryRare: true}}
+                        show={{
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            language: true
+                        }}
                     />
                     <TradeCards tradeCards={tradeCards}/>
                 </div>
@@ -399,6 +431,15 @@
 
             return (
                 <div key="trade-cards">
+                    <div className="global-stats">
+                        <div className="global-stats-element">Available points: <strong>{
+                            Object.keys(recycleCards).map(
+                                set => recycleCards[set].cards.map(
+                                    card => card.total
+                                ).reduce((partialSum, a) => partialSum + a, 0)
+                            ).reduce((partialSum, a) => partialSum + a, 0)
+                        }</strong></div> 
+                    </div>
                     {
                         Object.keys(recycleCards).sort().map(set => 
                             <div key={set} className="set">
@@ -431,7 +472,13 @@
                 <div>
                     <Filters
                         refresh={(filters) => setRecycleCards(formatCards(cards, filters))}
-                        hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true}}
+                        show={{
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            veryRare: true,
+                            language: true
+                        }}
                     />
                     <RecycleCards recycleCards={recycleCards}/>
                 </div>
@@ -571,15 +618,7 @@
                 <div>
                     <Filters
                         refresh={(filters) => setCollectionCards(formatCards(cards, filters))}
-                        hide={{
-                            fullyMissing: true,
-                            oneDiamond: true,
-                            twoDiamonds: true,
-                            threeDiamonds: true,
-                            fourDiamonds: true,
-                            oneStar: true,
-                            veryRare: true
-                        }}
+                        show={{language: true}}
                     />
                     <CollectionCards collectionCards={collectionCards}/>
                 </div>
@@ -592,6 +631,7 @@
         const root = ReactDOM.createRoot(container);
 
         Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest]).then((results) => {
+            setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
                 missingCards={results[1]}

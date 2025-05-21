@@ -89,7 +89,6 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 32,Celestial Guardians (A3),Torracat,Matoufeu,Solgaleo,Solgaleo,1,◊◊,2.0,0.0,70.0
 34,Celestial Guardians (A3),Oricorio,Plumeline,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
 64,Celestial Guardians (A3),Charjabug,Chrysapile,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
-114,Celestial Guardians (A3),Garbodor,Miasmax,All,All,1,◊◊,2.0,0.0,70.0
 126,Celestial Guardians (A3),Hakamo,Hakamo,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
 132,Celestial Guardians (A3),Hawlucha,Brutalibré,Solgaleo,Solgaleo,1,◊◊,2.0,0.0,70.0
 149,Celestial Guardians (A3),Ilima,Ilima,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
@@ -114,12 +113,9 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 166,Celestial Guardians (A3),Tapu Koko,Tokorico,Solgaleo,Solgaleo,0,★,5.0,400.0,400.0
 168,Celestial Guardians (A3),Comfey,Guérilande,Solgaleo,Solgaleo,0,★,5.0,400.0,400.0
 171,Celestial Guardians (A3),Cosmog,Cosmog,Lunala,Lunala,0,★,5.0,400.0,400.0
-172,Celestial Guardians (A3),Rockruff,Rocabot,Solgaleo,Solgaleo,0,★,5.0,400.0,400.0
 174,Celestial Guardians (A3),Minior,Météno,Lunala,Lunala,0,★,5.0,400.0,400.0
 175,Celestial Guardians (A3),Magearna,Magearna,Solgaleo,Solgaleo,0,★,5.0,400.0,400.0
 178,Celestial Guardians (A3),Bewear,Chelours,Lunala,Lunala,0,★,5.0,400.0,400.0
-241,Genetic Apex (A1),Nidoking,Nidoking,Pikachu,Pikachu,0,★,5.0,400.0,400.0
-244,Genetic Apex (A1),Dragonite,Dracolosse,Mewtwo,Mewtwo,0,★,5.0,400.0,400.0
 156,Space-Time Smackdown (A2),Tangrowth,Bouldeneu,Dialga,Dialga,0,★,5.0,400.0,400.0
 163,Space-Time Smackdown (A2),Shinx,Lixy,Dialga,Dialga,0,★,5.0,400.0,400.0
 167,Space-Time Smackdown (A2),Giratina,Giratina,Palkia,Palkia,0,★,5.0,400.0,400.0
@@ -129,3 +125,5 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 174,Space-Time Smackdown (A2),Heatran,Heatran,Dialga,Dialga,0,★,5.0,400.0,400.0
 177,Space-Time Smackdown (A2),Bidoof,Keunotor,Dialga,Dialga,0,★,5.0,400.0,400.0
 178,Space-Time Smackdown (A2),Glameow,Chaglam,Palkia,Palkia,0,★,5.0,400.0,400.0
+241,Genetic Apex (A1),Nidoking,Nidoking,Pikachu,Pikachu,0,★,5.0,400.0,400.0
+244,Genetic Apex (A1),Dragonite,Dracolosse,Mewtwo,Mewtwo,0,★,5.0,400.0,400.0
