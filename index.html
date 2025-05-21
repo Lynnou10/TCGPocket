@@ -16,7 +16,7 @@
         const tradeCardsRequest = fetch('./output/trade_cards.json', {cache: "no-store"}).then((response) => response.json());
         const recycleCardsRequest = fetch('./output/recycle_cards.json', {cache: "no-store"}).then((response) => response.json());
         
-        // GLOBALS
+    // GLOBALS
         // CONFIGUTRATION
         document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -99,18 +99,21 @@
         };
        
         // COMPONENTS
-        const MissingCardsByPack = (cardProps) => {
-            const packMissingCard = {}
-            cardProps.setMissingCards.forEach((card) => {    
-                if(isKeyInCardsCollection(packMissingCard, card.packDisplayName)) {
-                    packMissingCard[card.packDisplayName] += 1;
-                } else {
-                    packMissingCard[card.packDisplayName] = 1
-                }
-            });
-            return (<div className="missing-cards-set-info">{
-                Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack]}</strong></div>)
-            }</div>)
+        const SetHider = (hiderProps) => {
+            const {set, hideSet, setHideSet, defaultOpened} = hiderProps;
+
+            return (
+                <div className="hide-set">
+                    <button onClick={() => {
+                        let value = true;
+                        if(defaultOpened) {
+                            value = false;
+                        }
+                        setHideSet({...hideSet, [set]: value});
+                    }}>{defaultOpened ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
+                </div>
+            )
+
         };
         const CheckBoxfilter = (checkBoxfilterProps) => {
             const {label, value, handleChange, filterName} = checkBoxfilterProps;
@@ -203,9 +206,29 @@
                 </div>
             ); 
         };
-        // **********
+    // **********
 
+    // APP COMPONENTS
         //MISSING CARDS
+        const MissingCardsByPack = (missingCardsProps) => {
+            const packMissingCard = {};
+            let allPacksValue = 0;
+            missingCardsProps.setMissingCards.forEach((card) => { 
+                if(card.packDisplayName === 'All') {
+                    allPacksValue += 1;
+                } else {
+                    if(isKeyInCardsCollection(packMissingCard, card.packDisplayName)) {
+                        packMissingCard[card.packDisplayName] += 1;
+                    } else {
+                        packMissingCard[card.packDisplayName] = 1
+                    }
+                }
+            });
+            return (<div className="set-info">{
+                Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
+            }</div>)
+        };
+
         const MissingCard = (cardProps) => {
             const {set, missingCard} = cardProps;
             return (
@@ -234,6 +257,8 @@
 
         const MissingCards = (cardsProps) => {
             const {missingCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
             return (
                 <div key="missing-cards">
                     <div className="global-stats">Total trade points required: <strong>{calculateTotalTradePoint(missingCards)}</strong></div>
@@ -242,10 +267,12 @@
                             <div key={set} className="set">
                                 <div className = "set-container">
                                     <div className="set-name">{missingCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
                                     <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
                                 </div>
                                 {
-                                    missingCards[set].cards.map(
+                                    hideSet[set] ? 
+                                        <></> : missingCards[set].cards.map(
                                         missingCard => <MissingCard
                                             key={`${set}-${missingCard.card_id}`}
                                             set={set}
@@ -298,6 +325,8 @@
 
         const TradeCards = (cardsProps) => {
             const {tradeCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
             return (
                 <div key="trade-cards">
                     {
@@ -305,9 +334,11 @@
                             <div key={set} className="set">
                                 <div className = "set-container">
                                     <div className="set-name">{tradeCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
                                 </div>
                                 {
-                                    tradeCards[set].cards.map(
+                                    hideSet[set] ? 
+                                        <></> : tradeCards[set].cards.map(
                                         tradeCard => <TradeCard
                                             key={`${set}-${tradeCard.card_id}`}
                                             set={set}
@@ -364,6 +395,8 @@
 
         const RecycleCards = (cardsProps) => {
             const {recycleCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
             return (
                 <div key="trade-cards">
                     {
@@ -371,9 +404,11 @@
                             <div key={set} className="set">
                                 <div className = "set-container">
                                     <div className="set-name">{recycleCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
                                 </div>
                                 {
-                                    recycleCards[set].cards.map(
+                                    hideSet[set] ? 
+                                        <></> : recycleCards[set].cards.map(
                                         recycleCard => <RecycleCard
                                             key={`${set}-${recycleCard.card_id}`}
                                             set={set}
@@ -405,6 +440,18 @@
         // **********
 
         //COLLECTION CARDS
+        const CardsCountByPack = (cardsCountProps) => {
+            const {refreshCounter, collection, set} = cardsCountProps;
+            return (
+                <div className="set-info">
+                    Set cards count: 
+                    <strong>
+                        { refreshCounter > 0 ? collection[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
+                    </strong>
+                </div>
+            )
+        };
+
         const CollectionCard = (cardProps) => {
             const {set, collectionCard, updateCardQuantity} = cardProps;
             const [card, setCard] = React.useState(collectionCard);
@@ -494,21 +541,8 @@
                             <div key={set} className="set">
                                 <div className="set-container">
                                     <div className="set-name">{collection[set].setName}</div>
-                                    <div className="hide-set">
-                                        <button onClick={() => {
-                                            let value = true;
-                                            if(hideSet[set] || !Object.keys(hideSet).includes(set)) {
-                                                value = false;
-                                            }
-                                            setHideSet({...hideSet, [set]: value});
-                                        }}>{hideSet[set] || !Object.keys(hideSet).includes(set) ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
-                                    </div>
-                                    <div className="set-card-count">
-                                        Set cards count: 
-                                        <strong>
-                                            { refreshCounter > 0 ? collection[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
-                                        </strong>
-                                    </div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set] || !Object.keys(hideSet).includes(set)}/>
+                                    <CardsCountByPack refreshCounter={refreshCounter} collection={collection} set={set}/>
                                 </div>
                                 { 
                                     hideSet[set] || !Object.keys(hideSet).includes(set) ? 
@@ -552,6 +586,7 @@
             )
         };
         // **********
+    // **********
 
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);

@@ -65,6 +65,18 @@ body {
     display: inline-block;
 }
 
+.set-info {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+
+    div {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 20px;
+    }
+}
+
 .hide-set {
     display: inline-block;
     vertical-align: middle;
@@ -270,18 +282,6 @@ body {
     top: 230px;
     left: 0;
     z-index: 10
-}
-
-.missing-cards-set-info {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 20px;
-
-    div {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 20px;
-    }
 }
 
 .recyclable-tradable {

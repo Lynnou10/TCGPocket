@@ -40,6 +40,9 @@ def manageRegionalName(name):
 def translateName(name):
     if(name == -1):
         return 'No Data'
+    
+    if(name == 'All'):
+        return name
 
     selectedEnglishName = name
     selectedIndex = -1
@@ -52,7 +55,7 @@ def translateName(name):
             selectedEnglishName = englishName
             selectedIndex = index
             prio = True
-    if(index != -1):
+    if(selectedIndex != -1):
         return manageRegionalName(name.replace(selectedEnglishName, french[selectedIndex]))
     else:
         return manageRegionalName(name)
@@ -160,6 +163,7 @@ def refreshAppData():
     collection = getCollection()
     collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
     collection.fillna(-1, inplace = True)
+    collection.replace({'pack': -1}, 'All', inplace=True)
     collection['french_name'] = collection['name'].map(translateName)
     collection['pack_french_name'] = collection['pack'].map(translateName)
 
@@ -169,7 +173,7 @@ def refreshAppData():
     # PREPARE DATA TO CALCULATE
     rarity = getRarity()
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
-    collection.fillna(-1, inplace = True)
+    collectionWithInfo.fillna(-1, inplace = True)
     collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
     print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
 
