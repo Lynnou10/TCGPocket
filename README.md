@@ -5,12 +5,7 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
 
 python -m http.server 8000
 
-1 GERER LA COLLECTION
-  - BLACK ON 0
- - FILTER LANGUAGE
-
-
- MISSING:
+1 MISSING:
   IGNORE LAST EXTENSION
 
 2 SHOW/HIDE ON OTHER TABS

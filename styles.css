@@ -1,3 +1,4 @@
+/* GLOBAL */
 body {
     font-family: 'Roboto';
     margin: 0;
@@ -53,7 +54,7 @@ body {
     position: sticky;
     background-color: #c3d97c;
     margin-bottom: 5px;
-    top: 58px;
+    top: 110px;
     padding: 10px;
     z-index: 1000;
 }
@@ -88,33 +89,6 @@ body {
     }
 }
 
-.set-card-count {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 10px;
-}
-
-.total-card-count {
-    position: fixed;
-    top: 10px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    background-color: transparent;
-    z-index: 100000000;
-    font-size: 30px;
-}
-
-
-
-
-
-
-.clickable-card {
-    background-color: transparent;
-    border: none;
-    padding: 0;
-}
-
 .card {
     width: 183.5px;
     height: 286px;
@@ -141,6 +115,108 @@ body {
     height: 25px;
     display: block;
 }
+
+.filters {
+    height: 52px;
+    background-color: #aacf4c;
+    position: sticky;
+    top: 58px;
+    z-index: 1000;
+}
+
+.filter {
+    padding: 10px;
+    font-size: 25px;
+    display: inline-block;
+
+    input {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+        accent-color: #FFC300;
+        background: red;
+        border: none;
+    }
+
+    select {
+        width: 100px;
+        height: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        vertical-align: middle;
+        background: #FFC300;
+        border: none;
+        border-radius: 10px;
+    }
+}
+
+.global-stats {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: transparent;
+    z-index: 100000000;
+    font-size: 30px;
+}
+
+.missing-card {
+    opacity: 50%;
+}
+
+
+
+/* COLLECTION */
+.set-card-count {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.clickable-card {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: 'Roboto';
+    font-size: 16px;
+}
+
+.save-collection {
+    position: fixed;
+    width: 100%;
+    bottom: 15px;
+    text-align: center;
+    z-index: 100000;
+
+    button {
+        background-color: darkblue; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: lightblue;
+        color: black;
+    }
+}
+
+
+
+
+
+
+
+
+
 
 .card-costs {
     width: 183.5px;
@@ -196,30 +272,6 @@ body {
     z-index: 10
 }
 
-.filter {
-    padding: 10px;
-    font-size: 25px;
-    display: inline-block;
-
-    input {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
-        accent-color: #FFC300;
-        background: red;
-        border: none;
-    }
-
-    select {
-        width: 100px;
-        height: 20px;
-        font-size: 16px;
-        font-weight: bold;
-        vertical-align: middle;
-        background: #FFC300;
-    }
-}
-
 .missing-cards-set-info {
     display: inline-block;
     vertical-align: middle;
@@ -239,31 +291,4 @@ body {
 
 .total-trade-points {
     padding: 10px;
-}
-
-.save-collection {
-    position: fixed;
-    width: 100%;
-    bottom: 15px;
-    text-align: center;
-    z-index: 100000;
-
-    button {
-        background-color: darkblue; /* Green */
-        border: none;
-        color: white;
-        padding: 15px 32px;
-        border-radius: 5px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: lightblue;
-        color: black;
-    }
 }

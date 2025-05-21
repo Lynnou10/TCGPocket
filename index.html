@@ -117,7 +117,7 @@
             return (
                 <div className="filter">
                     <label>
-                        {label}:
+                        {label}
                         <input
                         type="checkbox"
                         checked={value}
@@ -131,7 +131,7 @@
             const {label, value, options, handleChange, filterName} = selectfilterProps;
             return (
                 <div className="filter">
-                    {label} :
+                    {label}:&nbsp;
                     <select onChange={(e) => handleChange(filterName, e.target.value)} value={value}>
                         {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
@@ -166,16 +166,17 @@
                         {hide && hide.fullyMissing ? <></> : <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/>}
                         {hide && hide.oneDiamond ? <></> : <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/>}
                         {hide && hide.twoDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/>}
-                        <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>
-                        <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>
-                        <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>
+                        {hide && hide.threeDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/>}
+                        {hide && hide.fourDiamonds ? <></> : <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/>}
+                        {hide && hide.oneStar ? <></> : <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/>}
                         {hide && hide.veryRare ? <></> : <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/>}
-                        <Selectfilter
-                            label='Card language'
+                        {hide && hide.language ? <></> : <Selectfilter
+                            label='Language'
                             value={filters.language}
                             filterName='language'
                             options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
                             handleChange={handleChange}/>
+                        }
                     </div>
                 </div>
             )
@@ -235,11 +236,11 @@
             const {missingCards} = cardsProps;
             return (
                 <div key="missing-cards">
-                    <div className="total-trade-points">Total trade points required: <strong>{calculateTotalTradePoint(missingCards)}</strong></div>
+                    <div className="global-stats">Total trade points required: <strong>{calculateTotalTradePoint(missingCards)}</strong></div>
                     {
                         Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className = "set-info-container">
+                                <div className = "set-container">
                                     <div className="set-name">{missingCards[set].setName}</div>
                                     <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
                                 </div>
@@ -302,7 +303,7 @@
                     {
                         Object.keys(tradeCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className = "set-info-container">
+                                <div className = "set-container">
                                     <div className="set-name">{tradeCards[set].setName}</div>
                                 </div>
                                 {
@@ -368,7 +369,7 @@
                     {
                         Object.keys(recycleCards).sort().map(set => 
                             <div key={set} className="set">
-                                <div className = "set-info-container">
+                                <div className = "set-container">
                                     <div className="set-name">{recycleCards[set].setName}</div>
                                 </div>
                                 {
@@ -419,7 +420,7 @@
             };
 
             return (
-                <button className="clickable-card" onClick={handleClick} onContextMenu={handleClick}>
+                <button className={`clickable-card ${card.quantity === 0 ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleClick}>
                     <div className="card">
                         <div className="card-image">
                             <img
@@ -468,7 +469,7 @@
                             <button onClick={saveCollection}>Save collection</button>
                         </div> : <></>
                     }
-                    <div className="total-card-count">
+                    <div className="global-stats">
                         Total cards: 
                         <strong>
                             { refreshCounter > 0 ? Object.keys(collection).map(set => 
@@ -532,9 +533,23 @@
             const {cards} = cardsDashboardProps;
             const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards));
 
-            return <CollectionCards collectionCards={collectionCards}/>
-                
-            
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setCollectionCards(formatCards(cards, filters))}
+                        hide={{
+                            fullyMissing: true,
+                            oneDiamond: true,
+                            twoDiamonds: true,
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            veryRare: true
+                        }}
+                    />
+                    <CollectionCards collectionCards={collectionCards}/>
+                </div>
+            )
         };
         // **********
 
