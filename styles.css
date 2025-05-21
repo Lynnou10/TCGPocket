@@ -4,17 +4,33 @@ body {
     background-color: #FFFAA0;
 }
 
-.menu{
+.content {
+    margin-top: 58px;
+}
+
+.page-title {
     position: fixed;
+    left: 0;
+    z-index: 100000;
+    padding: 10px;
+    font-size: 40px;
+}
+
+.menu{
+    width: 100%;
+    position: fixed;
+    background-color: #FFFAA0;
     top: 0;
-    right: 0;
-    z-index: 100;
+    left: 0;
+    text-align: right;
+    z-index: 10000;
 
     button {
         background-color: grey; /* Green */
         border: none;
         color: white;
         padding: 15px 32px;
+        border-radius: 5px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -28,32 +44,82 @@ body {
     }
 }
 
-.page-title {
-    padding: 10px;
-    font-size: 40px;
-}
-
-.total-trade-points {
-    padding: 10px;
-}
-
 .set {
-    padding: 5px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #c3d97c;
     margin-bottom: 10px;
+}
+
+.set-container {
+    position: sticky;
+    background-color: #c3d97c;
+    margin-bottom: 5px;
+    top: 58px;
+    padding: 10px;
+    z-index: 1000;
 }
 
 .set-name {
     font-size: 30px;
-    margin-bottom: 15px;
+    vertical-align: middle;
     display: inline-block;
+}
+
+.hide-set {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 30px;
+    margin-left: 10px;
+
+    button {
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #008CBA;
+    }
+}
+
+.set-card-count {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.total-card-count {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    background-color: transparent;
+    z-index: 100000000;
+    font-size: 30px;
+}
+
+
+
+
+
+
+.clickable-card {
+    background-color: transparent;
+    border: none;
+    padding: 0;
 }
 
 .card {
     width: 183.5px;
     height: 286px;
     display: inline-block;
-    margin-right: 8px;
+    margin-left: 8px;
     margin-bottom: 10px;
     position: relative;
 }
@@ -169,4 +235,35 @@ body {
 .recyclable-tradable {
     border: 3px solid #b20d78;
     border-radius: 10px;
+}
+
+.total-trade-points {
+    padding: 10px;
+}
+
+.save-collection {
+    position: fixed;
+    width: 100%;
+    bottom: 15px;
+    text-align: center;
+    z-index: 100000;
+
+    button {
+        background-color: darkblue; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: lightblue;
+        color: black;
+    }
 }

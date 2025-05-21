@@ -1,3 +1,5 @@
+import http.server
+import socketserver
 import pandas as pd
 from os import walk
 from os import remove
@@ -98,13 +100,13 @@ def getMissingCards(collection):
     oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
     try:
-        remove('./output/missing_cards.csv')
+        remove('./csv_output/missing_cards.csv')
     except OSError as error:
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF MISSING CARDS: {missingCards["set_id"].count()}')
     missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
-    missingCards.to_csv('./output/missing_cards.csv', index=False, encoding='utf-8')
+    missingCards.to_csv('./csv_output/missing_cards.csv', index=False, encoding='utf-8')
     missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
 
 def getRecycleCards(collection, tradeCards):
@@ -117,11 +119,11 @@ def getRecycleCards(collection, tradeCards):
     recycleCards = recycleCards.rename(columns={"quantity_x": "quantity", "quantity_y": "trade_quantity"})
     print(f'TOTAL TRADING POINTS AVAILABLE: {recycleCards["total"].sum()}')
     try:
-        remove('./output/recycle_cards.csv')
+        remove('./csv_output/recycle_cards.csv')
     except OSError as error:
         print(error)
         print("File path can not be removed")
-    recycleCards.to_csv('./output/recycle_cards.csv', index=False, encoding='utf-8')
+    recycleCards.to_csv('./csv_output/recycle_cards.csv', index=False, encoding='utf-8')
     recycleCards.sort_values(by=['card_id']).to_json('./output/recycle_cards.json', orient="records", force_ascii=False)
 
 def groupTradeCards(cards):
@@ -141,40 +143,74 @@ def getTradeCards(collection):
     tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA" and set != "{active_extention}"')
     tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
     try:
-        remove('./output/trade_cards.csv')
+        remove('./csv_output/trade_cards.csv')
     except OSError as error:
         print(error)
         print("File path can not be removed")
     print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
     tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
-    tradeCards.to_csv('./output/trade_cards.csv', index=False, encoding='utf-8') 
+    tradeCards.to_csv('./csv_output/trade_cards.csv', index=False, encoding='utf-8') 
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
     return tradeCards
 
-# GET COLLECTION
-cards = getCards()
-rarity = getRarity()
-collection = getCollection()
-collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
-collection.fillna(-1, inplace = True)
-collection['french_name'] = collection['name'].map(translateName)
-collection['pack_french_name'] = collection['pack'].map(translateName)
 
-# EXPORT COLLECTION DATA
-collection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
+def refreshAppData():
+    # GET COLLECTION
+    cards = getCards()
+    collection = getCollection()
+    collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
+    collection.fillna(-1, inplace = True)
+    collection['french_name'] = collection['name'].map(translateName)
+    collection['pack_french_name'] = collection['pack'].map(translateName)
 
-# PREPARE DATA TO CALCULATE
+    # EXPORT COLLECTION DATA
+    collection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
 
-collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
-collection.fillna(-1, inplace = True)
-collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
-print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
+    # PREPARE DATA TO CALCULATE
+    rarity = getRarity()
+    collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
+    collection.fillna(-1, inplace = True)
+    collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
+    print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
 
-# GET MISSING CARDS
-getMissingCards(collectionWithInfo)
+    # GET MISSING CARDS
+    getMissingCards(collectionWithInfo)
 
-# GET TRADE CARDS
-tradeCards = getTradeCards(collectionWithInfo)
+    # GET TRADE CARDS
+    tradeCards = getTradeCards(collectionWithInfo)
 
-# GET RECYCLE CARDS
-getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
+    # GET RECYCLE CARDS
+    getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
+
+class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == '/':
+            self.path = 'mywebpage.html'
+        return http.server.SimpleHTTPRequestHandler.do_GET(self)
+    
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+
+
+        # UPDATE COLLECTION
+        newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
+        newCollection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
+        
+        refreshAppData()
+
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain")
+        self.send_header("Content-Length", str(len("OK")))
+        self.end_headers()
+        self.wfile.write("OK".encode('utf-8'))
+
+# Create an object of the above class
+handler = ServerRequestHandler
+
+PORT = 8000
+server = socketserver.TCPServer(("", PORT), handler)
+
+# Star the server
+server.serve_forever()

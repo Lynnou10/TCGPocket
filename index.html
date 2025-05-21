@@ -11,10 +11,10 @@
     <div id="app"></div>
 
     <script type="text/babel">
-        const collectionRequest = fetch('./output/collection.json').then((response) => response.json());
-        const missingCardsRequest = fetch('./output/missing_cards.json').then((response) => response.json());
-        const tradeCardsRequest = fetch('./output/trade_cards.json').then((response) => response.json());
-        const recycleCardsRequest = fetch('./output/recycle_cards.json').then((response) => response.json());
+        const collectionRequest = fetch('./output/collection.json', {cache: "no-store"}).then((response) => response.json());
+        const missingCardsRequest = fetch('./output/missing_cards.json', {cache: "no-store"}).then((response) => response.json());
+        const tradeCardsRequest = fetch('./output/trade_cards.json', {cache: "no-store"}).then((response) => response.json());
+        const recycleCardsRequest = fetch('./output/recycle_cards.json', {cache: "no-store"}).then((response) => response.json());
         
         // GLOBALS
         // CONFIGUTRATION
@@ -182,20 +182,21 @@
         };
         const App = (appProps) => {
             const { collection, missingCards, tradeCards, recycleCards} = appProps
-            const [page, setPage] = React.useState('missing');
+            const [page, setPage] = React.useState('Collection');
 
             return (
-                <div>
+                <div className="content">
                     <div className="menu">
-                        <button onClick={() => setPage('collection')}>Collection</button>
-                        <button onClick={() => setPage('missing')}>Missing Cards</button>
-                        <button onClick={() => setPage('trade')}>Trade Cards</button>
-                        <button onClick={() => setPage('recycle')}>Recycle Cards</button>
+                        <div className="page-title">{page}</div>
+                        <button onClick={() => setPage('Collection')}>Collection</button>
+                        <button onClick={() => setPage('Missing Cards')}>Missing Cards</button>
+                        <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
+                        <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
                     </div>
                     { 
-                        page === 'missing' ? <MissingCardsDashboard cards={missingCards}/> :
-                        page === 'trade' ? <TradeCardsDashboard cards={tradeCards}/> :
-                        page === 'recycle' ? <RecycleCardsDashboard cards={recycleCards}/> :
+                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards}/> :
+                        page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards}/> :
+                        page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards}/> :
                         <CollectionDashboard cards={collection}/>
                     }
                 </div>
@@ -264,7 +265,6 @@
 
             return (
                 <div>
-                    <div className="page-title">Missing cards</div>
                     <Filters 
                         refresh={(filters) => setMissingCards(formatCards(cards, filters))}
                         hide={{veryRare: true}}
@@ -327,7 +327,6 @@
 
             return (
                 <div>
-                    <div className="page-title">Trade cards</div>
                     <Filters
                         refresh={(filters) => setTradeCards(formatCards(cards, filters))}
                         hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true, veryRare: true}}
@@ -394,7 +393,6 @@
 
             return (
                 <div>
-                    <div className="page-title">Recycle cards</div>
                     <Filters
                         refresh={(filters) => setRecycleCards(formatCards(cards, filters))}
                         hide={{fullyMissing: true, oneDiamond: true, twoDiamonds: true}}
@@ -421,7 +419,7 @@
             };
 
             return (
-                <button onClick={handleClick} onContextMenu={handleClick}>
+                <button className="clickable-card" onClick={handleClick} onContextMenu={handleClick}>
                     <div className="card">
                         <div className="card-image">
                             <img
@@ -444,6 +442,8 @@
 
             const [collection, setCollection] = React.useState(collectionCards);
             const [hideSet, setHideSet] = React.useState({});
+            const [showSaveCollection, setShowSaveCollection] = React.useState(false);
+            const [refreshCounter, setRefreshCounter] = React.useState(1)
 
             const updateCardQuantity = (set, cardId, deltaQuantity) => {
                 const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
@@ -451,27 +451,66 @@
                     collection[set].cards[cardIndex].quantity += deltaQuantity;
                 }
                 setCollection(collection);
+                setShowSaveCollection(true);
+                setRefreshCounter(refreshCounter + 1);
             };
+
+            const saveCollection = () => 
+                fetch('/collection', {
+                    method: 'POST',
+                    body: JSON.stringify(Object.keys(collection).map(set => collection[set].cards).flat(1))
+                }).then((response) => location.reload(true));
+            ;
 
             return (
                 <div key="collection-cards">
+                    {showSaveCollection ? <div className="save-collection">
+                            <button onClick={saveCollection}>Save collection</button>
+                        </div> : <></>
+                    }
+                    <div className="total-card-count">
+                        Total cards: 
+                        <strong>
+                            { refreshCounter > 0 ? Object.keys(collection).map(set => 
+                                collection[set].cards.map(
+                                    card => {
+                                        //OLD AMBER IS IN A1 and A1A
+                                        if(card.name === 'Old Amber' && set === 'A1')
+                                            return 0;
+                                        else{
+                                            return card.quantity;
+                                        }
+                                    }
+                                ).reduce(
+                                    (partialSum, a) => partialSum + a, 0)
+                                ).reduce(
+                                    (partialSum, a) => partialSum + a, 0)
+                                : 0}
+                        </strong>
+                    </div>
                     {
                         Object.keys(collection).sort().map(set => 
                             <div key={set} className="set">
-                                <div className = "set-info-container">
+                                <div className="set-container">
                                     <div className="set-name">{collection[set].setName}</div>
                                     <div className="hide-set">
                                         <button onClick={() => {
                                             let value = true;
-                                            if(hideSet[set]) {
+                                            if(hideSet[set] || !Object.keys(hideSet).includes(set)) {
                                                 value = false;
                                             }
                                             setHideSet({...hideSet, [set]: value});
-                                        }}>{hideSet[set] ? "Show" : "Hide"}</button>
+                                        }}>{hideSet[set] || !Object.keys(hideSet).includes(set) ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
+                                    </div>
+                                    <div className="set-card-count">
+                                        Set cards count: 
+                                        <strong>
+                                            { refreshCounter > 0 ? collection[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
+                                        </strong>
                                     </div>
                                 </div>
                                 { 
-                                    hideSet[set] ? 
+                                    hideSet[set] || !Object.keys(hideSet).includes(set) ? 
                                         <></> :
                                         collection[set].cards.map(
                                             collectionCard => <CollectionCard
@@ -493,12 +532,9 @@
             const {cards} = cardsDashboardProps;
             const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards));
 
-            return (
-                <div>
-                    <div className="page-title">Collection</div>
-                    <CollectionCards collectionCards={collectionCards}/>
-                </div>
-            )
+            return <CollectionCards collectionCards={collectionCards}/>
+                
+            
         };
         // **********
 

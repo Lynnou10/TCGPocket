@@ -1,6 +1,5 @@
 card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,tradeCost,pointCost
 23,Celestial Guardians (A3),Dhelmise ex,Sinistrail EX,Solgaleo,Solgaleo,0,◊◊◊◊,4.0,500.0,500.0
-49,Celestial Guardians (A3),Crabominable ex,Crabominable EX,Solgaleo,Solgaleo,0,◊◊◊◊,4.0,500.0,500.0
 111,Celestial Guardians (A3),Alolan Muk ex,Grotadmorv d'Alola EX,Lunala,Lunala,0,◊◊◊◊,4.0,500.0,500.0
 22,Shining Revelry (A2b),Pikachu ex,Pikachu EX,Charizard,Dracaufeu,0,◊◊◊◊,4.0,500.0,500.0
 54,Shining Revelry (A2b),Tinkaton ex,Forgelina EX,Charizard,Dracaufeu,0,◊◊◊◊,4.0,500.0,500.0
@@ -35,6 +34,7 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 79,Celestial Guardians (A3),Ribombee,Rubombelle,Solgaleo,Solgaleo,0,◊,1.0,0.0,35.0
 115,Celestial Guardians (A3),Mareanie,Vorastérie,Lunala,Lunala,0,◊,1.0,0.0,35.0
 12,Celestial Guardians (A3),Decidueye ex,Archéduc EX,Lunala,Lunala,1,◊◊◊◊,4.0,500.0,500.0
+49,Celestial Guardians (A3),Crabominable ex,Crabominable EX,Solgaleo,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
 51,Celestial Guardians (A3),Wishiwashi ex,Froussardine EX,Lunala,Lunala,1,◊◊◊◊,4.0,500.0,500.0
 58,Celestial Guardians (A3),Alolan Raichu ex,Raichu d'Alola EX,Solgaleo,Solgaleo,1,◊◊◊◊,4.0,500.0,500.0
 41,Genetic Apex (A1),Arcanine ex,Arcanin EX,Pikachu,Pikachu,1,◊◊◊◊,4.0,500.0,500.0
@@ -97,7 +97,6 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 114,Celestial Guardians (A3),Garbodor,Miasmax,No Data,No Data,1,◊◊,2.0,0.0,70.0
 126,Celestial Guardians (A3),Hakamo,Miraidon,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
 132,Celestial Guardians (A3),Hawlucha,Brutalibré,Solgaleo,Solgaleo,1,◊◊,2.0,0.0,70.0
-144,Celestial Guardians (A3),Rare Candy,Miraidon,No Data,No Data,1,◊◊,2.0,0.0,70.0
 149,Celestial Guardians (A3),Ilima,Miraidon,Lunala,Lunala,1,◊◊,2.0,0.0,70.0
 19,Genetic Apex (A1),Weepinbell,Boustiflor,Charizard,Dracaufeu,1,◊◊,2.0,0.0,70.0
 69,Genetic Apex (A1),Kingler,Krabboss,Mewtwo,Mewtwo,1,◊◊,2.0,0.0,70.0
@@ -125,8 +124,6 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 174,Celestial Guardians (A3),Minior,Météno,Lunala,Lunala,0,★,5.0,400.0,400.0
 175,Celestial Guardians (A3),Magearna,Magearna,Solgaleo,Solgaleo,0,★,5.0,400.0,400.0
 178,Celestial Guardians (A3),Bewear,Chelours,Lunala,Lunala,0,★,5.0,400.0,400.0
-241,Genetic Apex (A1),Nidoking,Nidoking,Pikachu,Pikachu,0,★,5.0,400.0,400.0
-244,Genetic Apex (A1),Dragonite,Dracolosse,Mewtwo,Mewtwo,0,★,5.0,400.0,400.0
 156,Space-Time Smackdown (A2),Tangrowth,Bouldeneu,Dialga,Dialga,0,★,5.0,400.0,400.0
 163,Space-Time Smackdown (A2),Shinx,Lixy,Dialga,Dialga,0,★,5.0,400.0,400.0
 167,Space-Time Smackdown (A2),Giratina,Giratina,Palkia,Palkia,0,★,5.0,400.0,400.0
@@ -136,3 +133,5 @@ card_id,set,name,french_name,pack,pack_french_name,quantity,rarity,rarityOrder,t
 174,Space-Time Smackdown (A2),Heatran,Heatran,Dialga,Dialga,0,★,5.0,400.0,400.0
 177,Space-Time Smackdown (A2),Bidoof,Keunotor,Dialga,Dialga,0,★,5.0,400.0,400.0
 178,Space-Time Smackdown (A2),Glameow,Chaglam,Palkia,Palkia,0,★,5.0,400.0,400.0
+241,Genetic Apex (A1),Nidoking,Nidoking,Pikachu,Pikachu,0,★,5.0,400.0,400.0
+244,Genetic Apex (A1),Dragonite,Dracolosse,Mewtwo,Mewtwo,0,★,5.0,400.0,400.0
