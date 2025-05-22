@@ -103,14 +103,7 @@ def getMissingCards(collection):
     missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1 and set != "{active_extention}"').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
     oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
-    try:
-        remove('./csv_output/missing_cards.csv')
-    except OSError as error:
-        print(error)
-        print("File path can not be removed")
-    print(f'NUMBER OF MISSING CARDS: {missingCards["set_id"].count()}')
     missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
-    missingCards.to_csv('./csv_output/missing_cards.csv', index=False, encoding='utf-8')
     missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
 
 def getRecycleCards(collection, tradeCards):
@@ -122,12 +115,6 @@ def getRecycleCards(collection, tradeCards):
     recycleCards = pd.merge(recycleCards, tradeCards, left_on=['set', 'card_id'], right_on=['set', 'card_id'], how='left')
     recycleCards = recycleCards.rename(columns={"quantity_x": "quantity", "quantity_y": "trade_quantity"})
     print(f'TOTAL TRADING POINTS AVAILABLE: {recycleCards["total"].sum()}')
-    try:
-        remove('./csv_output/recycle_cards.csv')
-    except OSError as error:
-        print(error)
-        print("File path can not be removed")
-    recycleCards.to_csv('./csv_output/recycle_cards.csv', index=False, encoding='utf-8')
     recycleCards.sort_values(by=['card_id']).to_json('./output/recycle_cards.json', orient="records", force_ascii=False)
 
 def groupTradeCards(cards):
@@ -146,14 +133,8 @@ def getTradeCards(collection):
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
     tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA" and set != "{active_extention}"')
     tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
-    try:
-        remove('./csv_output/trade_cards.csv')
-    except OSError as error:
-        print(error)
-        print("File path can not be removed")
     print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
     tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
-    tradeCards.to_csv('./csv_output/trade_cards.csv', index=False, encoding='utf-8') 
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
     return tradeCards
 
