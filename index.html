@@ -15,6 +15,7 @@
         const missingCardsRequest = fetch('./output/missing_cards.json', {cache: "no-store"}).then((response) => response.json());
         const tradeCardsRequest = fetch('./output/trade_cards.json', {cache: "no-store"}).then((response) => response.json());
         const recycleCardsRequest = fetch('./output/recycle_cards.json', {cache: "no-store"}).then((response) => response.json());
+        const pullRequest = fetch('./output/pulls.json', {cache: "no-store"}).then((response) => response.json());
         
     // GLOBALS
         // CONFIGUTRATION
@@ -72,31 +73,39 @@
             });
             return cards
         };
+        const formatPulls = (pullsData, filters) => {
+            const pulls = [];
+            pullsData.forEach((pull) => {
+                pull.displayName = filters && filters.language == 'en' ? pull.pack : pull.pack_french_name;
+                pulls.push(pull)
+            });
+            return pulls;
+        };
         const filterCard = (card, filters) => {
             const conditions = [true]
             if(filters) {
-                if(filters.fullyMissing) {
+                if(filters.oneCardOnly !== undefined && !filters.oneCardOnly) {
                     conditions.push(card.quantity === 0);
                 }
-                if(!filters.oneDiamond && card.rarityOrder === 1) {
+                if(filters.oneDiamond !== undefined && !filters.oneDiamond && card.rarityOrder === 1) {
                     conditions.push(false);
                 }
-                if(!filters.twoDiamonds && card.rarityOrder === 2) {
+                if(filters.twoDiamonds !== undefined && !filters.twoDiamonds && card.rarityOrder === 2) {
                     conditions.push(false);
                 }
-                if(!filters.threeDiamonds && card.rarityOrder === 3) {
+                if(filters.threeDiamonds !== undefined && !filters.threeDiamonds && card.rarityOrder === 3) {
                     conditions.push(false);
                 }
-                if(!filters.fourDiamonds && card.rarityOrder === 4) {
+                if(filters.fourDiamonds !== undefined && !filters.fourDiamonds && card.rarityOrder === 4) {
                     conditions.push(false);
                 }
-                if(!filters.oneStar && card.rarityOrder === 5) {
+                if(filters.oneStar !== undefined && !filters.oneStar && card.rarityOrder === 5) {
                     conditions.push(false);
                 }
-                if(!filters.veryRare && card.rarityOrder >= tradeThreshold) {
+                if(filters.veryRare !== undefined && !filters.veryRare && card.rarityOrder >= tradeThreshold) {
                     conditions.push(false);
                 }
-                if(!filters.lastExtension) {
+                if(filters.lastExtension !== undefined && !filters.lastExtension) {
                     conditions.push(!card.set.includes(lastExtension));
                 }
                 return conditions.reduce(
@@ -176,7 +185,7 @@
         const Filters = (filtersProps) => {
             const {init, refresh, show} = filtersProps;
             const [filters, setFilters] = React.useState({
-                fullyMissing: false,
+                oneCardOnly: !!init ? init.oneCardOnly : undefined,
                 oneDiamond: true,
                 twoDiamonds: true,
                 threeDiamonds: true,
@@ -199,7 +208,7 @@
             return (
                 <div className="filters">
                     <div>
-                        {show && show.fullyMissing ? <CheckBoxfilter label='Only missing' value={filters.fullyMissing} filterName='fullyMissing' handleChange={handleChange}/> : <></>}
+                        {show && show.oneCardOnly ? <CheckBoxfilter label='One or less cards' value={filters.oneCardOnly} filterName='oneCardOnly' handleChange={handleChange}/> : <></>}
                         {show && show.oneDiamond ? <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/> : <></>}
                         {show && show.twoDiamonds ? <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/> : <></>}
                         {show && show.threeDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/> : <></>}
@@ -219,7 +228,7 @@
             )
         };
         const App = (appProps) => {
-            const { collection, missingCards, tradeCards, recycleCards} = appProps
+            const { collection, missingCards, tradeCards, recycleCards, pulls} = appProps
             const [page, setPage] = React.useState('Collection');
 
             return (
@@ -232,7 +241,7 @@
                         <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
                     </div>
                     { 
-                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards}/> :
+                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls}/> :
                         page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards}/> :
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards}/> :
                         <CollectionDashboard cards={collection}/>
@@ -245,9 +254,10 @@
     // APP COMPONENTS
         //MISSING CARDS
         const MissingCardsByPack = (missingCardsProps) => {
+            const { setMissingCards } = missingCardsProps;
             const packMissingCard = {};
             let allPacksValue = 0;
-            missingCardsProps.setMissingCards.forEach((card) => { 
+            setMissingCards.forEach((card) => { 
                 if(card.packDisplayName === 'All') {
                     allPacksValue += 1;
                 } else {
@@ -259,9 +269,21 @@
                 }
             });
             return (<div className="set-info">
-                <div>Cards: <strong>{missingCardsProps.setMissingCards.length}</strong></div>
+                <div>Cards: <strong>{setMissingCards.length}</strong></div>
                 {
                     Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
+                }
+            </div>)
+        };
+
+        const PullsByPack = (pullsProps) => {
+            const { pulls, set } = pullsProps;
+            const selectedPackPulls = pulls.filter(pull => pull.set === set.toUpperCase());
+            selectedPackPulls.sort((a, b) => -(a.value - b.value));
+            const maxPull = Math.max(...selectedPackPulls.map(pull => pull.value));
+            return (<div className="set-info">
+                {
+                    selectedPackPulls.map(pull => <div className={`${pull.value === maxPull ? 'max-pull' : ''}`} key={`${pull.set}-${pull.displayName}`}>{pull.displayName} : <strong>{pull.value}%</strong></div>)
                 }
             </div>)
         };
@@ -293,8 +315,9 @@
         };
 
         const MissingCards = (cardsProps) => {
-            const {missingCards} = cardsProps;
+            const {missingCards, pulls} = cardsProps;
             const [hideSet, setHideSet] = React.useState({});
+
 
             return (
                 <div key="missing-cards">
@@ -308,7 +331,11 @@
                                 <div className = "set-container">
                                     <div className="set-name">{missingCards[set].setName}</div>
                                     <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
-                                    <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
+                                    {
+                                        missingCards[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) === 0 ?
+                                            <PullsByPack pulls={pulls} set={set}/> :
+                                            <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
+                                    }
                                 </div>
                                 {
                                     hideSet[set] ? 
@@ -328,15 +355,19 @@
         };
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
-            const {cards} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards));
+            const {cards, pulls} = cardsDashboardProps;
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {oneCardOnly: false}));
+            const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls));
 
             return (
                 <div>
                     <Filters 
-                        refresh={(filters) => setMissingCards(formatCards(cards, filters))}
+                        refresh={(filters) => {
+                            setMissingCards(formatCards(cards, filters))
+                            setPackPulls(formatPulls(pulls, filters))
+                        }}
                         show={{
-                            fullyMissing: true,
+                            oneCardOnly: true,
                             oneDiamond: true,
                             twoDiamonds: true,
                             threeDiamonds: true,
@@ -345,8 +376,9 @@
                             language: true,
                             lastExtension: true
                         }}
+                        init={{oneCardOnly: false}}
                     />
-                    <MissingCards missingCards={missingCards}/>
+                    <MissingCards missingCards={missingCards} pulls={packPulls}/>
                 </div>
             )
         };
@@ -662,13 +694,14 @@
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest]).then((results) => {
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest]).then((results) => {
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
                 missingCards={results[1]}
                 tradeCards={results[2]}
                 recycleCards={results[3]}
+                pulls={results[4]}
             />)
         }).catch(function(err) {
             console.log(err);

@@ -179,6 +179,7 @@ def getPackPull(collection):
     
     pullData = pd.DataFrame(pullData)
     pullData = pullData.rename(columns={0: 'set', 1: 'pack', 2: 'value'})
+    pullData['pack_french_name'] = pullData['pack'].map(translateName)
     pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
 
 def refreshAppData():

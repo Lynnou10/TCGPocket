@@ -77,6 +77,10 @@ body {
     }
 }
 
+.max-pull {
+    color: red;
+}
+
 .hide-set {
     display: inline-block;
     vertical-align: middle;
