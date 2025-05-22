@@ -175,7 +175,7 @@
             const {label, value, options, handleChange, filterName} = selectfilterProps;
             return (
                 <div className="filter">
-                    {label}:&nbsp;
+                    {!!label ? <span>{label}:&nbsp;</span> : ''}
                     <select onChange={(e) => handleChange(filterName, e.target.value)} value={value}>
                         {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
                     </select>
@@ -192,7 +192,6 @@
                 fourDiamonds: true,
                 oneStar: true,
                 veryRare: true,
-                language: 'fr',
                 lastExtension: true
             });
 
@@ -216,13 +215,6 @@
                         {show && show.oneStar ? <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/> : <></>}
                         {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
-                        {show && show.language ? <Selectfilter
-                            label='Language'
-                            value={filters.language}
-                            filterName='language'
-                            options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
-                            handleChange={handleChange}/>  : <></>
-                        }
                     </div>
                 </div>
             )
@@ -230,21 +222,37 @@
         const App = (appProps) => {
             const { collection, missingCards, tradeCards, recycleCards, pulls} = appProps
             const [page, setPage] = React.useState('Collection');
+            const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
+
+            const handleChange = (filterName, filterValue) => {
+                const newFilters = {
+                    ...globalFilters
+                };
+                newFilters[filterName] = filterValue
+                setGlobalFilters(newFilters)
+            };
 
             return (
                 <div className="content">
                     <div className="menu">
                         <div className="page-title">{page}</div>
+                        <Selectfilter
+                            label=''
+                            value={globalFilters.language}
+                            filterName='language'
+                            options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
+                            handleChange={handleChange}
+                        />
                         <button onClick={() => setPage('Collection')}>Collection</button>
                         <button onClick={() => setPage('Missing Cards')}>Missing Cards</button>
                         <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
                         <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
                     </div>
                     { 
-                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls}/> :
-                        page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards}/> :
-                        page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards}/> :
-                        <CollectionDashboard cards={collection}/>
+                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} globalFilters={globalFilters}/> :
+                        page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
+                        page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
+                        <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
                     }
                 </div>
             ); 
@@ -355,17 +363,20 @@
         };
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
-            const {cards, pulls} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {oneCardOnly: false}));
-            const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls));
+            const {cards, pulls, globalFilters} = cardsDashboardProps;
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false}));
+            const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
+            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false}));
+
+            React.useEffect(() => {
+                setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
+                setPackPulls(formatPulls(pulls, {...filters, ...globalFilters}))
+            }, [globalFilters, filters]);
 
             return (
                 <div>
                     <Filters 
-                        refresh={(filters) => {
-                            setMissingCards(formatCards(cards, filters))
-                            setPackPulls(formatPulls(pulls, filters))
-                        }}
+                        refresh={(filters) => setFilters(filters)}
                         show={{
                             oneCardOnly: true,
                             oneDiamond: true,
@@ -373,7 +384,6 @@
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
-                            language: true,
                             lastExtension: true
                         }}
                         init={{oneCardOnly: false}}
@@ -410,6 +420,15 @@
 
             return (
                 <div key="trade-cards">
+                    <div className="global-stats">
+                        <div className="global-stats-element">Cards: <strong>{
+                            Object.keys(tradeCards).map(
+                                set => tradeCards[set].cards.map(
+                                    card => card.quantity
+                                ).reduce((partialSum, a) => partialSum + a, 0)
+                            ).reduce((partialSum, a) => partialSum + a, 0)
+                        }</strong></div> 
+                    </div>
                     <ContentToClipboard
                         content={
                             Object.keys(tradeCards).sort().map(
@@ -444,18 +463,20 @@
         };
 
         const TradeCardsDashboard = (cardsDashboardProps) => {
-            const {cards} = cardsDashboardProps;
-            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards));
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setTradeCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
 
             return (
                 <div>
                     <Filters
-                        refresh={(filters) => setTradeCards(formatCards(cards, filters))}
+                        refresh={(filters) => setFilters(filters)}
                         show={{
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
-                            language: true,
                             lastExtension: true
                         }}
                     />
@@ -529,19 +550,21 @@
         };
 
         const RecycleCardsDashboard = (cardsDashboardProps) => {
-            const {cards} = cardsDashboardProps;
-            const [recycleCards, setRecycleCards] = React.useState(() => formatCards(cards));
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [recycleCards, setRecycleCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setRecycleCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
 
             return (
                 <div>
                     <Filters
-                        refresh={(filters) => setRecycleCards(formatCards(cards, filters))}
+                        refresh={(filters) => setFilters(filters)}
                         show={{
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
-                            veryRare: true,
-                            language: true
+                            veryRare: true
                         }}
                     />
                     <RecycleCards recycleCards={recycleCards}/>
@@ -675,14 +698,17 @@
         };
 
         const CollectionDashboard = (cardsDashboardProps) => {
-            const {cards} = cardsDashboardProps;
-            const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards));
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setCollectionCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
 
             return (
                 <div>
                     <Filters
-                        refresh={(filters) => setCollectionCards(formatCards(cards, filters))}
-                        show={{language: true}}
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
                     />
                     <CollectionCards collectionCards={collectionCards}/>
                 </div>

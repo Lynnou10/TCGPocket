@@ -2,7 +2,7 @@
 body {
     font-family: 'Roboto';
     margin: 0;
-    background-color: #FFFAA0;
+    background-color: #c3d97c;
 }
 
 .content {
@@ -46,13 +46,13 @@ body {
 }
 
 .set {
-    background-color: #c3d97c;
+    background-color: #FFFAA0;
     margin-bottom: 10px;
 }
 
 .set-container {
     position: sticky;
-    background-color: #c3d97c;
+    background-color: #FFFAA0;
     margin-bottom: 5px;
     top: 110px;
     padding: 10px;
@@ -134,7 +134,7 @@ body {
 
 .filters {
     height: 52px;
-    background-color: #aacf4c;
+    background-color: #c3d97c;
     position: sticky;
     top: 58px;
     z-index: 10000000000;
@@ -169,8 +169,7 @@ body {
 .global-stats {
     position: fixed;
     top: 10px;
-    left: 50%;
-    transform: translate(-50%, 0);
+    left: 20%;
     background-color: transparent;
     z-index: 100000000;
     font-size: 30px;

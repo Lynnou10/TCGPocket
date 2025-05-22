@@ -5,11 +5,10 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
 
 python -m http.server 8000
 
-1 CLOSE ALL
+1 CLOSE ALL T
 
-2 TRADE CARDS
-    CARDS COUNT
 
-3 LANGUAGE GLOBAL FILTERS
+
+
 
 4 FROM SCRATCH
