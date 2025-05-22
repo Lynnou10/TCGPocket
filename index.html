@@ -124,7 +124,9 @@
 
             return (
                 <div className="copy-clipboard">
-                    {showMessage ? <span>Cards copied to clipboard!</span> : <></>}
+                    <div className="copy-clipboard-message">
+                        {showMessage ? <span>Cards copied to clipboard!</span> : <></>}
+                    </div>
                     <button onClick={() => {
                         navigator.clipboard.writeText(content).then(function() {
                             setShowMessage(true);
@@ -313,27 +315,43 @@
 
         const MissingCard = (cardProps) => {
             const {set, missingCard} = cardProps;
+            const [showMessage, setShowMessage] = React.useState(false);
+
+            const handleCardClick = () => {
+                navigator.clipboard.writeText(`${missingCard.displayName} ${missingCard.rarity} (${set})`).then(function() {
+                    setShowMessage(true);
+                    setTimeout(() => setShowMessage(false), 3000);
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+
             return (
-                <div className="card">
-                    <div className="card-image">
-                        <img
-                            src={getCardUrl(set, missingCard.card_id, missingCard.language)}
-                        />
+                <button className="clickable-card" onClick={handleCardClick}>
+                    <div className="copy-clipboard-message">
+                        {showMessage ? <span>Card copied to clipboard!</span> : <></>} 
                     </div>
-                    <div className="card-name">
-                        {missingCard.card_id} - {missingCard.displayName}
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                src={getCardUrl(set, missingCard.card_id, missingCard.language)}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {missingCard.card_id} - {missingCard.displayName}
+                        </div>
+                        <div className="card-costs">
+                            <div className="trade">Trade: {missingCard.tradeCost}</div>
+                            <div className="pack">Pack points: {missingCard.pointCost}</div>
+                        </div>
+                        <div className="card-counter">
+                            {missingCard.quantity}
+                        </div>
+                        <div className="card-pack-name">
+                            {missingCard.packDisplayName}
+                        </div>
                     </div>
-                    <div className="card-costs">
-                        <div className="trade">Trade: {missingCard.tradeCost}</div>
-                        <div className="pack">Pack points: {missingCard.pointCost}</div>
-                    </div>
-                    <div className="card-counter">
-                        {missingCard.quantity}
-                    </div>
-                    <div className="card-pack-name">
-                        {missingCard.packDisplayName}
-                    </div>
-                </div>
+                </button>
             )
         };
 

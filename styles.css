@@ -236,6 +236,13 @@ body {
     }
 }
 
+.copy-clipboard-message {
+    position: fixed;
+    z-index: 10000000000;
+    top: 120px;
+    right: 20px;
+}
+
 /* COLLECTION */
 .set-card-count {
     display: inline-block;

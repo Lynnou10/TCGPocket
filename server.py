@@ -12,10 +12,9 @@ warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
 pd.set_option("display.max_rows", 500)
 
 promo_sets = ['PA']
-excluded_packs = ['All']
-active_extention = 'Unknown'
 trade_rarity_threshold = 6
 pull_rarity_threshold = 8
+excluded_packs = ['All']
 
 with open("./utils/french.json", encoding="utf-8") as f:
     french = json.load(f)
@@ -100,8 +99,8 @@ def groupMissingCards(cards):
 def getMissingCards(collection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
     missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-    missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1 and set != "{active_extention}"').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
-    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1 and set != "{active_extention}"')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+    missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
+    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
     missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
     missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
@@ -131,7 +130,7 @@ def groupTradeCards(cards):
 def getTradeCards(collection):
     tradeCards = collection[collection['quantity'] > 0]
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
-    tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA" and set != "{active_extention}"')
+    tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
     tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
     print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
     tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
