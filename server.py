@@ -11,10 +11,11 @@ warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
  
 pd.set_option("display.max_rows", 500)
 
-# 8652622458979642
-# active_extention = 'Celestial Guardians (A3)'
+promo_sets = ['PA']
+excluded_packs = ['All']
 active_extention = 'Unknown'
 trade_rarity_threshold = 6
+pull_rarity_threshold = 8
 
 with open("./utils/french.json", encoding="utf-8") as f:
     french = json.load(f)
@@ -156,6 +157,48 @@ def getTradeCards(collection):
     tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
     return tradeCards
 
+def getPackPull(collection):
+    sets = collection['set_id'].unique()
+    sets = [s for s in sets if s not in promo_sets]
+
+    pullData = []
+
+    for s in sets:
+        setCards = collection[collection['set_id'] == s]
+
+        packs = setCards['pack'].unique()
+        packs = [pack for pack in packs if pack not in excluded_packs]
+
+        for pack in packs:
+            packCards = setCards[(setCards['pack'] == pack) | (setCards['pack'].isin(excluded_packs))]
+            contains_shinies = packCards[packCards['rarityOrder'] > pull_rarity_threshold]['set_id'].count() > 0
+
+            packCardsCount = packCards.groupby(['rarityOrder'])['set_id'].count()
+            possessedPackCardsCount = packCards[packCards['quantity'] > 0].groupby(['rarityOrder'])['set_id'].count()
+
+            packCardsCount = pd.merge(packCardsCount, possessedPackCardsCount, left_on=['rarityOrder'], right_on=['rarityOrder'], how='left').reset_index()
+            packCardsCount = packCardsCount.rename(columns={'set_id_x': 'total', 'set_id_y': 'owned'})
+            packCardsCount.fillna(0, inplace = True)
+
+            pullRates = pd.read_csv(f'./utils/pulls.csv')
+
+            if(contains_shinies):
+                pullRates = pd.read_csv(f'./utils/pulls_shiny.csv')
+
+            packCardsCount = pd.merge(packCardsCount, pullRates, left_on=['rarityOrder'], right_on=['rarityOrder'], how='left').reset_index()
+        
+            packCardsCount['New-Card_1-3'] = (packCardsCount['1'] / packCardsCount['total'])*packCardsCount['owned']/100
+            packCardsCount['New-Card_4'] = (packCardsCount['4'] / packCardsCount['total'])*packCardsCount['owned']/100
+            packCardsCount['New-Card_5'] = (packCardsCount['5'] / packCardsCount['total'])*packCardsCount['owned']/100
+            packCardsCount = packCardsCount.sum()
+
+            chanceNewCard = round((1 - ( packCardsCount['New-Card_1-3'] * packCardsCount['New-Card_4'] * packCardsCount['New-Card_5'])) * 100, 1)
+
+            pullData.append([s, pack, chanceNewCard])
+    
+    pullData = pd.DataFrame(pullData)
+    pullData = pullData.rename(columns={0: 'set', 1: 'pack', 2: 'value'})
+    pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
 
 def refreshAppData():
     # GET COLLECTION
@@ -174,6 +217,9 @@ def refreshAppData():
     rarity = getRarity()
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     collectionWithInfo.fillna(-1, inplace = True)
+    
+    getPackPull(collectionWithInfo)
+    
     collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
     print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
 
