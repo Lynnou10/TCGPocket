@@ -156,6 +156,21 @@
             )
 
         };
+        const SetsHider = (setCollapserProps) => {
+            const {sets, hideSet, setHideSet, defaultOpened} = setCollapserProps;
+            const hideSetKeys = Object.keys(hideSet);
+            return ((hideSetKeys.length === 0 && defaultOpened) || (hideSetKeys.length > 0 && sets.map(set => hideSet[set] === true).includes(false)) ? 
+                <div className="hide-sets">
+                    <button onClick={() => {
+                        const hideSet = {};
+                        sets.forEach(set => hideSet[set] = true)
+                        setHideSet(hideSet)
+                    }}>
+                        Hide all sets &#11167;
+                    </button>
+                </div> : <></>
+            );
+        };
         const CheckBoxfilter = (checkBoxfilterProps) => {
             const {label, value, handleChange, filterName} = checkBoxfilterProps;
             return (
@@ -326,13 +341,13 @@
             const {missingCards, pulls} = cardsProps;
             const [hideSet, setHideSet] = React.useState({});
 
-
             return (
                 <div key="missing-cards">
                     <div className="global-stats">
                         <div className="global-stats-element">Cards: <strong>{Object.keys(missingCards).map(set => missingCards[set].cards.length).reduce((partialSum, a) => partialSum + a, 0)}</strong></div> 
                         <div className="global-stats-element">Trade points needed: <strong>{calculateTotalTradePoint(missingCards)}</strong></div> 
                     </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(missingCards)} defaultOpened={true}/>
                     {
                         Object.keys(missingCards).sort().map(set => 
                             <div key={set} className="set">
@@ -429,6 +444,7 @@
                             ).reduce((partialSum, a) => partialSum + a, 0)
                         }</strong></div> 
                     </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(tradeCards)} defaultOpened={true}/>
                     <ContentToClipboard
                         content={
                             Object.keys(tradeCards).sort().map(
@@ -525,6 +541,7 @@
                             ).reduce((partialSum, a) => partialSum + a, 0)
                         }</strong></div> 
                     </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(recycleCards)} defaultOpened={true}/>
                     {
                         Object.keys(recycleCards).sort().map(set => 
                             <div key={set} className="set">
@@ -651,7 +668,7 @@
                         </div> : <></>
                     }
                     <div className="global-stats">
-                        Total cards: 
+                        Total cards:&nbsp;
                         <strong>
                             { refreshCounter > 0 ? Object.keys(collection).map(set => 
                                 collection[set].cards.map(
@@ -670,6 +687,7 @@
                                 : 0}
                         </strong>
                     </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(collection)} defaultOpened={false}/>
                     {
                         Object.keys(collection).sort().map(set => 
                             <div key={set} className="set">

@@ -105,6 +105,31 @@ body {
     }
 }
 
+.hide-sets {
+    
+    position: fixed;
+    right: 90px;
+    top: 70px;
+    z-index: 10000000000;
+
+    button {
+        background-color: #FFC300;
+        border: none;
+        color: black;
+        padding: 5px 8px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #008CBA;
+    }
+}
+
 .card {
     width: 183.5px;
     height: 286px;
@@ -210,8 +235,6 @@ body {
         color: black;
     }
 }
-
-
 
 /* COLLECTION */
 .set-card-count {

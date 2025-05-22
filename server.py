@@ -241,7 +241,7 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
 # Create an object of the above class
 handler = ServerRequestHandler
 
-PORT = 8000
+PORT = 80
 server = socketserver.TCPServer(("", PORT), handler)
 
 # Star the server

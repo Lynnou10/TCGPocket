@@ -17,5 +17,7 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
     python ./server.py
 
 
-1 CLOSE ALL T
-2 FROM SCRATCH
+1 Click on missing copy to clipboard
+
+
+3 FROM SCRATCH
