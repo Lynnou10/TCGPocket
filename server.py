@@ -1,6 +1,8 @@
 import http.server
 import socketserver
 import pandas as pd
+import threading
+import webbrowser
 from os import walk
 import warnings
 import json
@@ -298,4 +300,7 @@ PORT = 80
 server = socketserver.TCPServer(("", PORT), handler)
 
 # Star the server
-server.serve_forever()
+
+threading.Thread(target=server.serve_forever).start()
+
+webbrowser.open('http://localhost', new=2)

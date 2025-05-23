@@ -16,8 +16,7 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
     pip install -r requirements.txt
     python ./server.py
 
-INSTALL GUIDE
-- INSTALL PYTHON
-- pip install
-- python server.py
-- GO TO: localhost/ in web browser
+- INSTALL GUIDE
+    INSTALL PYTHON
+    pip install
+    python server.py
