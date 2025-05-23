@@ -5,6 +5,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="./styles.css">
+    <title>Pokemon TCGP Tracker</title>
   </head>
   <body>
 
@@ -45,7 +46,7 @@
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
             if(recycleCard.rarityOrder < 5) {
-                return recycleCard.trade_quantity > recycleCard.quantity;
+                return recycleCard.trade_quantity > recycleCard.quantity || recycleCard.quantity > 1;
             }
             return true;
         };
