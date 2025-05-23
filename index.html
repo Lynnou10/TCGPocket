@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -312,7 +315,7 @@
             const maxPull = Math.max(...selectedPackPulls.map(pull => pull.value));
             return (<div className="set-info">
                 {
-                    selectedPackPulls.map(pull => <div className={`${pull.value === maxPull ? 'max-pull' : ''}`} key={`${pull.set}-${pull.displayName}`}>{pull.displayName} : <strong>{pull.value}%</strong></div>)
+                    selectedPackPulls.map(pull => <div className={`${pull.value === maxPull ? 'max-pull' : ''}`} key={`${pull.set}-${pull.displayName}`}>{pull.displayName}: <strong>{pull.value}%</strong></div>)
                 }
             </div>)
         };
@@ -623,7 +626,7 @@
             const {refreshCounter, collection, set} = cardsCountProps;
             return (
                 <div className="set-info">
-                    Set cards count: 
+                    Set cards count:&nbsp;
                     <strong>
                         { refreshCounter > 0 ? collection[set].cards.filter(card => !(set === 'A1' && card.card_id === 283)).map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
                     </strong>
