@@ -15,6 +15,3 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
 
     pip install -r requirements.txt
     python ./server.py
-
-
-1 FROM SCRATCH APPLICATION

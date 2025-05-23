@@ -2,9 +2,9 @@ import http.server
 import socketserver
 import pandas as pd
 from os import walk
-from os import remove
 import warnings
-import json 
+import json
+import os
 from pandas.errors import SettingWithCopyWarning
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
 warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
@@ -21,6 +21,16 @@ with open("./utils/french.json", encoding="utf-8") as f:
 with open("./utils/english.json") as f:
     english = json.load(f)
 
+def init():
+    collectionDirectory = './collection'
+    outputDirectory = './output'
+    if not os.path.exists(collectionDirectory):
+        os.mkdir(collectionDirectory)
+        collection = pd.DataFrame(columns=['set_id', 'card_id' ,'quantity'])
+        collection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
+
+    if not os.path.exists(outputDirectory):
+        os.mkdir(outputDirectory)
 
 def manageRegionalName(name):
     isEx = False
@@ -98,7 +108,11 @@ def groupMissingCards(cards):
 
 def getMissingCards(collection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    missingCards = missingCards.reset_index()[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+    
+    if not missingCards.empty:
+        missingCards = missingCards.reset_index()
+    
+    missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
     oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
     missingCards = pd.concat([missingCards, oneStarMissing])
@@ -130,18 +144,21 @@ def groupTradeCards(cards):
 def getTradeCards(collection):
     tradeCards = collection[collection['quantity'] > 0]
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
-    tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
-    tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
-    print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
-    tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
-    tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
-    return tradeCards
+    if not tradeCards.empty:
+        tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
+        tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
+        print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
+        tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
+        tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
+        return tradeCards
+    else:
+        return pd.DataFrame(columns=['card_id', 'set', 'quantity'])
 
 def getPackPull(collection):
     sets = collection['set_id'].unique()
     sets = [s for s in sets if s not in promo_sets]
 
-    pullData = []
+    pullData = [['set', 'pack', 'value']]
 
     for s in sets:
         setCards = collection[collection['set_id'] == s]
@@ -177,22 +194,33 @@ def getPackPull(collection):
             pullData.append([s, pack, chanceNewCard])
     
     pullData = pd.DataFrame(pullData)
-    pullData = pullData.rename(columns={0: 'set', 1: 'pack', 2: 'value'})
+    pullData.columns = pullData.iloc[0]
+    pullData = pullData.iloc[1:]
     pullData['pack_french_name'] = pullData['pack'].map(translateName)
     pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
 
 def refreshAppData():
+    init()
+
     # GET COLLECTION
     cards = getCards()
     collection = getCollection()
+
+    # EXPORT COLLECTION DATA
+    fullCollection = pd.merge(cards, collection, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
+    fullCollection['quantity'] = fullCollection['quantity'].fillna(value=0)
+    fullCollection.fillna(-1, inplace = True)
+    fullCollection.replace({'pack': -1}, 'All', inplace=True)
+    fullCollection['french_name'] = fullCollection['name'].map(translateName)
+    fullCollection['pack_french_name'] = fullCollection['pack'].map(translateName)
+    fullCollection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
+
+    # PREPARE COLLECTION FOR CALCULATION
     collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
     collection.fillna(-1, inplace = True)
     collection.replace({'pack': -1}, 'All', inplace=True)
     collection['french_name'] = collection['name'].map(translateName)
     collection['pack_french_name'] = collection['pack'].map(translateName)
-
-    # EXPORT COLLECTION DATA
-    collection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
 
     # PREPARE DATA TO CALCULATE
     rarity = getRarity()
@@ -212,6 +240,8 @@ def refreshAppData():
 
     # GET RECYCLE CARDS
     getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
+
+refreshAppData()
 
 class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
