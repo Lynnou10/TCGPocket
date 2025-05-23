@@ -9,5 +9,6 @@ xcopy index.html dist\index.html*
 xcopy styles.css dist\styles.css*
 rmdir /s /q "./build"
 del "./PTCGTracker.spec"
+ren dist PTCGTracker
 
 pause
