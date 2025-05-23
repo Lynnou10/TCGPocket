@@ -17,6 +17,7 @@
         const tradeCardsRequest = fetch('./output/trade_cards.json', {cache: "no-store"}).then((response) => response.json());
         const recycleCardsRequest = fetch('./output/recycle_cards.json', {cache: "no-store"}).then((response) => response.json());
         const pullRequest = fetch('./output/pulls.json', {cache: "no-store"}).then((response) => response.json());
+        const pullFullRequest = fetch('./output/pulls_full.json', {cache: "no-store"}).then((response) => response.json());
         
     // GLOBALS
         // CONFIGUTRATION
@@ -238,7 +239,7 @@
             )
         };
         const App = (appProps) => {
-            const { collection, missingCards, tradeCards, recycleCards, pulls} = appProps
+            const { collection, missingCards, tradeCards, recycleCards, pulls, pullsFull} = appProps
             const [page, setPage] = React.useState('Collection');
             const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
 
@@ -267,7 +268,7 @@
                         <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
                     </div>
                     { 
-                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} globalFilters={globalFilters}/> :
+                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} pullsFull={pullsFull} globalFilters={globalFilters}/> :
                         page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
                         <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
@@ -294,7 +295,7 @@
                     }
                 }
             });
-            return (<div className="set-info">
+            return (<div className="set-info set-info-secondary">
                 <div>Cards: <strong>{setMissingCards.length}</strong></div>
                 {
                     Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
@@ -357,7 +358,7 @@
         };
 
         const MissingCards = (cardsProps) => {
-            const {missingCards, pulls} = cardsProps;
+            const {missingCards, pulls, pullsFull} = cardsProps;
             const [hideSet, setHideSet] = React.useState({});
 
             return (
@@ -373,11 +374,15 @@
                                 <div className = "set-container">
                                     <div className="set-name">{missingCards[set].setName}</div>
                                     <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
-                                    {
+                                    <PullsByPack 
+                                        pulls={
                                         missingCards[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) === 0 ?
-                                            <PullsByPack pulls={pulls} set={set}/> :
-                                            <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
-                                    }
+                                            pulls :
+                                            pullsFull
+                                        }
+                                        set={set}
+                                    />
+                                    <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
                                 </div>
                                 {
                                     hideSet[set] ? 
@@ -397,14 +402,16 @@
         };
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
-            const {cards, pulls, globalFilters} = cardsDashboardProps;
+            const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
             const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false}));
             const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
+            const [packPullsFull, setPackPullsFull] = React.useState(() => formatPulls(pullsFull, globalFilters));
             const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false}));
 
             React.useEffect(() => {
                 setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
-                setPackPulls(formatPulls(pulls, {...filters, ...globalFilters}))
+                setPackPulls(formatPulls(pulls, {...filters, ...globalFilters}));
+                setPackPullsFull(formatPulls(pullsFull, {...filters, ...globalFilters}));
             }, [globalFilters, filters]);
 
             return (
@@ -422,7 +429,7 @@
                         }}
                         init={{oneCardOnly: false}}
                     />
-                    <MissingCards missingCards={missingCards} pulls={packPulls}/>
+                    <MissingCards missingCards={missingCards} pulls={packPulls} pullsFull={packPullsFull}/>
                 </div>
             )
         };
@@ -757,7 +764,7 @@
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest]).then((results) => {
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest]).then((results) => {
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
@@ -765,6 +772,7 @@
                 tradeCards={results[2]}
                 recycleCards={results[3]}
                 pulls={results[4]}
+                pullsFull={results[5]}
             />)
         }).catch(function(err) {
             console.log(err);

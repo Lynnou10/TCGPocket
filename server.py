@@ -13,7 +13,7 @@ pd.set_option("display.max_rows", 500)
 
 promo_sets = ['PA']
 trade_rarity_threshold = 6
-pull_rarity_threshold = 8
+pull_shinies_rarity_threshold = 8
 excluded_packs = ['All']
 
 with open("./utils/french.json", encoding="utf-8") as f:
@@ -111,13 +111,18 @@ def getMissingCards(collection):
     
     if not missingCards.empty:
         missingCards = missingCards.reset_index()
-    
-    missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-    missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
-    oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-    missingCards = pd.concat([missingCards, oneStarMissing])
-    missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
-    missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
+        missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+        missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
+        oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+        missingCards = pd.concat([missingCards, oneStarMissing])
+        missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
+        missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
+
+        return missingCards
+    else:
+        emptyMissingCards = pd.DataFrame(columns=["card_id", "set", "name", "french_name" ,"pack", "pack_french_name", "quantity", "rarity", "rarityOrder", "tradeCost", "pointCost"])
+        emptyMissingCards.to_json('./output/missing_cards.json', orient="records", force_ascii=False)
+        return emptyMissingCards
 
 def getRecycleCards(collection, tradeCards):
     recycleCards = collection.query('quantity > 2 and set_id != "PA" and rarityOrder > 2')
@@ -127,7 +132,6 @@ def getRecycleCards(collection, tradeCards):
     recycleCards = recycleCards[['card_id', 'name', 'french_name', 'pack', 'pack_french_name', 'set', 'quantity', 'rarity', 'rarityOrder', 'recycle', 'total']]
     recycleCards = pd.merge(recycleCards, tradeCards, left_on=['set', 'card_id'], right_on=['set', 'card_id'], how='left')
     recycleCards = recycleCards.rename(columns={"quantity_x": "quantity", "quantity_y": "trade_quantity"})
-    print(f'TOTAL TRADING POINTS AVAILABLE: {recycleCards["total"].sum()}')
     recycleCards.sort_values(by=['card_id']).to_json('./output/recycle_cards.json', orient="records", force_ascii=False)
 
 def groupTradeCards(cards):
@@ -147,7 +151,6 @@ def getTradeCards(collection):
     if not tradeCards.empty:
         tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
         tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
-        print(f'NUMBER OF TRADE CARDS: {tradeCards["set_id"].count()}')
         tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
         tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
         return tradeCards
@@ -156,7 +159,7 @@ def getTradeCards(collection):
         emptyTradeCards.to_json('./output/trade_cards.json', orient="records", force_ascii=False)
         return emptyTradeCards
 
-def getPackPull(collection):
+def getPackPull(collection, missingCards):
     sets = collection['set_id'].unique()
     sets = [s for s in sets if s not in promo_sets]
 
@@ -170,10 +173,26 @@ def getPackPull(collection):
 
         for pack in packs:
             packCards = setCards[(setCards['pack'] == pack) | (setCards['pack'].isin(excluded_packs))]
-            contains_shinies = packCards[packCards['rarityOrder'] > pull_rarity_threshold]['set_id'].count() > 0
+            contains_shinies = packCards[packCards['rarityOrder'] > pull_shinies_rarity_threshold]['set_id'].count() > 0
 
             packCardsCount = packCards.groupby(['rarityOrder'])['set_id'].count()
-            possessedPackCardsCount = packCards[packCards['quantity'] > 0].groupby(['rarityOrder'])['set_id'].count()
+            packCards['fullid'] = packCards['set'].astype(str).add('-' + packCards['card_id'].astype(str))
+
+            possessedPackCardsCount = packCards[packCards['quantity'] > 0]
+            if missingCards is not None:
+                missingCards['fullid'] = missingCards['set'].astype(str).add('-' + missingCards['card_id'].astype(str))
+                possessedPackCardsCount = packCards[
+                    (
+                        (packCards['rarityOrder'] < trade_rarity_threshold) & 
+                        (~packCards['fullid'].isin(missingCards['fullid'].values.tolist()))
+                    ) |
+                    (
+                        (packCards['rarityOrder'] >= trade_rarity_threshold) & 
+                        (packCards['quantity'] > 0)
+                    )
+                ]
+            
+            possessedPackCardsCount = possessedPackCardsCount.groupby(['rarityOrder'])['set_id'].count()
 
             packCardsCount = pd.merge(packCardsCount, possessedPackCardsCount, left_on=['rarityOrder'], right_on=['rarityOrder'], how='left').reset_index()
             packCardsCount = packCardsCount.rename(columns={'set_id_x': 'total', 'set_id_y': 'owned'})
@@ -199,7 +218,11 @@ def getPackPull(collection):
     pullData.columns = pullData.iloc[0]
     pullData = pullData.iloc[1:]
     pullData['pack_french_name'] = pullData['pack'].map(translateName)
-    pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
+
+    if missingCards is not None:
+        pullData.to_json('./output/pulls_full.json', orient="records", force_ascii=False)
+    else:
+        pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
 
 def refreshAppData():
     init()
@@ -229,19 +252,20 @@ def refreshAppData():
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     collectionWithInfo.fillna(-1, inplace = True)
     
-    getPackPull(collectionWithInfo)
-    
     collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
-    print(f'NUMBER OF CARDS: {collectionWithInfo["quantity"].sum()}')
-
+ 
     # GET MISSING CARDS
-    getMissingCards(collectionWithInfo)
+    missingCards = getMissingCards(collectionWithInfo)
 
     # GET TRADE CARDS
     tradeCards = getTradeCards(collectionWithInfo)
 
     # GET RECYCLE CARDS
     getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
+
+    #GET PACKS PULLS
+    getPackPull(collectionWithInfo, None)
+    getPackPull(collectionWithInfo, missingCards)
 
 refreshAppData()
 

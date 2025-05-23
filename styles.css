@@ -77,6 +77,11 @@ body {
     }
 }
 
+.set-info-secondary{
+    font-size: 13px;
+    margin-left: 50px
+}
+
 .max-pull {
     color: red;
 }
