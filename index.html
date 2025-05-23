@@ -163,7 +163,9 @@
         const SetsHider = (setCollapserProps) => {
             const {sets, hideSet, setHideSet, defaultOpened} = setCollapserProps;
             const hideSetKeys = Object.keys(hideSet);
-            return ((hideSetKeys.length === 0 && defaultOpened) || (hideSetKeys.length > 0 && hideSetKeys.map(set => hideSet[set] === true).includes(false)) ? 
+            return ((hideSetKeys.length === 0 && defaultOpened) || (sets.length > 0 && sets.map(set => 
+                (hideSet[set] === undefined && !defaultOpened) || hideSet[set] === true
+            ).includes(false)) ? 
                 <div className="hide-sets">
                     <button onClick={() => {
                         const hideSet = {};
