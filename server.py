@@ -251,11 +251,9 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             self.path = 'index.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
     
-
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
-
 
         # UPDATE COLLECTION
         newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
