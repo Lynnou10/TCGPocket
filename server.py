@@ -152,7 +152,9 @@ def getTradeCards(collection):
         tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
         return tradeCards
     else:
-        return pd.DataFrame(columns=['card_id', 'set', 'quantity'])
+        emptyTradeCards = pd.DataFrame(columns=["card_id","quantity","name","set","french_name","pack_french_name","rarity","rarityOrder","tradeCost","pointCost"])
+        emptyTradeCards.to_json('./output/trade_cards.json', orient="records", force_ascii=False)
+        return emptyTradeCards
 
 def getPackPull(collection):
     sets = collection['set_id'].unique()
@@ -208,7 +210,7 @@ def refreshAppData():
 
     # EXPORT COLLECTION DATA
     fullCollection = pd.merge(cards, collection, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
-    fullCollection['quantity'] = fullCollection['quantity'].fillna(value=0)
+    fullCollection['quantity'] = fullCollection['quantity'].astype(float).fillna(value=0)
     fullCollection.fillna(-1, inplace = True)
     fullCollection.replace({'pack': -1}, 'All', inplace=True)
     fullCollection['french_name'] = fullCollection['name'].map(translateName)
