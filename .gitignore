@@ -2,3 +2,4 @@ collection/
 output/
 dist/
 PTCGTracker/
+*.zip
