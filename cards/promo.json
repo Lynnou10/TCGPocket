@@ -1838,5 +1838,35 @@
     "abilities": [],
     "evolvesFrom": "Trumbeak",
     "rarity": null
+  },
+  {
+    "id": "pa-074",
+    "name": "Zeraora",
+    "element": "Lightning",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 90,
+    "set": "Promo-A",
+    "pack": null,
+    "attacks": [
+      {
+        "name": "Lightning Claw",
+        "damage": "50",
+        "cost": [
+          "Lightning",
+          "Lightning"
+        ]
+      }
+    ],
+    "retreatCost": 1,
+    "weakness": "Fighting",
+    "abilities": [
+      {
+        "name": "Thunderclap Flash",
+        "effect": "At the end of your first turn, take a  Energy from your Energy Zone and attach it to this Pokémon."
+      }
+    ],
+    "evolvesFrom": null,
+    "rarity": null
   }
 ]

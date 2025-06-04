@@ -50,6 +50,11 @@ body {
     margin-bottom: 10px;
 }
 
+.deck {
+    background-color: #FFFAA0;
+    margin-bottom: 10px;
+}
+
 .set-container {
     position: sticky;
     background-color: #FFFAA0;
@@ -59,7 +64,22 @@ body {
     z-index: 1000;
 }
 
+.deck-container {
+    position: sticky;
+    background-color: #FFFAA0;
+    margin-bottom: 5px;
+    top: 110px;
+    padding: 10px;
+    z-index: 1000;
+}
+
 .set-name {
+    font-size: 30px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.deck-name {
     font-size: 30px;
     vertical-align: middle;
     display: inline-block;
@@ -110,7 +130,56 @@ body {
     }
 }
 
+.hide-deck {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 30px;
+    margin-left: 10px;
+
+    button {
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 5px 8px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #008CBA;
+    }
+}
+
 .hide-sets {
+    
+    position: fixed;
+    right: 90px;
+    top: 70px;
+    z-index: 10000000000;
+
+    button {
+        background-color: #FFC300;
+        border: none;
+        color: black;
+        padding: 5px 8px;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #008CBA;
+    }
+}
+
+.hide-decks {
     
     position: fixed;
     right: 90px;

@@ -1,0 +1,73 @@
+{
+    "name":"Silvally",
+    "french_name":"Silvallié",
+    "cards":[
+        {
+            "card_id":88,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"1"
+        },
+        {
+            "card_id":89,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"2"
+        },
+        {
+            "card_id":60,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":61,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":223,
+            "set":"Genetic Apex (A1)",
+            "quantity":"1"
+        },
+        {
+            "card_id":225,
+            "set":"Genetic Apex (A1)",
+            "quantity":"1"
+        },
+        {
+            "card_id":144,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"2"
+        },
+        {
+            "card_id":147,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"1"
+        },
+        {
+            "card_id":155,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"1"
+        },
+        {
+            "card_id":69,
+            "set":"Shining Revelry (A2b)",
+            "quantity":"1"
+        },
+        {
+            "card_id":144,
+            "set":"Celestial Guardians (A3)",
+            "quantity":"2"
+        },
+        {
+            "card_id":67,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":7,
+            "set":"Promo-A",
+            "quantity":"2"
+        }
+    ]
+}
+
+

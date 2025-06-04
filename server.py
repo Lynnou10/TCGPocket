@@ -226,6 +226,35 @@ def getPackPull(collection, missingCards):
     else:
         pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
 
+def getDecks(missingCards, fullCollection):
+    decks = []
+    files = next(walk('./decks'), (None, None, []))[2]
+    for file in files:
+       with open(f'./decks/{file}', encoding="utf-8") as f:
+            deck = json.load(f)
+
+            deckCards = []
+
+            for card in deck["cards"]:
+                card_info = fullCollection.query(f'card_id == {card['card_id']} and set == "{card['set']}"')[["card_id", "set", "set_id", "name", "french_name", "pack", "pack_french_name"]].to_dict('records')[0]
+                missingCard = missingCards.query(f'card_id == {card['card_id']} and set == "{card['set']}"')
+                card_info["count"] = card["quantity"]
+                if missingCard.empty:
+                    card_info["quantity"] = card["quantity"]
+                    deckCards.append(card_info)
+                else:
+                    missingCard = missingCard.to_dict('records')[0]
+                    card_info["quantity"] = missingCard["quantity"]
+                    deckCards.append(card_info)
+            decks.append({
+                "name": deck["name"],
+                "french_name": deck["french_name"],
+                "cards": deckCards
+            })
+    
+    with open("./output/decks.json", "w", encoding='utf-8') as f:
+        json.dump(decks, f, ensure_ascii=False)
+
 def refreshAppData():
     init()
 
@@ -258,6 +287,9 @@ def refreshAppData():
  
     # GET MISSING CARDS
     missingCards = getMissingCards(collectionWithInfo)
+
+    # GET DECKS
+    getDecks(missingCards, fullCollection)
 
     # GET TRADE CARDS
     tradeCards = getTradeCards(collectionWithInfo)

@@ -21,6 +21,7 @@
         const recycleCardsRequest = fetch('./output/recycle_cards.json', {cache: "no-store"}).then((response) => response.json());
         const pullRequest = fetch('./output/pulls.json', {cache: "no-store"}).then((response) => response.json());
         const pullFullRequest = fetch('./output/pulls_full.json', {cache: "no-store"}).then((response) => response.json());
+        const decksRequest = fetch('./output/decks.json', {cache: "no-store"}).then((response) => response.json());
         
     // GLOBALS
         // CONFIGUTRATION
@@ -78,6 +79,18 @@
             });
             return cards
         };
+        const formatDecks = (decks, filters) => {
+            return decks.map(deck => ({ 
+                "name": filters && filters.language == 'en' ? deck.name : deck.french_name,
+                "cards": deck.cards.map(card => ({
+                    ...card,
+                    displayName: filters && filters.language == 'en' ? card.name : card.french_name,
+                    packDisplayName: filters && filters.language == 'en' ? card.pack : card.pack_french_name,
+                    language: filters && filters.language === 'en' ? 'en' : 'fr' ,
+                    set: getSetFromCards(card.set)
+                }))
+            }))
+        }
         const formatPulls = (pullsData, filters) => {
             const pulls = [];
             pullsData.forEach((pull) => {
@@ -180,6 +193,39 @@
                 </div> : <></>
             );
         };
+        const DeckHider = (hiderProps) => {
+            const {deck, hideDeck, setHideDeck, defaultOpened} = hiderProps;
+
+            return (
+                <div className="hide-deck">
+                    <button onClick={() => {
+                        let value = true;
+                        if(defaultOpened) {
+                            value = false;
+                        }
+                        setHideDeck({...hideDeck, [deck]: value});
+                    }}>{defaultOpened ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
+                </div>
+            )
+
+        };
+        const DecksHider = (deckCollapserProps) => {
+            const {decks, hideDeck, setHideDeck, defaultOpened} = deckCollapserProps;
+            const hideDeckKeys = Object.keys(hideDeck);
+            return ((hideDeckKeys.length === 0 && defaultOpened) || (decks.length > 0 && decks.map(deck => 
+                (hideDeck[deck] === undefined && !defaultOpened) || hideDeck[deck] === true
+            ).includes(false)) ? 
+                <div className="hide-decks">
+                    <button onClick={() => {
+                        const hideDeck = {};
+                        decks.forEach(deck => hideDeck[deck] = true)
+                        setHideDeck(hideDeck)
+                    }}>
+                        Hide all decks &#11167;
+                    </button>
+                </div> : <></>
+            );
+        };
         const CheckBoxfilter = (checkBoxfilterProps) => {
             const {label, value, handleChange, filterName} = checkBoxfilterProps;
             return (
@@ -244,7 +290,7 @@
             )
         };
         const App = (appProps) => {
-            const { collection, missingCards, tradeCards, recycleCards, pulls, pullsFull} = appProps
+            const { collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks} = appProps
             const [page, setPage] = React.useState('Collection');
             const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
 
@@ -271,11 +317,13 @@
                         <button onClick={() => setPage('Missing Cards')}>Missing Cards</button>
                         <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
                         <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
+                        <button onClick={() => setPage('Decks')}>Decks</button>
                     </div>
                     { 
                         page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} pullsFull={pullsFull} globalFilters={globalFilters}/> :
                         page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
+                        page === 'Decks' ? <DecksDashboard decks={decks} globalFilters={globalFilters}/> :
                         <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
                     }
                 </div>
@@ -764,12 +812,96 @@
             )
         };
         // **********
+
+        //DECKS CARDS
+        const DeckCard = (cardProps) => {
+            const {deckCard, status} = cardProps;
+
+            return (
+                <div className={`card ${!status ? 'missing-card' : ''}`}>
+                    <div className="card-image">
+                        <img
+                            src={getCardUrl(deckCard.set, deckCard.card_id, deckCard.language)}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {deckCard.displayName}
+                    </div>
+                </div>
+            )
+        };
+
+        const Decks = (cardsProps) => {
+            const {decks} = cardsProps;
+
+            const [decksContent, setDecksContent] = React.useState(decks);
+            const [hideDeck, setHideDeck] = React.useState({});
+
+            React.useEffect(() => {
+                setDecksContent(decks);
+            }, [decks]);
+
+            return (
+                <div key="decks-cards">
+                    <div className="global-stats"></div>
+                    <DecksHider setHideDeck={setHideDeck} hideDeck={hideDeck} decks={Object.keys(decksContent)} defaultOpened={true}/>
+                    {
+                        Object.keys(decksContent).sort().map(deck => 
+                            <div key={deck} className="deck">
+                                <div className="deck-container">
+                                    <div className="deck-name">{decksContent[deck].name}</div>
+                                    <DeckHider deck={deck} hideDeck={hideDeck} setHideDeck={setHideDeck} defaultOpened={!!hideDeck[deck]}/>
+                                </div>
+                                { 
+                                    hideDeck[deck] ? 
+                                        <></> :
+                                        decksContent[deck].cards.map(
+                                            deckCard => {
+                                                const cards = [];
+                                                for(let i = 0; i < deckCard.count; i++) {
+                                                    cards.push(<DeckCard
+                                                        key={`${i}-${deckCard.set_id}-${deckCard.card_id}`}
+                                                        deckCard={deckCard}
+                                                        status={i<deckCard.quantity}
+                                                    />)
+                                                }
+                                                return cards;
+                                            }
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const DecksDashboard = (cardsDashboardProps) => {
+            const {decks, globalFilters} = cardsDashboardProps;
+            const [decksContent, setDecksContent] = React.useState(() => formatDecks(decks, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => {
+                setDecksContent(formatDecks(decks, {...globalFilters}))
+            }, [globalFilters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
+                    />
+                    <Decks decks={decksContent}/>
+                </div>
+            )
+        };
+        // **********
     // **********
 
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest]).then((results) => {
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest]).then((results) => {
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
@@ -778,6 +910,7 @@
                 recycleCards={results[3]}
                 pulls={results[4]}
                 pullsFull={results[5]}
+                decks={results[6]}
             />)
         }).catch(function(err) {
             console.log(err);
