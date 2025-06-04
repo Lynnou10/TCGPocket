@@ -1,8 +1,21 @@
+/* VARIABLE */
+:root {
+  --primary-1: #F4EDD3;
+  --primary-2: #A5BFCC;
+  --secondary-1: #7E99A3;
+  --secondary-1-hover: #008CBA;
+  --ok: #80EF80;
+  --ko: #D84040;
+  --highlight: #b20d78;
+  --font-color-1: black;
+  --font-color-2: white;
+}
+
 /* GLOBAL */
 body {
     font-family: 'Roboto', sans-serif;;
     margin: 0;
-    background-color: #c3d97c;
+    background-color: var(--primary-1);
 }
 
 .content {
@@ -20,16 +33,16 @@ body {
 .menu{
     width: 100%;
     position: fixed;
-    background-color: #FFFAA0;
+    background-color: var(--primary-2);
     top: 0;
     left: 0;
     text-align: right;
     z-index: 10000;
 
     button {
-        background-color: grey;
+        background-color: var(--secondary-1);
         border: none;
-        color: white;
+        color: var(--font-color-2);
         padding: 15px 32px;
         border-radius: 5px;
         text-align: center;
@@ -41,23 +54,23 @@ body {
     }
 
     button:hover {
-        background-color: #008CBA;
+        background-color: var(--secondary-1-hover);
     }
 }
 
 .set {
-    background-color: #FFFAA0;
+    background-color: var(--primary-2);
     margin-bottom: 10px;
 }
 
 .deck {
-    background-color: #FFFAA0;
+    background-color: var(--primary-2);
     margin-bottom: 10px;
 }
 
 .set-container {
     position: sticky;
-    background-color: #FFFAA0;
+    background-color: var(--primary-2);
     margin-bottom: 5px;
     top: 110px;
     padding: 10px;
@@ -65,13 +78,21 @@ body {
 }
 
 .deck-container {
-    position: sticky;
-    background-color: #FFFAA0;
+    background-color: var(--primary-2);
     margin-bottom: 5px;
     top: 110px;
     padding: 10px;
     z-index: 1000;
 }
+
+.deck-complete {
+    background-color: var(--ok);
+}
+
+.deck-incomplete {
+    background-color: var(--ko);
+}
+
 
 .set-name {
     font-size: 30px;
@@ -103,7 +124,7 @@ body {
 }
 
 .max-pull {
-    color: red;
+    color: var(--ko);
 }
 
 .hide-set {
@@ -113,9 +134,9 @@ body {
     margin-left: 10px;
 
     button {
-        background-color: grey;
+        background-color: var(--secondary-1);
         border: none;
-        color: white;
+        color: var(--font-color-2);
         padding: 5px 8px;
         border-radius: 5px;
         text-align: center;
@@ -126,7 +147,7 @@ body {
     }
 
     button:hover {
-        background-color: #008CBA;
+        background-color: var(--secondary-1-hover);
     }
 }
 
@@ -137,9 +158,9 @@ body {
     margin-left: 10px;
 
     button {
-        background-color: grey;
+        background-color: var(--secondary-1);
         border: none;
-        color: white;
+        color: var(--font-color-2);
         padding: 5px 8px;
         border-radius: 5px;
         text-align: center;
@@ -150,7 +171,7 @@ body {
     }
 
     button:hover {
-        background-color: #008CBA;
+        background-color: var(--secondary-1-hover);
     }
 }
 
@@ -162,9 +183,9 @@ body {
     z-index: 10000000000;
 
     button {
-        background-color: #FFC300;
+        background-color: var(--secondary-1);
         border: none;
-        color: black;
+        color: var(--font-color-2);
         padding: 5px 8px;
         border-radius: 5px;
         text-align: center;
@@ -175,7 +196,7 @@ body {
     }
 
     button:hover {
-        background-color: #008CBA;
+        background-color: var(--secondary-1-hover);
     }
 }
 
@@ -187,9 +208,9 @@ body {
     z-index: 10000000000;
 
     button {
-        background-color: #FFC300;
+        background-color: var(--secondary-1);
         border: none;
-        color: black;
+        color: var(--font-color-2);
         padding: 5px 8px;
         border-radius: 5px;
         text-align: center;
@@ -200,13 +221,13 @@ body {
     }
 
     button:hover {
-        background-color: #008CBA;
+        background-color: var(--secondary-1-hover);
     }
 }
 
 .card {
-    width: 183.5px;
-    height: 286px;
+    width: 180px;
+    height: 281.8px;
     display: inline-block;
     margin-left: 8px;
     margin-bottom: 10px;
@@ -214,18 +235,18 @@ body {
 }
 
 .card-image {
-    width: 183.5px;
-    height: 256px;
+    width: 180px;
+    height: 251.8px;
     display: block;
 
     img {
-        width: 183.5px;
-        height: 256px;
+        width: 180px;
+        height: 251.8px;
     }
 }
 
 .card-name {
-    width: 183.5px;
+    width: 180px;
     margin-top: 3px;
     height: 25px;
     display: block;
@@ -233,7 +254,7 @@ body {
 
 .filters {
     height: 52px;
-    background-color: #c3d97c;
+    background-color: var(--primary-1);
     position: sticky;
     top: 58px;
     z-index: 10000000000;
@@ -248,8 +269,8 @@ body {
         width: 20px;
         height: 20px;
         vertical-align: middle;
-        accent-color: #FFC300;
-        background: red;
+        accent-color: var(--secondary-1);
+        background: var(--ko);
         border: none;
     }
 
@@ -259,7 +280,7 @@ body {
         font-size: 16px;
         font-weight: bold;
         vertical-align: middle;
-        background: #FFC300;
+        background: var(--secondary-1);
         border: none;
         border-radius: 10px;
     }
@@ -291,9 +312,9 @@ body {
     right: 20px;
 
     button {
-        background-color: grey;
+        background-color: var(--secondary-1);
         border: none;
-        color: white;
+        color: var(--font-color-2);
         padding: 3px 10px 5px 10px;
         border-radius: 5px;
         text-align: center;
@@ -305,8 +326,8 @@ body {
     }
 
     button:hover {
-        background-color: lightblue;
-        color: black;
+        background-color: var(--secondary-1-hover);
+        color: var(--font-color-1);
     }
 }
 
@@ -341,9 +362,9 @@ body {
     z-index: 100000;
 
     button {
-        background-color: darkblue;
+        background-color: var(--secondary-1);
         border: none;
-        color: white;
+        color: var(--font-color-2);
         padding: 15px 32px;
         border-radius: 5px;
         text-align: center;
@@ -355,13 +376,13 @@ body {
     }
 
     button:hover {
-        background-color: lightblue;
-        color: black;
+        background-color: var(--secondary-1-hover);
+        color: var(--font-color-1);
     }
 }
 
 .card-costs {
-    width: 183.5px;
+    width: 180px;
     height: 20px;
     position: absolute;
     display: flex;
@@ -388,8 +409,8 @@ body {
 }
 
 .card-counter {
-    width: 183.5px;
-    height: 256px;
+    width: 180px;
+    height: 251.8px;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -402,7 +423,7 @@ body {
 }
 
 .card-pack-name {
-    width: 183.5px;
+    width: 180px;
     height: 20px;
     position: absolute;
     display: flex;
@@ -415,7 +436,7 @@ body {
 }
 
 .recyclable-tradable {
-    border: 3px solid #b20d78;
+    border: 3px solid var(--highlight);
     border-radius: 10px;
 }
 

@@ -1,0 +1,68 @@
+{
+    "name":"Buzzwole Ex",
+    "french_name":"Mouscoto Ex",
+    "cards":[
+        {
+            "card_id":6,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":7,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":62,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":219,
+            "set":"Genetic Apex (A1)",
+            "quantity":"2"
+        },
+        {
+            "card_id":150,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"1"
+        },
+        {
+            "card_id":155,
+            "set":"Space-Time Smackdown (A2)",
+            "quantity":"1"
+        },
+        {
+            "card_id":70,
+            "set":"Shining Revelry (A2b)",
+            "quantity":"1"
+        },
+        {
+            "card_id":147,
+            "set":"Celestial Guardians (A3)",
+            "quantity":"2"
+        },
+        {
+            "card_id":66,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"1"
+        },
+        {
+            "card_id":69,
+            "set":"Extradimensional Crisis (A3a)",
+            "quantity":"2"
+        },
+        {
+            "card_id":5,
+            "set":"Promo-A",
+            "quantity":"2"
+        },
+        {
+            "card_id":7,
+            "set":"Promo-A",
+            "quantity":"2"
+        }
+    ]
+}
+
+

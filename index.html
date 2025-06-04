@@ -827,6 +827,11 @@
                     <div className="card-name">
                         {deckCard.displayName}
                     </div>
+                    {
+                        !status ? <div className="card-pack-name">
+                            {deckCard.packDisplayName}
+                        </div> : <></>
+                    }
                 </div>
             )
         };
@@ -841,16 +846,22 @@
                 setDecksContent(decks);
             }, [decks]);
 
+            const deckMissingCardsCount = (deck) => (
+                deck.cards.map(card => parseInt(card.count)).reduce((partialSum, a) => partialSum + a, 0) - deck.cards.map(card => parseInt(card.quantity)).reduce((partialSum, a) => partialSum + a, 0)
+            )
+
             return (
                 <div key="decks-cards">
-                    <div className="global-stats"></div>
                     <DecksHider setHideDeck={setHideDeck} hideDeck={hideDeck} decks={Object.keys(decksContent)} defaultOpened={true}/>
                     {
                         Object.keys(decksContent).sort().map(deck => 
-                            <div key={deck} className="deck">
-                                <div className="deck-container">
+                            <div key={deck} className={`deck ${deckMissingCardsCount(decksContent[deck]) === 0 ? 'deck-complete' : 'deck-incomplete'}`}>
+                                <div className={`deck-container ${deckMissingCardsCount(decksContent[deck]) === 0 ? 'deck-complete' : 'deck-incomplete'}`}>
                                     <div className="deck-name">{decksContent[deck].name}</div>
                                     <DeckHider deck={deck} hideDeck={hideDeck} setHideDeck={setHideDeck} defaultOpened={!!hideDeck[deck]}/>
+                                    { 
+                                        deckMissingCardsCount(decksContent[deck]) === 0 ? <></> : <div className="set-info">Missing cards: <strong>{deckMissingCardsCount(decksContent[deck])}</strong></div>
+                                    }
                                 </div>
                                 { 
                                     hideDeck[deck] ? 
