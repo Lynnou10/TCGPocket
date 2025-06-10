@@ -29,6 +29,7 @@
 
         // VARIABLES
         const cardsBaseUrl = 'https://assets.tcgdex.net/';
+        const cardsBackupBaseUrl = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket'
         const tradeThreshold = 6;
         const promos = ['PA'];
         let lastExtension = '';
@@ -48,6 +49,7 @@
             lastExtension = extensions[extensions.length -1]
         };
         const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
+        const getBackupCardUrl = (set, cardId, language) => `${cardsBackupBaseUrl}/${set.replace('romo', '')}/${set.replace('romo', '')}_${getCardNumberForDisplay(cardId)}_EN.webp`;
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
             if(recycleCard.rarityOrder < 5) {
@@ -701,7 +703,12 @@
                     <div className="card">
                         <div className="card-image">
                             <img
+                                id={`${set}_${card.card_id}`}
                                 src={getCardUrl(set, card.card_id, card.language)}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src=getBackupCardUrl(set, card.card_id, card.language)
+                                }}
                             />
                         </div>
                         <div className="card-name">

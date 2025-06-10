@@ -93,6 +93,7 @@ def getCards():
     cards['attacks'] = cards['attacks'].map(mapPowerName)
     cards['abilities'] = cards['abilities'].map(mapPowerName)
     cards = cards.rename(columns={"rarity": "rarityCode"})
+    cards.loc[cards['set'].str.contains("Promo"), 'rarityCode'] = 'Promo'
     cards = cards.drop(columns=['id', 'evolvesFrom', "type"])
     return cards
 
