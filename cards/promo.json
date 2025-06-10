@@ -1863,7 +1863,7 @@
     "abilities": [
       {
         "name": "Thunderclap Flash",
-        "effect": "At the end of your first turn, take a [L] Energy from your Energy Zone and attach it to this Pokémon."
+        "effect": "At the end of your first turn, take a Lightning Energy from your Energy Zone and attach it to this Pokémon."
       }
     ],
     "evolvesFrom": null,
@@ -1986,7 +1986,7 @@
     "attacks": [
       {
         "name": "Black Metal",
-        "effect": "Discard a [M] Energy from this Pokémon.",
+        "effect": "Discard a Metal Energy from this Pokémon.",
         "damage": "100",
         "cost": [
           "Metal",
