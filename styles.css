@@ -288,17 +288,17 @@ body {
 
 .global-stats {
     position: fixed;
-    top: 10px;
-    left: 20%;
+    top: 15px;
+    left: 300px;
     background-color: transparent;
     z-index: 100000000;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .global-stats-element {
         display: inline-block;
         vertical-align: middle;
-        margin-right: 50px;
+        margin-right: 30px;
 }
 
 .missing-card {
@@ -352,6 +352,7 @@ body {
     text-align: left;
     font-family: 'Roboto';
     font-size: 16px;
+    cursor: pointer;
 }
 
 .save-collection {
@@ -442,4 +443,22 @@ body {
 
 .total-trade-points {
     padding: 10px;
+}
+
+.deck-creator-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 2000000000000;
+    top: 70px;
+    vertical-align: too;
+    padding-left: 20px;
+    font-size: 25px;
+
+    input {
+        margin-right: 20px;
+        background-color: var(--secondary-1);
+        border-radius: 20px;
+    }
 }

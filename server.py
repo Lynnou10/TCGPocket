@@ -262,6 +262,13 @@ def refreshAppData():
     # GET COLLECTION
     cards = getCards()
     collection = getCollection()
+    rarity = getRarity()
+
+    # EXPORT DECK CARDS DATA
+    decksCards = pd.merge(cards, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
+    decksCards = decksCards.query(f'rarityOrder < 5 or set.str.contains("Promo")')
+    decksCards['french_name'] = decksCards['name'].map(translateName)
+    decksCards[['set_id', 'card_id', 'set', 'name', 'french_name']].sort_values(by=['card_id']).to_json('./output/deck_cards.json', orient="records", force_ascii=False)
 
     # EXPORT COLLECTION DATA
     fullCollection = pd.merge(cards, collection, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
@@ -280,7 +287,6 @@ def refreshAppData():
     collection['pack_french_name'] = collection['pack'].map(translateName)
 
     # PREPARE DATA TO CALCULATE
-    rarity = getRarity()
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     collectionWithInfo.fillna(-1, inplace = True)
     
@@ -314,9 +320,15 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
 
-        # UPDATE COLLECTION
-        newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
-        newCollection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
+        if self.path == '/deck':
+            # ADD NEW DECK
+            deck = json.loads(post_data.decode('utf-8'))
+            with open(f'./decks/{deck["name"]}.json', 'w') as d:
+                json.dump(deck, d)
+        else:
+            # UPDATE COLLECTION
+            newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
+            newCollection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
         
         refreshAppData()
 

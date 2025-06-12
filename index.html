@@ -22,13 +22,14 @@
         const pullRequest = fetch('./output/pulls.json', {cache: "no-store"}).then((response) => response.json());
         const pullFullRequest = fetch('./output/pulls_full.json', {cache: "no-store"}).then((response) => response.json());
         const decksRequest = fetch('./output/decks.json', {cache: "no-store"}).then((response) => response.json());
+        const decksCreatorRequest = fetch('./output/deck_cards.json', {cache: "no-store"}).then((response) => response.json());
         
     // GLOBALS
         // CONFIGUTRATION
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         // VARIABLES
-        const cardsBaseUrl = 'https://assets.tcgdex.net/';
+        const cardsBaseUrl = 'https://assets.tcgdex.net';
         const cardsBackupBaseUrl = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket'
         const tradeThreshold = 6;
         const promos = ['PA'];
@@ -292,7 +293,7 @@
             )
         };
         const App = (appProps) => {
-            const { collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks} = appProps
+            const {collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks, deckCards} = appProps
             const [page, setPage] = React.useState('Collection');
             const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
 
@@ -320,12 +321,14 @@
                         <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
                         <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
                         <button onClick={() => setPage('Decks')}>Decks</button>
+                        <button onClick={() => setPage('Creator')}>Creator</button>
                     </div>
                     { 
                         page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} pullsFull={pullsFull} globalFilters={globalFilters}/> :
                         page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
                         page === 'Decks' ? <DecksDashboard decks={decks} globalFilters={globalFilters}/> :
+                        page === 'Creator' ? <DeckCreatorDashboard deckCards={deckCards} globalFilters={globalFilters}/> :
                         <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
                     }
                 </div>
@@ -693,8 +696,11 @@
                     setCard({...card, quantity: card.quantity + 1})
                     updateCardQuantity(set, collectionCard.card_id, 1);
                 } else if (e.type === 'contextmenu') {
-                    setCard({...card, quantity: card.quantity -1})
-                    updateCardQuantity(set, collectionCard.card_id, -1);
+                    const newQuantity = card.quantity - 1;
+                    if (newQuantity >= 0) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(deckCard.set, deckCard.card_id, -1);
+                    }
                 }
             };
 
@@ -914,12 +920,199 @@
             )
         };
         // **********
+
+        //DECK CREATOR
+         const DeckCardsCountByPack = (cardsCountProps) => {
+            const {deckContent, set} = cardsCountProps;
+            return (
+                <div className="set-info">
+                    Set cards count:&nbsp;
+                    <strong>
+                        { deckContent.filter(deckCard => (deckCard.set.includes(`(${set})`) || deckCard.set === set)).map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0)}
+                    </strong>
+                </div>
+            )
+        };
+
+        const DeckCreatorCard = (cardProps) => {
+            const {set, deckCard, deckContent, updateCardQuantity, displayName, language, card_id} = cardProps;
+            const [quantity, setQuantity] = React.useState(0);
+            const [card, setCard] = React.useState({...deckCard, quantity: 0});
+
+            const handleClick = (e) => {
+                let newQuantity = !card.quantity ? 0 : card.quantity;
+                if (e.type === 'click') {
+                    newQuantity = newQuantity + 1;
+                    
+                    if (newQuantity <= 2) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(deckCard.set, deckCard.card_id, 1);
+                    }
+                } else if (e.type === 'contextmenu') {
+                    newQuantity = newQuantity - 1;
+                    if (newQuantity >= 0) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(deckCard.set, deckCard.card_id, -1);
+                    }
+                }
+                setQuantity(newQuantity);
+            };
+            return (
+                <button className={`clickable-card ${!card.quantity ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleClick}>
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                id={`${set}_${card.card_id}`}
+                                src={getCardUrl(set, card_id, language)}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src=getBackupCardUrl(set, card_id, language)
+                                }}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {card_id} - {displayName}
+                        </div>
+                        <div className="card-counter">
+                            {!card.quantity ? 0 : card.quantity}
+                        </div>
+                    </div>
+                </button>
+            )
+        };
+
+        const DeckCreatorCards = (deckCreatorCardsProps) => {
+            const {deckCreatorCards} = deckCreatorCardsProps;
+
+            const [hideSet, setHideSet] = React.useState({});
+            const [showSaveDeck, setShowSaveDeck] = React.useState(false);
+            const [deckContent, setDeckContent] = React.useState([]);
+            const [deckName, setDeckName] = React.useState('');
+            const [frenchDeckName, setFrenchDeckName] = React.useState('');
+
+            const updateCardQuantity = (set, cardId, deltaQuantity) => {
+                const isCardAlreadyInDeck = !!deckContent.find(deckCard => deckCard.set === set && deckCard.card_id === cardId)
+                if(isCardAlreadyInDeck) {
+                    const newDeckContent = deckContent.map(deckCard => {
+                        if(deckCard.set === set && deckCard.card_id === cardId) {
+                            return {
+                                ...deckCard,
+                                quantity: deckCard.quantity + deltaQuantity
+                            };
+                        } else {
+                            return deckCard;
+                        }
+                    });
+                    setDeckContent(newDeckContent.filter(deckCard => deckCard.quantity > 0))
+                } else {                    
+                    setDeckContent([...deckContent, ...[{
+                        card_id: cardId,
+                        set,
+                        quantity: 1
+                    }]]);
+                }
+            };
+
+            React.useEffect(() => {
+                if(
+                    deckContent.map(deckCard => deckCard.quantity).reduce((partialSum, a) => partialSum + a, 0) >= 20 &&
+                    !!deckName &&
+                    !!frenchDeckName
+                ) {
+                    setShowSaveDeck(true);
+                } else {
+                    setShowSaveDeck(false);
+                }
+            }, [deckContent, deckName, frenchDeckName]);
+
+            const saveDeck = () => {
+                const deck = {
+                    name: deckName,
+                    french_name: frenchDeckName,
+                    cards: deckContent
+                };
+
+                fetch('/deck', {
+                    method: 'POST',
+                    body: JSON.stringify(deck)
+                }).then((response) => location.reload(true));
+            };
+
+            return (
+                <div key="collection-cards">
+                    {showSaveDeck ? <div className="save-collection">
+                            <button onClick={saveDeck}>Save deck</button>
+                        </div> : <></>
+                    }
+                    <div className="global-stats">
+                        Deck cards: <strong>{deckContent.map(deckCard => deckCard.quantity).reduce((partialSum, a) => partialSum + a, 0)}</strong>
+                    </div>
+
+
+                    <div className="deck-creator-name">
+                        Name: <input onChange={e => setDeckName(e.target.value)}/>
+                        French Name: <input onChange={e => setFrenchDeckName(e.target.value)}/>
+                    </div>
+
+
+
+
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(deckCreatorCards)} defaultOpened={false}/>
+                    {
+                        Object.keys(deckCreatorCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className="set-container">
+                                    <div className="set-name">{deckCreatorCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set] || !Object.keys(hideSet).includes(set)}/>
+                                    <DeckCardsCountByPack deckContent={deckContent} set={set}/>
+                                </div>
+                                { 
+                                    hideSet[set] || !Object.keys(hideSet).includes(set) ? 
+                                        <></> :
+                                        deckCreatorCards[set].cards.map(
+                                            deckCard => <DeckCreatorCard
+                                                key={`${set}-${deckCard.card_id}`}
+                                                set={set}
+                                                deckCard={deckCard}
+                                                deckContent={deckContent}
+                                                displayName={deckCard.displayName}
+                                                language={deckCard.language}
+                                                card_id={deckCard.card_id}
+                                                updateCardQuantity={updateCardQuantity}
+                                            />
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const DeckCreatorDashboard = (deckCreatorDashboardProps) => {
+            const {deckCards, globalFilters} = deckCreatorDashboardProps;
+            const [deckCreatorCards, setDeckCreatorCards] = React.useState(() => formatCards(deckCards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setDeckCreatorCards(formatCards(deckCards, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
+                    />
+                    <DeckCreatorCards deckCreatorCards={deckCreatorCards}/>
+                </div>
+            )
+        };
+        // **********
     // **********
 
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest]).then((results) => {
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest, decksCreatorRequest]).then((results) => {
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
@@ -929,6 +1122,7 @@
                 pulls={results[4]}
                 pullsFull={results[5]}
                 decks={results[6]}
+                deckCards={results[7]}
             />)
         }).catch(function(err) {
             console.log(err);
