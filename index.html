@@ -127,7 +127,7 @@
                     conditions.push(false);
                 }
                 if(filters.lastExtension !== undefined && !filters.lastExtension) {
-                    conditions.push(!card.set.includes(lastExtension));
+                    conditions.push(!card.set.toUpperCase().includes(lastExtension.toUpperCase()));
                 }
                 return conditions.reduce(
                     (previousValue, currentValue) => previousValue && currentValue,
