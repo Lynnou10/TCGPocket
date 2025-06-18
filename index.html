@@ -699,7 +699,7 @@
                     const newQuantity = card.quantity - 1;
                     if (newQuantity >= 0) {
                         setCard({...card, quantity: newQuantity})
-                        updateCardQuantity(deckCard.set, deckCard.card_id, -1);
+                        updateCardQuantity(set, collectionCard.card_id, -1);
                     }
                 }
             };
