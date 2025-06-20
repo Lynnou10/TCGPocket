@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="./styles.css">
+    <title>Pokemon TCGP Tracker</title>
+  </head>
+  <body>
+
+    <div id="app"></div>
+
+    <script type="text/babel">
+        const collectionName = window.location.pathname.replace('/', '');
+        const collectionRequest = fetch(`./output/collection_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const missingCardsRequest = fetch(`./output/missing_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const tradeCardsRequest = fetch(`./output/trade_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const recycleCardsRequest = fetch(`./output/recycle_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const pullRequest = fetch(`./output/pulls_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const pullFullRequest = fetch(`./output/pulls_full_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const decksRequest = fetch(`./output/decks_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const decksCreatorRequest = fetch(`./output/deck_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
+        const collectionsRequest = fetch(`./collection/collections.json`, {cache: "no-store"}).then((response) => response.json());
+        
+    // GLOBALS
+        // CONFIGUTRATION
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // VARIABLES
+        const cardsBaseUrl = 'https://assets.tcgdex.net';
+        const cardsBackupBaseUrl = 'https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/pocket'
+        const tradeThreshold = 6;
+        const promos = ['PA'];
+        let lastExtension = '';
+
+        // FUNCTIONS
+        const getSetFromCards = (setName) => {
+            if(setName.includes("(")) {
+                return setName.split(' (')[1].replace(')', '');
+            }
+            else {
+                return setName;
+            }
+        };
+        const setLastExtension = (collection) => {
+            let extensions = [...new Set(collection.map(card => card.set_id))].sort();
+            extensions = extensions.filter(extension => !promos.includes(extension));
+            lastExtension = extensions[extensions.length -1]
+        };
+        const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
+        const getBackupCardUrl = (set, cardId, language) => `${cardsBackupBaseUrl}/${set.replace('romo', '')}/${set.replace('romo', '')}_${getCardNumberForDisplay(cardId)}_EN.webp`;
+        const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
+        const isRecycleCardTradeble = (recycleCard) => {
+            if(recycleCard.rarityOrder < 5) {
+                return recycleCard.trade_quantity > recycleCard.quantity || recycleCard.quantity > 1;
+            }
+            return true;
+        };
+        const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
+        const calculateTotalTradePoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.tradeCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
+        const formatCards = (cardsData, filters) => {
+            const cards = {};
+            cardsData.forEach((card) => {
+                if(filterCard(card, filters)) {
+                    const setKey = getSetFromCards(card.set)
+                    
+                    card.displayName = filters && filters.language == 'en' ? card.name : card.french_name ;
+                    card.packDisplayName = filters && filters.language == 'en' ? card.pack : card.pack_french_name;
+                    card.language = filters && filters.language === 'en' ? 'en' : 'fr' ;
+                    
+                    if(isKeyInCardsCollection(cards, setKey)) {
+                        cards[setKey].cards.push(card);
+                    } else {
+                        cards[setKey] = {
+                            setName: card.set,
+                            cards: [card]
+                        };
+                    }
+                }
+            });
+            return cards
+        };
+        const formatDecks = (decks, filters) => {
+            return decks.map(deck => ({ 
+                "name": filters && filters.language == 'en' ? deck.name : deck.french_name,
+                "cards": deck.cards.map(card => ({
+                    ...card,
+                    displayName: filters && filters.language == 'en' ? card.name : card.french_name,
+                    packDisplayName: filters && filters.language == 'en' ? card.pack : card.pack_french_name,
+                    language: filters && filters.language === 'en' ? 'en' : 'fr' ,
+                    set: getSetFromCards(card.set)
+                }))
+            }))
+        }
+        const formatPulls = (pullsData, filters) => {
+            const pulls = [];
+            pullsData.forEach((pull) => {
+                pull.displayName = filters && filters.language == 'en' ? pull.pack : pull.pack_french_name;
+                pulls.push(pull)
+            });
+            return pulls;
+        };
+        const filterCard = (card, filters) => {
+            const conditions = [true]
+            if(filters) {
+                if(filters.oneCardOnly !== undefined && !filters.oneCardOnly) {
+                    conditions.push(card.quantity === 0);
+                }
+                if(filters.oneDiamond !== undefined && !filters.oneDiamond && card.rarityOrder === 1) {
+                    conditions.push(false);
+                }
+                if(filters.twoDiamonds !== undefined && !filters.twoDiamonds && card.rarityOrder === 2) {
+                    conditions.push(false);
+                }
+                if(filters.threeDiamonds !== undefined && !filters.threeDiamonds && card.rarityOrder === 3) {
+                    conditions.push(false);
+                }
+                if(filters.fourDiamonds !== undefined && !filters.fourDiamonds && card.rarityOrder === 4) {
+                    conditions.push(false);
+                }
+                if(filters.oneStar !== undefined && !filters.oneStar && card.rarityOrder === 5) {
+                    conditions.push(false);
+                }
+                if(filters.veryRare !== undefined && !filters.veryRare && card.rarityOrder >= tradeThreshold) {
+                    conditions.push(false);
+                }
+                if(filters.lastExtension !== undefined && !filters.lastExtension) {
+                    conditions.push(!card.set.toUpperCase().includes(lastExtension.toUpperCase()));
+                }
+                return conditions.reduce(
+                    (previousValue, currentValue) => previousValue && currentValue,
+                    true
+                );
+            } else {
+                return true
+            }
+        };
+       
+        // COMPONENTS
+        const ContentToClipboard = (contentToClipboardProps) => {
+            const {content} = contentToClipboardProps;
+            const [showMessage, setShowMessage] = React.useState(false);
+
+            return (
+                <div className="copy-clipboard">
+                    <div className="copy-clipboard-message">
+                        {showMessage ? <span>Cards copied to clipboard!</span> : <></>}
+                    </div>
+                    <button onClick={() => {
+                        navigator.clipboard.writeText(content).then(function() {
+                            setShowMessage(true);
+                            setTimeout(() => setShowMessage(false), 3000);
+                        }, function(err) {
+                            console.error('Could not copy text: ', err);
+                        });
+                    }}>
+                        &#128203;
+                    </button>
+                </div>
+            )
+            // 
+            // COPY
+        };
+        const SetHider = (hiderProps) => {
+            const {set, hideSet, setHideSet, defaultOpened} = hiderProps;
+
+            return (
+                <div className="hide-set">
+                    <button onClick={() => {
+                        let value = true;
+                        if(defaultOpened) {
+                            value = false;
+                        }
+                        setHideSet({...hideSet, [set]: value});
+                    }}>{defaultOpened ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
+                </div>
+            )
+
+        };
+        const SetsHider = (setCollapserProps) => {
+            const {sets, hideSet, setHideSet, defaultOpened} = setCollapserProps;
+            const hideSetKeys = Object.keys(hideSet);
+            return ((hideSetKeys.length === 0 && defaultOpened) || (sets.length > 0 && sets.map(set => 
+                (hideSet[set] === undefined && !defaultOpened) || hideSet[set] === true
+            ).includes(false)) ? 
+                <div className="hide-sets">
+                    <button onClick={() => {
+                        const hideSet = {};
+                        sets.forEach(set => hideSet[set] = true)
+                        setHideSet(hideSet)
+                    }}>
+                        Hide all sets &#11167;
+                    </button>
+                </div> : <></>
+            );
+        };
+        const DeckHider = (hiderProps) => {
+            const {deck, hideDeck, setHideDeck, defaultOpened} = hiderProps;
+
+            return (
+                <div className="hide-deck">
+                    <button onClick={() => {
+                        let value = true;
+                        if(defaultOpened) {
+                            value = false;
+                        }
+                        setHideDeck({...hideDeck, [deck]: value});
+                    }}>{defaultOpened ? <span>&#11167;</span> : <span>&#11165;</span>}</button>
+                </div>
+            )
+
+        };
+        const DecksHider = (deckCollapserProps) => {
+            const {decks, hideDeck, setHideDeck, defaultOpened} = deckCollapserProps;
+            const hideDeckKeys = Object.keys(hideDeck);
+            return ((hideDeckKeys.length === 0 && defaultOpened) || (decks.length > 0 && decks.map(deck => 
+                (hideDeck[deck] === undefined && !defaultOpened) || hideDeck[deck] === true
+            ).includes(false)) ? 
+                <div className="hide-decks">
+                    <button onClick={() => {
+                        const hideDeck = {};
+                        decks.forEach(deck => hideDeck[deck] = true)
+                        setHideDeck(hideDeck)
+                    }}>
+                        Hide all decks &#11167;
+                    </button>
+                </div> : <></>
+            );
+        };
+        const CheckBoxfilter = (checkBoxfilterProps) => {
+            const {label, value, handleChange, filterName} = checkBoxfilterProps;
+            return (
+                <div className="filter">
+                    <label>
+                        {label}
+                        <input
+                        type="checkbox"
+                        checked={value}
+                        onChange={() => handleChange(filterName, !value)}
+                        />
+                    </label>
+                </div>
+            )
+        };
+        const Selectfilter = (selectfilterProps) => {
+            const {label, value, options, handleChange, filterName} = selectfilterProps;
+            return (
+                <div className="filter">
+                    {!!label ? <span>{label}:&nbsp;</span> : ''}
+                    <select onChange={(e) => handleChange(filterName, e.target.value)} value={value}>
+                        {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
+                    </select>
+                </div>
+            )
+        };
+        const Filters = (filtersProps) => {
+            const {init, refresh, show} = filtersProps;
+            const [filters, setFilters] = React.useState({
+                oneCardOnly: !!init ? init.oneCardOnly : undefined,
+                oneDiamond: true,
+                twoDiamonds: true,
+                threeDiamonds: true,
+                fourDiamonds: true,
+                oneStar: true,
+                veryRare: true,
+                lastExtension: true
+            });
+
+            const handleChange = (filterName, filterValue) => {
+                const newFilters = {
+                    ...filters
+                };
+                newFilters[filterName] = filterValue
+                setFilters(newFilters)
+                refresh(newFilters)
+            };
+
+            return (
+                <div className="filters">
+                    <div>
+                        {show && show.oneCardOnly ? <CheckBoxfilter label='One or less cards' value={filters.oneCardOnly} filterName='oneCardOnly' handleChange={handleChange}/> : <></>}
+                        {show && show.oneDiamond ? <CheckBoxfilter label='&#9830;' value={filters.oneDiamond} filterName='oneDiamond' handleChange={handleChange}/> : <></>}
+                        {show && show.twoDiamonds ? <CheckBoxfilter label='&#9830;&#9830;' value={filters.twoDiamonds} filterName='twoDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.threeDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.fourDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/> : <></>}
+                        {show && show.oneStar ? <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/> : <></>}
+                        {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
+                        {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
+                    </div>
+                </div>
+            )
+        };
+        const App = (appProps) => {
+            const {collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks, deckCards, collections} = appProps
+            const [page, setPage] = React.useState('Collection');
+            const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
+
+            const handleChange = (filterName, filterValue) => {
+                const newFilters = {
+                    ...globalFilters
+                };
+                newFilters[filterName] = filterValue
+                setGlobalFilters(newFilters)
+            };
+            const collectionImage = collections.find(collection => collection.name === collectionName).image
+
+            return (
+                <div className="content">
+                    <div className="menu">
+                        <div className="page-title">
+                            <img src={`./img/${collectionImage}.png`}/>
+                            {page} 
+                        </div>
+                        <Selectfilter
+                            label=''
+                            value={globalFilters.language}
+                            filterName='language'
+                            options={[{label: 'English', value: 'en'}, {label: 'French', value: 'fr'}]}
+                            handleChange={handleChange}
+                        />
+                        <button onClick={() => setPage('Collection')}>Collection</button>
+                        <button onClick={() => setPage('Missing Cards')}>Missing Cards</button>
+                        <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
+                        <button onClick={() => setPage('Recycle Cards')}>Recycle Cards</button>
+                        <button onClick={() => setPage('Decks')}>Decks</button>
+                        <button onClick={() => setPage('Creator')}>Creator</button>
+                    </div>
+                    { 
+                        page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} pullsFull={pullsFull} globalFilters={globalFilters}/> :
+                        page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
+                        page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
+                        page === 'Decks' ? <DecksDashboard decks={decks} globalFilters={globalFilters}/> :
+                        page === 'Creator' ? <DeckCreatorDashboard deckCards={deckCards} globalFilters={globalFilters}/> :
+                        <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
+                    }
+                </div>
+            ); 
+        };
+    // **********
+
+    // APP COMPONENTS
+        //MISSING CARDS
+        const MissingCardsByPack = (missingCardsProps) => {
+            const { setMissingCards } = missingCardsProps;
+            const packMissingCard = {};
+            let allPacksValue = 0;
+            setMissingCards.forEach((card) => { 
+                if(card.packDisplayName === 'All') {
+                    allPacksValue += 1;
+                } else {
+                    if(isKeyInCardsCollection(packMissingCard, card.packDisplayName)) {
+                        packMissingCard[card.packDisplayName] += 1;
+                    } else {
+                        packMissingCard[card.packDisplayName] = 1
+                    }
+                }
+            });
+            return (<div className="set-info set-info-secondary">
+                <div>Cards: <strong>{setMissingCards.length}</strong></div>
+                {
+                    Object.keys(packMissingCard).map(pack => <div key={pack}>{pack} : <strong>{packMissingCard[pack] + allPacksValue}</strong></div>)
+                }
+            </div>)
+        };
+
+        const PullsByPack = (pullsProps) => {
+            const { pulls, set } = pullsProps;
+            const selectedPackPulls = pulls.filter(pull => pull.set === set.toUpperCase());
+            selectedPackPulls.sort((a, b) => -(a.value - b.value));
+            const maxPull = Math.max(...selectedPackPulls.map(pull => pull.value));
+            return (<div className="set-info">
+                {
+                    selectedPackPulls.map(pull => <div className={`${pull.value === maxPull ? 'max-pull' : ''}`} key={`${pull.set}-${pull.displayName}`}>{pull.displayName}: <strong>{pull.value}%</strong></div>)
+                }
+            </div>)
+        };
+
+        const MissingCard = (cardProps) => {
+            const {set, missingCard} = cardProps;
+            const [showMessage, setShowMessage] = React.useState(false);
+
+            const handleCardClick = () => {
+                navigator.clipboard.writeText(`${missingCard.displayName} ${missingCard.rarity} (${set})`).then(function() {
+                    setShowMessage(true);
+                    setTimeout(() => setShowMessage(false), 3000);
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+
+            return (
+                <button className="clickable-card" onClick={handleCardClick}>
+                    <div className="copy-clipboard-message">
+                        {showMessage ? <span>Card copied to clipboard!</span> : <></>} 
+                    </div>
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                src={getCardUrl(set, missingCard.card_id, missingCard.language)}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {missingCard.card_id} - {missingCard.displayName}
+                        </div>
+                        <div className="card-costs">
+                            <div className="trade">Trade: {missingCard.tradeCost}</div>
+                            <div className="pack">Pack points: {missingCard.pointCost}</div>
+                        </div>
+                        <div className="card-counter">
+                            {missingCard.quantity}
+                        </div>
+                        <div className="card-pack-name">
+                            {missingCard.packDisplayName}
+                        </div>
+                    </div>
+                </button>
+            )
+        };
+
+        const MissingCards = (cardsProps) => {
+            const {missingCards, pulls, pullsFull} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
+            return (
+                <div key="missing-cards">
+                    <div className="global-stats">
+                        <div className="global-stats-element">Cards: <strong>{Object.keys(missingCards).map(set => missingCards[set].cards.length).reduce((partialSum, a) => partialSum + a, 0)}</strong></div> 
+                        <div className="global-stats-element">Trade points needed: <strong>{calculateTotalTradePoint(missingCards)}</strong></div> 
+                    </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(missingCards)} defaultOpened={true}/>
+                    {
+                        Object.keys(missingCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className = "set-container">
+                                    <div className="set-name">{missingCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
+                                    <PullsByPack 
+                                        pulls={
+                                        missingCards[set].cards.map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) === 0 ?
+                                            pulls :
+                                            pullsFull
+                                        }
+                                        set={set}
+                                    />
+                                    <MissingCardsByPack setMissingCards={missingCards[set].cards}/>
+                                </div>
+                                {
+                                    hideSet[set] ? 
+                                        <></> : missingCards[set].cards.map(
+                                        missingCard => <MissingCard
+                                            key={`${set}-${missingCard.card_id}`}
+                                            set={set}
+                                            missingCard={missingCard}
+                                        />
+                                    )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const MissingCardsDashboard = (cardsDashboardProps) => {
+            const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false}));
+            const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
+            const [packPullsFull, setPackPullsFull] = React.useState(() => formatPulls(pullsFull, globalFilters));
+            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false}));
+
+            React.useEffect(() => {
+                setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
+                setPackPulls(formatPulls(pulls, {...filters, ...globalFilters}));
+                setPackPullsFull(formatPulls(pullsFull, {...filters, ...globalFilters}));
+            }, [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters 
+                        refresh={(filters) => setFilters(filters)}
+                        show={{
+                            oneCardOnly: true,
+                            oneDiamond: true,
+                            twoDiamonds: true,
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            lastExtension: true
+                        }}
+                        init={{oneCardOnly: false}}
+                    />
+                    <MissingCards missingCards={missingCards} pulls={packPulls} pullsFull={packPullsFull}/>
+                </div>
+            )
+        };
+        // **********
+
+        //TRADE CARDS
+        const TradeCard = (cardProps) => {
+            const {set, tradeCard} = cardProps;
+            return (
+                <div className="card">
+                    <div className="card-image">
+                        <img
+                            src={getCardUrl(set, tradeCard.card_id, tradeCard.language)}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {tradeCard.card_id} - {tradeCard.displayName}
+                    </div>
+                    <div className="card-counter">
+                        {tradeCard.quantity}
+                    </div>
+                </div>
+            )
+        };
+
+        const TradeCards = (cardsProps) => {
+            const {tradeCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
+            return (
+                <div key="trade-cards">
+                    <div className="global-stats">
+                        <div className="global-stats-element">Cards: <strong>{
+                            Object.keys(tradeCards).map(
+                                set => tradeCards[set].cards.map(
+                                    card => card.quantity
+                                ).reduce((partialSum, a) => partialSum + a, 0)
+                            ).reduce((partialSum, a) => partialSum + a, 0)
+                        }</strong></div> 
+                    </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(tradeCards)} defaultOpened={true}/>
+                    <ContentToClipboard
+                        content={
+                            Object.keys(tradeCards).sort().map(
+                                set => tradeCards[set].cards.map(
+                                    card => `${card.displayName} ${card.rarity} (${set})`
+                                ).join('\r\n')
+                            ).join('\r\n')
+                        }
+                    />
+                    {
+                        Object.keys(tradeCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className = "set-container">
+                                    <div className="set-name">{tradeCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
+                                </div>
+                                {
+                                    hideSet[set] ? 
+                                        <></> : tradeCards[set].cards.map(
+                                        tradeCard => <TradeCard
+                                            key={`${set}-${tradeCard.card_id}`}
+                                            set={set}
+                                            tradeCard={tradeCard}
+                                        />
+                                    )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const TradeCardsDashboard = (cardsDashboardProps) => {
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setTradeCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            lastExtension: true
+                        }}
+                    />
+                    <TradeCards tradeCards={tradeCards}/>
+                </div>
+            )
+        };
+        // **********
+
+        //RECYCLE CARDS
+        const RecycleCard = (cardProps) => {
+            const {set, recycleCard} = cardProps;
+            return (
+                <div className="card">
+                    <div className={`card-image ${isRecycleCardTradeble(recycleCard) ? 'recyclable-tradable' : ''}`}>
+                        <img
+                            src={getCardUrl(set, recycleCard.card_id, recycleCard.language)}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {recycleCard.card_id} - {recycleCard.displayName}
+                    </div>
+                    <div className="card-costs">
+                        <div className="trade">Tokens: {recycleCard.recycle}</div>
+                        <div className="pack">Total: {recycleCard.total}</div>
+                    </div>
+                    <div className="card-counter">
+                        {recycleCard.quantity}
+                    </div>
+                </div>
+            )
+        };
+
+        const RecycleCards = (cardsProps) => {
+            const {recycleCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
+            return (
+                <div key="trade-cards">
+                    <div className="global-stats">
+                        <div className="global-stats-element">Available points: <strong>{
+                            Object.keys(recycleCards).map(
+                                set => recycleCards[set].cards.map(
+                                    card => card.total
+                                ).reduce((partialSum, a) => partialSum + a, 0)
+                            ).reduce((partialSum, a) => partialSum + a, 0)
+                        }</strong></div> 
+                    </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(recycleCards)} defaultOpened={true}/>
+                    {
+                        Object.keys(recycleCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className = "set-container">
+                                    <div className="set-name">{recycleCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
+                                </div>
+                                {
+                                    hideSet[set] ? 
+                                        <></> : recycleCards[set].cards.map(
+                                        recycleCard => <RecycleCard
+                                            key={`${set}-${recycleCard.card_id}`}
+                                            set={set}
+                                            recycleCard={recycleCard}
+                                        />
+                                    )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const RecycleCardsDashboard = (cardsDashboardProps) => {
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [recycleCards, setRecycleCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setRecycleCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{
+                            threeDiamonds: true,
+                            fourDiamonds: true,
+                            oneStar: true,
+                            veryRare: true
+                        }}
+                    />
+                    <RecycleCards recycleCards={recycleCards}/>
+                </div>
+            )
+        };
+        // **********
+
+        //COLLECTION CARDS
+        const CardsCountByPack = (cardsCountProps) => {
+            const {refreshCounter, collection, set} = cardsCountProps;
+            return (
+                <div className="set-info">
+                    Set cards count:&nbsp;
+                    <strong>
+                        { refreshCounter > 0 ? collection[set].cards.filter(card => !(set === 'A1' && card.card_id === 283)).map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0) : 0}
+                    </strong>
+                </div>
+            )
+        };
+
+        const CollectionCard = (cardProps) => {
+            const {set, collectionCard, updateCardQuantity} = cardProps;
+            const [card, setCard] = React.useState(collectionCard);
+
+            const handleClick = (e) => {
+                if (e.type === 'click') {
+                    setCard({...card, quantity: card.quantity + 1})
+                    updateCardQuantity(set, collectionCard.card_id, 1);
+                } else if (e.type === 'contextmenu') {
+                    const newQuantity = card.quantity - 1;
+                    if (newQuantity >= 0) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(set, collectionCard.card_id, -1);
+                    }
+                }
+            };
+
+            return (
+                <button className={`clickable-card ${card.quantity === 0 ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleClick}>
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                id={`${set}_${card.card_id}`}
+                                src={getCardUrl(set, card.card_id, card.language)}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src=getBackupCardUrl(set, card.card_id, card.language)
+                                }}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {card.card_id} - {card.displayName}
+                        </div>
+                        <div className="card-counter">
+                            {card.quantity}
+                        </div>
+                    </div>
+                </button>
+            )
+        };
+
+        const CollectionCards = (cardsProps) => {
+            const {collectionCards} = cardsProps;
+
+            const [collection, setCollection] = React.useState(collectionCards);
+            const [hideSet, setHideSet] = React.useState({});
+            const [showSaveCollection, setShowSaveCollection] = React.useState(false);
+            const [refreshCounter, setRefreshCounter] = React.useState(1)
+
+            const updateCardQuantity = (set, cardId, deltaQuantity) => {
+                const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
+                if (cardIndex !== undefined) {
+                    collection[set].cards[cardIndex].quantity += deltaQuantity;
+                }
+                setCollection(collection);
+                setShowSaveCollection(true);
+                setRefreshCounter(refreshCounter + 1);
+            };
+
+            const saveCollection = () => 
+                fetch(`/collection/${collectionName}`, {
+                    method: 'POST',
+                    body: JSON.stringify(Object.keys(collection).map(set => collection[set].cards).flat(1))
+                }).then((response) => location.reload(true));
+            ;
+
+            return (
+                <div key="collection-cards">
+                    {showSaveCollection ? <div className="save-collection">
+                            <button onClick={saveCollection}>Save collection</button>
+                        </div> : <></>
+                    }
+                    <div className="global-stats">
+                        Total cards:&nbsp;
+                        <strong>
+                            { refreshCounter > 0 ? Object.keys(collection).map(set => 
+                                collection[set].cards.map(
+                                    card => {
+                                        //OLD AMBER IS IN A1 and A1A
+                                        if(card.name === 'Old Amber' && set === 'A1')
+                                            return 0;
+                                        else{
+                                            return card.quantity;
+                                        }
+                                    }
+                                ).reduce(
+                                    (partialSum, a) => partialSum + a, 0)
+                                ).reduce(
+                                    (partialSum, a) => partialSum + a, 0)
+                                : 0}
+                        </strong>
+                    </div>
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(collection)} defaultOpened={false}/>
+                    {
+                        Object.keys(collection).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className="set-container">
+                                    <div className="set-name">{collection[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set] || !Object.keys(hideSet).includes(set)}/>
+                                    <CardsCountByPack refreshCounter={refreshCounter} collection={collection} set={set}/>
+                                </div>
+                                { 
+                                    hideSet[set] || !Object.keys(hideSet).includes(set) ? 
+                                        <></> :
+                                        collection[set].cards.map(
+                                            collectionCard => <CollectionCard
+                                                key={`${set}-${collectionCard.card_id}`}
+                                                set={set}
+                                                collectionCard={collectionCard}
+                                                updateCardQuantity={updateCardQuantity}
+                                            />
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const CollectionDashboard = (cardsDashboardProps) => {
+            const {cards, globalFilters} = cardsDashboardProps;
+            const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setCollectionCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
+                    />
+                    <CollectionCards collectionCards={collectionCards}/>
+                </div>
+            )
+        };
+        // **********
+
+        //DECKS CARDS
+        const DeckCard = (cardProps) => {
+            const {deckCard, status} = cardProps;
+
+            return (
+                <div className={`card ${!status ? 'missing-card' : ''}`}>
+                    <div className="card-image">
+                        <img
+                            src={getCardUrl(deckCard.set, deckCard.card_id, deckCard.language)}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {deckCard.displayName}
+                    </div>
+                    {
+                        !status ? <div className="card-pack-name">
+                            {deckCard.packDisplayName}
+                        </div> : <></>
+                    }
+                </div>
+            )
+        };
+
+        const Decks = (cardsProps) => {
+            const {decks} = cardsProps;
+
+            const [decksContent, setDecksContent] = React.useState(decks);
+            const [hideDeck, setHideDeck] = React.useState({});
+
+            React.useEffect(() => {
+                setDecksContent(decks);
+            }, [decks]);
+
+            const deckMissingCardsCount = (deck) => (
+                deck.cards.map(card => parseInt(card.count)).reduce((partialSum, a) => partialSum + a, 0) - deck.cards.map(card => parseInt(card.quantity)).reduce((partialSum, a) => partialSum + a, 0)
+            )
+
+            return (
+                <div key="decks-cards">
+                    <DecksHider setHideDeck={setHideDeck} hideDeck={hideDeck} decks={Object.keys(decksContent)} defaultOpened={true}/>
+                    {
+                        Object.keys(decksContent).sort().map(deck => 
+                            <div key={deck} className={`deck ${deckMissingCardsCount(decksContent[deck]) === 0 ? 'deck-complete' : 'deck-incomplete'}`}>
+                                <div className={`deck-container ${deckMissingCardsCount(decksContent[deck]) === 0 ? 'deck-complete' : 'deck-incomplete'}`}>
+                                    <div className="deck-name">{decksContent[deck].name}</div>
+                                    <DeckHider deck={deck} hideDeck={hideDeck} setHideDeck={setHideDeck} defaultOpened={!!hideDeck[deck]}/>
+                                    { 
+                                        deckMissingCardsCount(decksContent[deck]) === 0 ? <></> : <div className="set-info">Missing cards: <strong>{deckMissingCardsCount(decksContent[deck])}</strong></div>
+                                    }
+                                </div>
+                                { 
+                                    hideDeck[deck] ? 
+                                        <></> :
+                                        decksContent[deck].cards.map(
+                                            deckCard => {
+                                                const cards = [];
+                                                for(let i = 0; i < deckCard.count; i++) {
+                                                    cards.push(<DeckCard
+                                                        key={`${i}-${deckCard.set_id}-${deckCard.card_id}`}
+                                                        deckCard={deckCard}
+                                                        status={i<deckCard.quantity}
+                                                    />)
+                                                }
+                                                return cards;
+                                            }
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const DecksDashboard = (cardsDashboardProps) => {
+            const {decks, globalFilters} = cardsDashboardProps;
+            const [decksContent, setDecksContent] = React.useState(() => formatDecks(decks, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => {
+                setDecksContent(formatDecks(decks, {...globalFilters}))
+            }, [globalFilters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
+                    />
+                    <Decks decks={decksContent}/>
+                </div>
+            )
+        };
+        // **********
+
+        //DECK CREATOR
+         const DeckCardsCountByPack = (cardsCountProps) => {
+            const {deckContent, set} = cardsCountProps;
+            return (
+                <div className="set-info">
+                    Set cards count:&nbsp;
+                    <strong>
+                        { deckContent.filter(deckCard => (deckCard.set.includes(`(${set})`) || deckCard.set === set)).map(card => card.quantity).reduce((partialSum, a) => partialSum + a, 0)}
+                    </strong>
+                </div>
+            )
+        };
+
+        const DeckCreatorCard = (cardProps) => {
+            const {set, deckCard, deckContent, updateCardQuantity, displayName, language, card_id} = cardProps;
+            const [quantity, setQuantity] = React.useState(0);
+            const [card, setCard] = React.useState({...deckCard, quantity: 0});
+
+            const handleClick = (e) => {
+                let newQuantity = !card.quantity ? 0 : card.quantity;
+                if (e.type === 'click') {
+                    newQuantity = newQuantity + 1;
+                    
+                    if (newQuantity <= 2) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(deckCard.set, deckCard.card_id, 1);
+                    }
+                } else if (e.type === 'contextmenu') {
+                    newQuantity = newQuantity - 1;
+                    if (newQuantity >= 0) {
+                        setCard({...card, quantity: newQuantity})
+                        updateCardQuantity(deckCard.set, deckCard.card_id, -1);
+                    }
+                }
+                setQuantity(newQuantity);
+            };
+            return (
+                <button className={`clickable-card ${!card.quantity ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleClick}>
+                    <div className="card">
+                        <div className="card-image">
+                            <img
+                                id={`${set}_${card.card_id}`}
+                                src={getCardUrl(set, card_id, language)}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src=getBackupCardUrl(set, card_id, language)
+                                }}
+                            />
+                        </div>
+                        <div className="card-name">
+                            {card_id} - {displayName}
+                        </div>
+                        <div className="card-counter">
+                            {!card.quantity ? 0 : card.quantity}
+                        </div>
+                    </div>
+                </button>
+            )
+        };
+
+        const DeckCreatorCards = (deckCreatorCardsProps) => {
+            const {deckCreatorCards} = deckCreatorCardsProps;
+
+            const [hideSet, setHideSet] = React.useState({});
+            const [showSaveDeck, setShowSaveDeck] = React.useState(false);
+            const [deckContent, setDeckContent] = React.useState([]);
+            const [deckName, setDeckName] = React.useState('');
+            const [frenchDeckName, setFrenchDeckName] = React.useState('');
+
+            const updateCardQuantity = (set, cardId, deltaQuantity) => {
+                const isCardAlreadyInDeck = !!deckContent.find(deckCard => deckCard.set === set && deckCard.card_id === cardId)
+                if(isCardAlreadyInDeck) {
+                    const newDeckContent = deckContent.map(deckCard => {
+                        if(deckCard.set === set && deckCard.card_id === cardId) {
+                            return {
+                                ...deckCard,
+                                quantity: deckCard.quantity + deltaQuantity
+                            };
+                        } else {
+                            return deckCard;
+                        }
+                    });
+                    setDeckContent(newDeckContent.filter(deckCard => deckCard.quantity > 0))
+                } else {                    
+                    setDeckContent([...deckContent, ...[{
+                        card_id: cardId,
+                        set,
+                        quantity: 1
+                    }]]);
+                }
+            };
+
+            React.useEffect(() => {
+                if(
+                    deckContent.map(deckCard => deckCard.quantity).reduce((partialSum, a) => partialSum + a, 0) >= 20 &&
+                    !!deckName &&
+                    !!frenchDeckName
+                ) {
+                    setShowSaveDeck(true);
+                } else {
+                    setShowSaveDeck(false);
+                }
+            }, [deckContent, deckName, frenchDeckName]);
+
+            const saveDeck = () => {
+                const deck = {
+                    name: deckName,
+                    french_name: frenchDeckName,
+                    cards: deckContent
+                };
+
+                fetch('/deck', {
+                    method: 'POST',
+                    body: JSON.stringify(deck)
+                }).then((response) => location.reload(true));
+            };
+
+            return (
+                <div key="collection-cards">
+                    {showSaveDeck ? <div className="save-collection">
+                            <button onClick={saveDeck}>Save deck</button>
+                        </div> : <></>
+                    }
+                    <div className="global-stats">
+                        Deck cards: <strong>{deckContent.map(deckCard => deckCard.quantity).reduce((partialSum, a) => partialSum + a, 0)}</strong>
+                    </div>
+
+
+                    <div className="deck-creator-name">
+                        Name: <input onChange={e => setDeckName(e.target.value)}/>
+                        French Name: <input onChange={e => setFrenchDeckName(e.target.value)}/>
+                    </div>
+
+
+
+
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(deckCreatorCards)} defaultOpened={false}/>
+                    {
+                        Object.keys(deckCreatorCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className="set-container">
+                                    <div className="set-name">{deckCreatorCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set] || !Object.keys(hideSet).includes(set)}/>
+                                    <DeckCardsCountByPack deckContent={deckContent} set={set}/>
+                                </div>
+                                { 
+                                    hideSet[set] || !Object.keys(hideSet).includes(set) ? 
+                                        <></> :
+                                        deckCreatorCards[set].cards.map(
+                                            deckCard => <DeckCreatorCard
+                                                key={`${set}-${deckCard.card_id}`}
+                                                set={set}
+                                                deckCard={deckCard}
+                                                deckContent={deckContent}
+                                                displayName={deckCard.displayName}
+                                                language={deckCard.language}
+                                                card_id={deckCard.card_id}
+                                                updateCardQuantity={updateCardQuantity}
+                                            />
+                                        )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const DeckCreatorDashboard = (deckCreatorDashboardProps) => {
+            const {deckCards, globalFilters} = deckCreatorDashboardProps;
+            const [deckCreatorCards, setDeckCreatorCards] = React.useState(() => formatCards(deckCards, globalFilters));
+            const [filters, setFilters] = React.useState(() => globalFilters);
+
+            React.useEffect(() => setDeckCreatorCards(formatCards(deckCards, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{}}
+                    />
+                    <DeckCreatorCards deckCreatorCards={deckCreatorCards}/>
+                </div>
+            )
+        };
+        // **********
+    // **********
+
+        const container = document.getElementById('app');
+        const root = ReactDOM.createRoot(container);
+
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest, decksCreatorRequest, collectionsRequest]).then((results) => {
+            setLastExtension(results[0]);
+            root.render(<App 
+                collection={results[0]}
+                missingCards={results[1]}
+                tradeCards={results[2]}
+                recycleCards={results[3]}
+                pulls={results[4]}
+                pullsFull={results[5]}
+                decks={results[6]}
+                deckCards={results[7]}
+                collections={results[8]}
+            />)
+        }).catch(function(err) {
+            console.log(err);
+        })
+       
+    </script>
+  </body>
+</html>

@@ -22,14 +22,18 @@ with open("./utils/french.json", encoding="utf-8") as f:
     french = json.load(f)
 with open("./utils/english.json") as f:
     english = json.load(f)
+with open("./collection/collections.json") as f:
+    collection_names = json.load(f)
 
-def init():
+def init(collectionName):
     collectionDirectory = './collection'
     outputDirectory = './output'
     if not os.path.exists(collectionDirectory):
         os.mkdir(collectionDirectory)
+
+    if not os.path.exists(f'{collectionDirectory}/collection_{collectionName}.csv'):
         collection = pd.DataFrame(columns=['set_id', 'card_id' ,'quantity'])
-        collection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
+        collection.to_csv(f'./collection/collection_{collectionName}.csv', index=False, encoding='utf-8')
 
     if not os.path.exists(outputDirectory):
         os.mkdir(outputDirectory)
@@ -97,8 +101,8 @@ def getCards():
     cards = cards.drop(columns=['id', 'evolvesFrom', "type"])
     return cards
 
-def getCollection():
-    collection = pd.read_csv(f'./collection/collection.csv')
+def getCollection(collectionName):
+    collection = pd.read_csv(f'./collection/collection_{collectionName}.csv')
     return collection.drop_duplicates()
 
 def groupMissingCards(cards):
@@ -109,7 +113,7 @@ def groupMissingCards(cards):
         value['quantity'] = cards['quantity'].sum()
     return value
 
-def getMissingCards(collection):
+def getMissingCards(collection, collectionName):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
     
     if not missingCards.empty:
@@ -119,15 +123,15 @@ def getMissingCards(collection):
         oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
         missingCards = pd.concat([missingCards, oneStarMissing])
         missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
-        missingCards.sort_values(by=['card_id']).to_json('./output/missing_cards.json', orient="records", force_ascii=False)
+        missingCards.sort_values(by=['card_id']).to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
 
         return missingCards
     else:
         emptyMissingCards = pd.DataFrame(columns=["card_id", "set", "name", "french_name" ,"pack", "pack_french_name", "quantity", "rarity", "rarityOrder", "tradeCost", "pointCost"])
-        emptyMissingCards.to_json('./output/missing_cards.json', orient="records", force_ascii=False)
+        emptyMissingCards.to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
         return emptyMissingCards
 
-def getRecycleCards(collection, tradeCards):
+def getRecycleCards(collection, tradeCards, collectionName):
     recycleCards = collection.query('quantity > 2 and set_id != "PA" and rarityOrder > 2')
     recycleCards['quantity'] = recycleCards['quantity'] - 2
     recycleCards['total'] = recycleCards['quantity'] * recycleCards['recycle']
@@ -135,7 +139,7 @@ def getRecycleCards(collection, tradeCards):
     recycleCards = recycleCards[['card_id', 'name', 'french_name', 'pack', 'pack_french_name', 'set', 'quantity', 'rarity', 'rarityOrder', 'recycle', 'total']]
     recycleCards = pd.merge(recycleCards, tradeCards, left_on=['set', 'card_id'], right_on=['set', 'card_id'], how='left')
     recycleCards = recycleCards.rename(columns={"quantity_x": "quantity", "quantity_y": "trade_quantity"})
-    recycleCards.sort_values(by=['card_id']).to_json('./output/recycle_cards.json', orient="records", force_ascii=False)
+    recycleCards.sort_values(by=['card_id']).to_json(f'./output/recycle_cards_{collectionName}.json', orient="records", force_ascii=False)
 
 def groupTradeCards(cards):
     cardQuantity = cards['quantity'].sum()
@@ -148,21 +152,21 @@ def groupTradeCards(cards):
         cards['quantity'] = cards['quantity'] - subtract
         return cards
 
-def getTradeCards(collection):
+def getTradeCards(collection, collectionName):
     tradeCards = collection[collection['quantity'] > 0]
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
     if not tradeCards.empty:
         tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
         tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
         tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
-        tradeCards.sort_values(by=['card_id']).to_json('./output/trade_cards.json', orient="records", force_ascii=False)
+        tradeCards.sort_values(by=['card_id']).to_json(f'./output/trade_cards_{collectionName}.json', orient="records", force_ascii=False)
         return tradeCards
     else:
         emptyTradeCards = pd.DataFrame(columns=["card_id","quantity","name","set","french_name","pack_french_name","rarity","rarityOrder","tradeCost","pointCost"])
-        emptyTradeCards.to_json('./output/trade_cards.json', orient="records", force_ascii=False)
+        emptyTradeCards.to_json(f'./output/trade_cards_{collectionName}.json', orient="records", force_ascii=False)
         return emptyTradeCards
 
-def getPackPull(collection, missingCards):
+def getPackPull(collection, missingCards, collectionName):
     sets = collection['set_id'].unique()
     sets = [s for s in sets if s not in promo_sets]
 
@@ -223,11 +227,11 @@ def getPackPull(collection, missingCards):
     pullData['pack_french_name'] = pullData['pack'].map(translateName)
 
     if missingCards is not None:
-        pullData.to_json('./output/pulls_full.json', orient="records", force_ascii=False)
+        pullData.to_json(f'./output/pulls_full_{collectionName}.json', orient="records", force_ascii=False)
     else:
-        pullData.to_json('./output/pulls.json', orient="records", force_ascii=False)
+        pullData.to_json(f'./output/pulls_{collectionName}.json', orient="records", force_ascii=False)
 
-def getDecks(missingCards, fullCollection):
+def getDecks(missingCards, fullCollection, collectionName):
     decks = []
     files = next(walk('./decks'), (None, None, []))[2]
     for file in files:
@@ -253,22 +257,22 @@ def getDecks(missingCards, fullCollection):
                 "cards": deckCards
             })
     
-    with open("./output/decks.json", "w", encoding='utf-8') as f:
+    with open(f"./output/decks_{collectionName}.json", "w", encoding='utf-8') as f:
         json.dump(decks, f, ensure_ascii=False)
 
-def refreshAppData():
-    init()
+def refreshAppData(collectionName):
+    init(collectionName)
 
     # GET COLLECTION
     cards = getCards()
-    collection = getCollection()
+    collection = getCollection(collectionName)
     rarity = getRarity()
 
     # EXPORT DECK CARDS DATA
     decksCards = pd.merge(cards, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     decksCards = decksCards.query(f'rarityOrder < 5 or set.str.contains("Promo")')
     decksCards['french_name'] = decksCards['name'].map(translateName)
-    decksCards[['set_id', 'card_id', 'set', 'name', 'french_name']].sort_values(by=['card_id']).to_json('./output/deck_cards.json', orient="records", force_ascii=False)
+    decksCards[['set_id', 'card_id', 'set', 'name', 'french_name']].sort_values(by=['card_id']).to_json(f'./output/deck_cards_{collectionName}.json', orient="records", force_ascii=False)
 
     # EXPORT COLLECTION DATA
     fullCollection = pd.merge(cards, collection, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
@@ -277,7 +281,7 @@ def refreshAppData():
     fullCollection.replace({'pack': -1}, 'All', inplace=True)
     fullCollection['french_name'] = fullCollection['name'].map(translateName)
     fullCollection['pack_french_name'] = fullCollection['pack'].map(translateName)
-    fullCollection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json('./output/collection.json', orient="records", force_ascii=False)
+    fullCollection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json(f'./output/collection_{collectionName}.json', orient="records", force_ascii=False)
 
     # PREPARE COLLECTION FOR CALCULATION
     collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
@@ -293,27 +297,35 @@ def refreshAppData():
     collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
  
     # GET MISSING CARDS
-    missingCards = getMissingCards(collectionWithInfo)
+    missingCards = getMissingCards(collectionWithInfo, collectionName)
 
     # GET DECKS
-    getDecks(missingCards, fullCollection)
+    getDecks(missingCards, fullCollection, collectionName)
 
     # GET TRADE CARDS
-    tradeCards = getTradeCards(collectionWithInfo)
+    tradeCards = getTradeCards(collectionWithInfo, collectionName)
 
     # GET RECYCLE CARDS
-    getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']])
+    getRecycleCards(collectionWithInfo, tradeCards[['card_id', 'set', 'quantity']], collectionName)
 
     #GET PACKS PULLS
-    getPackPull(collectionWithInfo, None)
-    getPackPull(collectionWithInfo, missingCards)
+    getPackPull(collectionWithInfo, None, collectionName)
+    getPackPull(collectionWithInfo, missingCards, collectionName)
 
-refreshAppData()
+def refreshGlobalAppData():
+    for collection in collection_names:
+        refreshAppData(collection["name"])
+
+refreshGlobalAppData()
 
 class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.path = 'index.html'
+
+        for name in [collection["name"] for collection in collection_names]:
+            if self.path == f'/{name}':
+                self.path = 'app.html'
         return http.server.SimpleHTTPRequestHandler.do_GET(self)
     
     def do_POST(self):
@@ -325,12 +337,15 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             deck = json.loads(post_data.decode('utf-8'))
             with open(f'./decks/{deck["name"]}.json', 'w') as d:
                 json.dump(deck, d)
-        else:
+        elif '/collection' in self.path :
+            print('SAVE COLLECTION')
             # UPDATE COLLECTION
+            collection_name = self.path.replace("/collection/", "")
+            print(collection_name)
             newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
-            newCollection.to_csv('./collection/collection.csv', index=False, encoding='utf-8')
+            newCollection.to_csv(f'./collection/collection_{collection_name}.csv', index=False, encoding='utf-8')
         
-        refreshAppData()
+        refreshGlobalAppData()
 
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")

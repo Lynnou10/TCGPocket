@@ -26,8 +26,16 @@ body {
     position: fixed;
     left: 0;
     z-index: 100000;
-    padding: 10px;
-    font-size: 40px;
+    padding: 5px 10px 10px 10px;
+    
+    font-size: 35px;
+    vertical-align: middle;
+
+    img {
+        height: 50px;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
 }
 
 .menu{
@@ -55,6 +63,22 @@ body {
 
     button:hover {
         background-color: var(--secondary-1-hover);
+    }
+}
+
+.collection-link-container{
+    margin-left: 20px;
+    font-size: 30px;
+
+    a {
+        color: var(--secondary-1);
+        text-decoration: none;
+
+        img {
+            height: 50px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
     }
 }
 
