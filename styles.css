@@ -22,6 +22,14 @@ body {
     margin-top: 58px;
 }
 
+.hidden-element {
+    display: none;
+}
+
+.displayed-element {
+    display: block;
+}
+
 .page-title {
     position: fixed;
     left: 0;

@@ -139,6 +139,16 @@
                 return true
             }
         };
+        const changeMetadata = (selectedCollection) => {
+            document.title = `${selectedCollection.fullName}`;
+            var link = document.querySelector("link[rel~='icon']");
+            if (!link) {
+                link = document.createElement('link');
+                link.rel = 'icon';
+                document.head.appendChild(link);
+            }
+            link.href = `./img/${selectedCollection.image}.png`;
+        }
        
         // COMPONENTS
         const ContentToClipboard = (contentToClipboardProps) => {
@@ -306,13 +316,15 @@
                 newFilters[filterName] = filterValue
                 setGlobalFilters(newFilters)
             };
-            const collectionImage = collections.find(collection => collection.name === collectionName).image
+
+            const selectedCollection = collections.find(collection => collection.name === collectionName);
+            changeMetadata(selectedCollection);
 
             return (
                 <div className="content">
                     <div className="menu">
                         <div className="page-title">
-                            <img src={`./img/${collectionImage}.png`}/>
+                            <img src={`./img/${selectedCollection.image}.png`}/>
                             {page} 
                         </div>
                         <Selectfilter
@@ -1060,9 +1072,6 @@
                         French Name: <input onChange={e => setFrenchDeckName(e.target.value)}/>
                     </div>
 
-
-
-
                     <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(deckCreatorCards)} defaultOpened={false}/>
                     {
                         Object.keys(deckCreatorCards).sort().map(set => 
@@ -1072,9 +1081,8 @@
                                     <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set] || !Object.keys(hideSet).includes(set)}/>
                                     <DeckCardsCountByPack deckContent={deckContent} set={set}/>
                                 </div>
-                                { 
-                                    hideSet[set] || !Object.keys(hideSet).includes(set) ? 
-                                        <></> :
+                                <div className={hideSet[set] || !Object.keys(hideSet).includes(set) ? 'hidden-element' : 'displayed-element'}>
+                                    { 
                                         deckCreatorCards[set].cards.map(
                                             deckCard => <DeckCreatorCard
                                                 key={`${set}-${deckCard.card_id}`}
@@ -1087,7 +1095,8 @@
                                                 updateCardQuantity={updateCardQuantity}
                                             />
                                         )
-                                }
+                                    }
+                                </div>
                             </div> 
                         )
                     }
