@@ -114,7 +114,7 @@ def groupMissingCards(cards):
     return value
 
 def getMissingCards(collection, collectionName):
-    missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
+    missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
     
     if not missingCards.empty:
         missingCards = missingCards.reset_index()
@@ -154,11 +154,11 @@ def groupTradeCards(cards):
 
 def getTradeCards(collection, collectionName):
     tradeCards = collection[collection['quantity'] > 0]
-    tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "retreatCost", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
+    tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
     if not tradeCards.empty:
         tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold} and set_id != "PA"')
         tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
-        tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'retreatCost', 'weakness', 'abilities'])
+        tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'weakness', 'abilities'])
         tradeCards.sort_values(by=['card_id']).to_json(f'./output/trade_cards_{collectionName}.json', orient="records", force_ascii=False)
         return tradeCards
     else:
@@ -295,7 +295,7 @@ def refreshAppData(collectionName):
     collectionWithInfo.fillna(-1, inplace = True)
     
     collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
- 
+
     # GET MISSING CARDS
     missingCards = getMissingCards(collectionWithInfo, collectionName)
 

@@ -413,6 +413,10 @@
                         <div className="card-image">
                             <img
                                 src={getCardUrl(set, missingCard.card_id, missingCard.language)}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src=getBackupCardUrl(set, missingCard.card_id, missingCard.language)
+                                }}
                             />
                         </div>
                         <div className="card-name">
@@ -519,6 +523,10 @@
                     <div className="card-image">
                         <img
                             src={getCardUrl(set, tradeCard.card_id, tradeCard.language)}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src=getBackupCardUrl(set, tradeCard.card_id, tradeCard.language)
+                            }}
                         />
                     </div>
                     <div className="card-name">
@@ -612,6 +620,10 @@
                     <div className={`card-image ${isRecycleCardTradeble(recycleCard) ? 'recyclable-tradable' : ''}`}>
                         <img
                             src={getCardUrl(set, recycleCard.card_id, recycleCard.language)}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src=getBackupCardUrl(set, recycleCard.card_id, recycleCard.language)
+                            }}
                         />
                     </div>
                     <div className="card-name">
@@ -853,6 +865,10 @@
                     <div className="card-image">
                         <img
                             src={getCardUrl(deckCard.set, deckCard.card_id, deckCard.language)}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src=getBackupCardUrl(set, deckCard.card_id, deckCard.language)
+                            }}
                         />
                     </div>
                     <div className="card-name">
