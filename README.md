@@ -1,6 +1,7 @@
 CARD DATA DB: https://github.com/hugoburguete/pokemon-tcg-pocket-card-database/tree/main/cards/en
 CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
 
+0 - Automatic get collection
 1 - delete deck
 2 - TRADUIRE TRAINERS
 

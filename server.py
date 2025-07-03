@@ -231,12 +231,19 @@ def getPackPull(collection, missingCards, collectionName):
     else:
         pullData.to_json(f'./output/pulls_{collectionName}.json', orient="records", force_ascii=False)
 
-def getDecks(missingCards, fullCollection, collectionName):
+def getDecks(missingCards, fullCollection, collectionWithInfo, collectionName):
     decks = []
     files = next(walk('./decks'), (None, None, []))[2]
     for file in files:
        with open(f'./decks/{file}', encoding="utf-8") as f:
             deck = json.load(f)
+
+            def groupRarityCards(cards):
+                value = cards[cards['rarityOrder']==cards['rarityOrder'].min()]
+                value['quantity'] = cards['quantity'].sum()
+                return value
+
+            collectionWithRare = collectionWithInfo.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupRarityCards)
 
             deckCards = []
 
@@ -248,9 +255,10 @@ def getDecks(missingCards, fullCollection, collectionName):
                     card_info["quantity"] = card["quantity"]
                     deckCards.append(card_info)
                 else:
-                    missingCard = missingCard.to_dict('records')[0]
-                    card_info["quantity"] = missingCard["quantity"]
+                    cardWithRareCount = collectionWithRare[(collectionWithRare["set"] == card["set"]) & (collectionWithRare["card_id"] == card["card_id"])]
+                    card_info["quantity"] = cardWithRareCount["quantity"].values[0].tolist()
                     deckCards.append(card_info)
+
             decks.append({
                 "name": deck["name"],
                 "french_name": deck["french_name"],
@@ -300,7 +308,7 @@ def refreshAppData(collectionName):
     missingCards = getMissingCards(collectionWithInfo, collectionName)
 
     # GET DECKS
-    getDecks(missingCards, fullCollection, collectionName)
+    getDecks(missingCards, fullCollection, collectionWithInfo, collectionName)
 
     # GET TRADE CARDS
     tradeCards = getTradeCards(collectionWithInfo, collectionName)

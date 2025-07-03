@@ -867,7 +867,7 @@
                             src={getCardUrl(deckCard.set, deckCard.card_id, deckCard.language)}
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null;
-                                currentTarget.src=getBackupCardUrl(set, deckCard.card_id, deckCard.language)
+                                currentTarget.src=getBackupCardUrl(deckCard.set, deckCard.card_id, deckCard.language)
                             }}
                         />
                     </div>
