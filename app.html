@@ -275,7 +275,7 @@
                 twoDiamonds: true,
                 threeDiamonds: true,
                 fourDiamonds: true,
-                oneStar: false,
+                oneStar: !!init ? init.oneStar : true,
                 veryRare: true,
                 lastExtension: true
             });
@@ -483,10 +483,10 @@
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
             const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false}));
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false, oneStar: false}));
             const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
             const [packPullsFull, setPackPullsFull] = React.useState(() => formatPulls(pullsFull, globalFilters));
-            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false}));
+            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false, oneStar: false}));
 
             React.useEffect(() => {
                 setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
@@ -507,7 +507,10 @@
                             oneStar: true,
                             lastExtension: true
                         }}
-                        init={{oneCardOnly: false}}
+                        init={{
+                            oneCardOnly: false,
+                            oneStar: false
+                        }}
                     />
                     <MissingCards missingCards={missingCards} pulls={packPulls} pullsFull={packPullsFull}/>
                 </div>
