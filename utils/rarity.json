@@ -20,7 +20,7 @@
         "rarity": "◊◊◊",
         "rarityOrder": 3,
         "recycle": 25,
-        "tradeCost": 120,
+        "tradeCost": 1200,
         "pointCost": 150
     },
     {
@@ -28,7 +28,7 @@
         "rarity": "◊◊◊◊",
         "rarityOrder": 4,
         "recycle": 125,
-        "tradeCost": 500,
+        "tradeCost": 5000,
         "pointCost": 500
     },
     {
@@ -36,7 +36,7 @@
         "rarity": "★",
         "rarityOrder": 5,
         "recycle": 100,
-        "tradeCost": 400,
+        "tradeCost": 4000,
         "pointCost": 400
     },
     {
