@@ -268,6 +268,16 @@ def getDecks(missingCards, fullCollection, collectionWithInfo, collectionName):
     with open(f"./output/decks_{collectionName}.json", "w", encoding='utf-8') as f:
         json.dump(decks, f, ensure_ascii=False)
 
+def filterPackDuplicates(collectionWithInfo):
+    with open("./utils/pack_exclusion.json", encoding="utf-8") as f:
+        pack_exclusion = json.load(f)
+
+    for exclusion in pack_exclusion:
+        collectionWithInfo = collectionWithInfo[(collectionWithInfo['card_id'] != exclusion["card_id"]) | (collectionWithInfo['set_id'] != exclusion["set_id"])]
+
+    return collectionWithInfo
+
+
 def refreshAppData(collectionName):
     init(collectionName)
 
@@ -301,8 +311,9 @@ def refreshAppData(collectionName):
     # PREPARE DATA TO CALCULATE
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     collectionWithInfo.fillna(-1, inplace = True)
-    
-    collectionWithInfo = collectionWithInfo[(collectionWithInfo['name'] != 'Old Amber') | (collectionWithInfo['set_id'] == 'A1')]
+
+    # FILTER PACK DUPLICATE CARDS
+    collectionWithInfo = filterPackDuplicates(collectionWithInfo)
 
     # GET MISSING CARDS
     missingCards = getMissingCards(collectionWithInfo, collectionName)
