@@ -143,6 +143,11 @@ body {
     vertical-align: middle;
     margin-left: 10px;
 
+    strong {
+        font-size: 22px;
+        color: var(--highlight);
+    }
+
     div {
         display: inline-block;
         vertical-align: middle;

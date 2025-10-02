@@ -368,6 +368,8 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             deck = json.loads(post_data.decode('utf-8'))
             with open(f'./decks/{deck["name"]}.json', 'w') as d:
                 json.dump(deck, d)
+            refreshGlobalAppData('ALL')
+
         elif '/collection' in self.path :
             # UPDATE COLLECTION
             collection_name = self.path.replace("/collection/", "")
@@ -375,7 +377,7 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
             newCollection.to_csv(f'./collection/collection_{collection_name}.csv', index=False, encoding='utf-8')
         
-        refreshGlobalAppData(collection_name)
+            refreshGlobalAppData(collection_name)
 
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
