@@ -25,6 +25,7 @@
         const decksRequest = fetch(`./output/decks_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
         const decksCreatorRequest = fetch(`./output/deck_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
         const collectionsRequest = fetch(`./collection/collections.json`, {cache: "no-store"}).then((response) => response.json());
+        const duplicateCards = fetch(`./utils/duplicates.json`, {cache: "no-store"}).then((response) => response.json());
         
     // GLOBALS
         // CONFIGUTRATION
@@ -149,7 +150,28 @@
             }
             link.href = `./img/${selectedCollection.image}.png`;
         }
-       
+        const collectionCardDuplicates = (set, cardId, duplicatedCards) => {
+            for (const duplicatedCard of duplicatedCards) {
+
+                for (const duplicate of duplicatedCard) {
+                    if (set === duplicate.set_id && cardId === duplicate.card_id) {
+                        return duplicatedCard.filter(card => card.set_id !== set || card.card_id !== cardId);
+                    }
+                }
+            }
+            return null;
+        }
+        const isDuplicatedCardCounted = (set, cardId, duplicatedCards) => {
+            for (const duplicatedCard of duplicatedCards) {
+                for (const duplicate in duplicatedCard) {
+                    if (set === duplicatedCard[duplicate].set_id && cardId === duplicatedCard[duplicate].card_id) {
+                        return duplicate <= 0;
+                    }
+                }
+            }
+            return true;
+        }
+
         // COMPONENTS
         const ContentToClipboard = (contentToClipboardProps) => {
             const {content} = contentToClipboardProps;
@@ -305,7 +327,7 @@
             )
         };
         const App = (appProps) => {
-            const {collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks, deckCards, collections} = appProps
+            const {collection, missingCards, tradeCards, recycleCards, pulls, pullsFull, decks, deckCards, collections, duplicatedCards} = appProps
             const [page, setPage] = React.useState('Collection');
             const [globalFilters, setGlobalFilters] = React.useState({language: 'fr'});
 
@@ -346,7 +368,7 @@
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
                         page === 'Decks' ? <DecksDashboard decks={decks} globalFilters={globalFilters}/> :
                         page === 'Creator' ? <DeckCreatorDashboard deckCards={deckCards} globalFilters={globalFilters}/> :
-                        <CollectionDashboard cards={collection} globalFilters={globalFilters}/>
+                        <CollectionDashboard cards={collection} globalFilters={globalFilters} duplicatedCards={duplicatedCards}/>
                     }
                 </div>
             ); 
@@ -761,7 +783,7 @@
         };
 
         const CollectionCards = (cardsProps) => {
-            const {collectionCards} = cardsProps;
+            const {collectionCards, duplicatedCards} = cardsProps;
 
             const [collection, setCollection] = React.useState(collectionCards);
             const [hideSet, setHideSet] = React.useState({});
@@ -773,6 +795,17 @@
                 if (cardIndex !== undefined) {
                     collection[set].cards[cardIndex].quantity += deltaQuantity;
                 }
+
+                const duplicates = collectionCardDuplicates(set, cardId, duplicatedCards)
+                if (duplicates) {
+                    for (const duplicate of duplicates) {
+                        const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
+                         if (cardIndex !== undefined) {
+                            collection[duplicate.set_id].cards[duplicatedCardIndex].quantity = collection[set].cards[cardIndex].quantity;
+                        }
+                    }
+                }
+
                 setCollection(collection);
                 setShowSaveCollection(true);
                 setRefreshCounter(refreshCounter + 1);
@@ -797,11 +830,10 @@
                             { refreshCounter > 0 ? Object.keys(collection).map(set => 
                                 collection[set].cards.map(
                                     card => {
-                                        //OLD AMBER IS IN A1 and A1A
-                                        if(card.name === 'Old Amber' && set === 'A1')
-                                            return 0;
-                                        else{
+                                        if(isDuplicatedCardCounted(set, card.card_id, duplicatedCards)) {
                                             return card.quantity;
+                                        } else {
+                                            return 0;
                                         }
                                     }
                                 ).reduce(
@@ -840,7 +872,7 @@
         };
 
         const CollectionDashboard = (cardsDashboardProps) => {
-            const {cards, globalFilters} = cardsDashboardProps;
+            const {cards, globalFilters, duplicatedCards} = cardsDashboardProps;
             const [collectionCards, setCollectionCards] = React.useState(() => formatCards(cards, globalFilters));
             const [filters, setFilters] = React.useState(() => globalFilters);
 
@@ -852,7 +884,7 @@
                         refresh={(filters) => setFilters(filters)}
                         show={{}}
                     />
-                    <CollectionCards collectionCards={collectionCards}/>
+                    <CollectionCards collectionCards={collectionCards} duplicatedCards={duplicatedCards}/>
                 </div>
             )
         };
@@ -1145,7 +1177,7 @@
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest, decksCreatorRequest, collectionsRequest]).then((results) => {
+        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest, decksCreatorRequest, collectionsRequest, duplicateCards]).then((results) => {
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
@@ -1157,6 +1189,7 @@
                 decks={results[6]}
                 deckCards={results[7]}
                 collections={results[8]}
+                duplicatedCards={results[9]}
             />)
         }).catch(function(err) {
             console.log(err);

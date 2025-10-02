@@ -269,16 +269,23 @@ def getDecks(missingCards, fullCollection, collectionWithInfo, collectionName):
         json.dump(decks, f, ensure_ascii=False)
 
 def filterPackDuplicates(collectionWithInfo):
-    with open("./utils/pack_exclusion.json", encoding="utf-8") as f:
-        pack_exclusion = json.load(f)
+    with open("./utils/duplicates.json", encoding="utf-8") as f:
+        duplicates = json.load(f)
+
+    pack_exclusion = []
+    for duplicate_list in duplicates:
+        duplicate_list.pop(0)
+        for duplicate in duplicate_list:
+            duplicate['set_id'] = duplicate['set_id'].upper()
+            pack_exclusion.append(duplicate)
 
     for exclusion in pack_exclusion:
         collectionWithInfo = collectionWithInfo[(collectionWithInfo['card_id'] != exclusion["card_id"]) | (collectionWithInfo['set_id'] != exclusion["set_id"])]
 
     return collectionWithInfo
 
-
 def refreshAppData(collectionName):
+    print(f'START REFRESH COLLECTION: {collectionName}')
     init(collectionName)
 
     # GET COLLECTION
@@ -331,11 +338,16 @@ def refreshAppData(collectionName):
     getPackPull(collectionWithInfo, None, collectionName)
     getPackPull(collectionWithInfo, missingCards, collectionName)
 
-def refreshGlobalAppData():
-    for collection in collection_names:
-        refreshAppData(collection["name"])
+    print(f'END REFRESH COLLECTION: {collectionName}')
 
-refreshGlobalAppData()
+def refreshGlobalAppData(collection_name):
+    if collection_name == 'ALL':
+        for collection in collection_names:
+            refreshAppData(collection["name"])
+    else:
+        refreshAppData(collection_name)
+
+refreshGlobalAppData('ALL')
 
 class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -357,14 +369,13 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             with open(f'./decks/{deck["name"]}.json', 'w') as d:
                 json.dump(deck, d)
         elif '/collection' in self.path :
-            print('SAVE COLLECTION')
             # UPDATE COLLECTION
             collection_name = self.path.replace("/collection/", "")
-            print(collection_name)
+            print(f'SAVE COLLECTION: {collection_name}')
             newCollection = pd.DataFrame(json.loads(post_data.decode('utf-8')))[["set_id", "card_id" , "quantity"]]
             newCollection.to_csv(f'./collection/collection_{collection_name}.csv', index=False, encoding='utf-8')
         
-        refreshGlobalAppData()
+        refreshGlobalAppData(collection_name)
 
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
