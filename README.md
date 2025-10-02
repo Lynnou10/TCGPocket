@@ -4,7 +4,7 @@ CARD IMAGE DB: https://assets.tcgdex.net/fr/tcgp/A2/152/high.png
 0 - Baby probability
 0 - Automatic get collection
 1 - delete deck
-2 - TRADUIRE TRAINERS
+2 - Translate
 
 - PYTHON VERSION
 
