@@ -189,7 +189,7 @@
 	[{"set_id": "A2b", "card_id": 68}, {"set_id": "A4b", "card_id": 306}],
 	[{"set_id": "A3b", "card_id": 66}, {"set_id": "A4b", "card_id": 308}],
 	[{"set_id": "A4", "card_id": 151}, {"set_id": "A4b", "card_id": 310}],
-	[{"set_id": "A1", "card_id": 218}, { "set_id": "A1a", "card_id": 63 }, {"set_id": "A4b", "card_id": 312}],
+	[{"set_id": "A1", "card_id": 218}, {"set_id": "A1a", "card_id": 63}, {"set_id": "A4b", "card_id": 312}],
 	[{"set_id": "A3", "card_id": 144}, {"set_id": "A4b", "card_id": 314}],
 	[{"set_id": "A2", "card_id": 146}, {"set_id": "A4b", "card_id": 316}],
 	[{"set_id": "A3a", "card_id": 65}, {"set_id": "A4b", "card_id": 318}],
