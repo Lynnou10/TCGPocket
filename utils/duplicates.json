@@ -78,6 +78,7 @@
 	[{"set_id": "A1", "card_id": 94}, {"set_id": "A4b", "card_id": 128}],
 	[{"set_id": "A3", "card_id": 58}, {"set_id": "A4b", "card_id": 130}],
 	[{"set_id": "A1", "card_id": 96}, {"set_id": "A4b", "card_id": 131}],
+	[{"set_id": "A2b", "card_id": 22}, {"set_id": "A4b", "card_id": 132}],
 	[{"set_id": "A1", "card_id": 97}, {"set_id": "A4b", "card_id": 133}],
 	[{"set_id": "A1", "card_id": 98}, {"set_id": "A4b", "card_id": 135}],
 	[{"set_id": "A2", "card_id": 53}, {"set_id": "A4b", "card_id": 137}],
