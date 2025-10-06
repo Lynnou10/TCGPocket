@@ -6,4 +6,252 @@
 {"id":"pa-105","name":"Zorua","element":"Darkness","type":"Pokemon","subtype":"Basic","health":60.0,"set":"Promos-A (P-A)","pack":"All","attacks":[{"name":"Ram","effect":null,"damage":20,"cost":["Darkness"]}],"weakness":"Grass","abilities":[],"evolvesFrom":null,"rarity":"One Diamond"},
 {"id":"pa-106","name":"Zoroark","element":"Darkness","type":"Pokemon","subtype":"Stage1","health":100.0,"set":"Promos-A (P-A)","pack":"All","attacks":[{"name":"Night Daze","effect":null,"damage":70,"cost":["Darkness","Darkness"]}],"weakness":"Grass","abilities":[{"name":"Illusive Trickery","effect":"If your opponent's Pokémon is Knocked Out by damage from this Pokémon's attacks, during your opponent's next turn, prevent all damage from—and effects of—attacks done to this Pokémon."}],"evolvesFrom":null,"rarity":"Three Diamond"},
 {"id":"pa-107","name":"Miltank","element":"Colorless","type":"Pokemon","subtype":"Basic","health":110.0,"set":"Promos-A (P-A)","pack":"All","attacks":[{"name":"Rolling Frenzy","effect":"Until this Pokémon leaves the Active Spot, this Pokémon's Rolling Frenzy attack does +30 damage. This effect stacks.","damage":10,"cost":["Colorless"]}],"weakness":"Fighting","abilities":[],"evolvesFrom":null,"rarity":"Two Diamond"},
-{"id":"pa-108","name":"Phanpy","element":"Fighting","type":"Pokemon","subtype":"Basic","health":70.0,"set":"Promos-A (P-A)","pack":"All","attacks":[{"name":"Flail","effect":"This attack does damage to your opponent's Active Pokémon equal to the damage this Pokémon has on it.","damage":null,"cost":["Fighting"]}],"weakness":"Grass","abilities":[],"evolvesFrom":null,"rarity":"One Diamond"}]
+{"id":"pa-108","name":"Phanpy","element":"Fighting","type":"Pokemon","subtype":"Basic","health":70.0,"set":"Promos-A (P-A)","pack":"All","attacks":[{"name":"Flail","effect":"This attack does damage to your opponent's Active Pokémon equal to the damage this Pokémon has on it.","damage":null,"cost":["Fighting"]}],"weakness":"Grass","abilities":[],"evolvesFrom":null,"rarity":"One Diamond"},
+{
+    "id":"pa-109",
+    "name":"Eevee ex",
+    "element":"Colorless",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":90.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Bite",
+        "effect":null,
+        "damage":30,
+        "cost":[
+            "Colorless"
+        ]
+        }
+    ],
+    "weakness":"Fighting",
+    "abilities":[
+        {
+        "name":"Veevee 'volve",
+        "effect":"This Pokémon can evolve into any Pokémon that evolves from Eevee if you play it from your hand onto this Pokémon. (This Pokémon can't evolve during your first turn or the turn you play it.)"
+        }
+    ],
+    "evolvesFrom":null,
+    "rarity":"Two Star"
+},
+{
+    "id":"pa-110",
+    "name":"Entei ex",
+    "element":"Fire",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":140.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Blazing Beatdown",
+        "effect":"If this Pokémon has at least 2 extra {R} Energy attached, this attack does 60 more damage.",
+        "damage":60,
+        "cost":[
+            "Fire",
+            "Fire"
+        ]
+        }
+    ],
+    "weakness":"Water",
+    "abilities":[
+        {
+        "name":"Legendary Pulse",
+        "effect":"At the end of your turn, if this Pokémon is in the Active Spot, draw a card."
+        }
+    ],
+    "evolvesFrom":null,
+    "rarity":"Four Diamond"
+},
+{
+    "id":"pa-111",
+    "name":"Pikachu",
+    "element":"Lightning",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":60.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Quick Attack",
+        "effect":"Flip a coin. If heads, this attack does 30 more damage.",
+        "damage":20,
+        "cost":[
+            "Lightning",
+            "Colorless"
+        ]
+        }
+    ],
+    "weakness":"Fighting",
+    "abilities":[],
+    "evolvesFrom":null,
+    "rarity":"Two Diamond"
+},
+{
+    "id":"pa-112",
+    "name":"Raichu ex",
+    "element":"Lightning",
+    "type":"Pokemon",
+    "subtype":"Stage1",
+    "health":140.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Volt Tackle",
+        "effect":"This Pokémon also does 30 damage to itself.",
+        "damage":130,
+        "cost":[
+            "Lightning",
+            "Lightning",
+            "Lightning"
+        ]
+        }
+    ],
+    "weakness":"Fighting",
+    "abilities":[],
+    "evolvesFrom":null,
+    "rarity":"Four Diamond"
+},
+{
+    "id":"pa-113",
+    "name":"Mimikyu",
+    "element":"Psychic",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":70.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Try to Imitate",
+        "effect":"Flip a coin. If heads, choose 1 of your opponent's Active Pokémon's attacks and use it as this attack.",
+        "damage":null,
+        "cost":[
+            "Psychic",
+            "Psychic"
+        ]
+        }
+    ],
+    "weakness":"Metal",
+    "abilities":[
+        
+    ],
+    "evolvesFrom":null,
+    "rarity":"Two Diamond"
+},
+{
+    "id":"pa-114",
+    "name":"Machamp",
+    "element":"Fighting",
+    "type":"Pokemon",
+    "subtype":"Stage2",
+    "health":140.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Hurricane Punch",
+        "effect":"Flip 4 coins. This attack does 50 damage for each heads.",
+        "damage":50,
+        "cost":[
+            "Fighting",
+            "Fighting",
+            "Fighting"
+        ]
+        }
+    ],
+    "weakness":"Psychic",
+    "abilities":[],
+    "evolvesFrom":null,
+    "rarity":"Three Diamond"
+},
+{
+    "id":"pa-115",
+    "name":"Regigigas",
+    "element":"Colorless",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":140.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Raging Hammer",
+        "effect":"This attack does more damage equal to the damage this Pokémon has on it.",
+        "damage":"50+",
+        "cost":[
+            "Colorless",
+            "Colorless",
+            "Colorless",
+            "Colorless"
+        ]
+        }
+    ],
+    "weakness":"Fighting",
+    "abilities":[
+        
+    ],
+    "evolvesFrom":null,
+    "rarity":"Three Diamond"
+},
+{
+    "id":"pa-116",
+    "name":"Shaymin",
+    "element":"Grass",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":60.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Flop",
+        "effect":null,
+        "damage":30,
+        "cost":[
+            "Grass",
+            "Colorless"
+        ]
+        }
+    ],
+    "weakness":"Fire",
+    "abilities":[
+        {
+        "name":"Fragrant Flower Garden",
+        "effect":"Once during your turn, you may heal 10 damage from each of your Pokémon."
+        }
+    ],
+    "evolvesFrom":null,
+    "rarity":"Three Diamond"
+},
+{
+    "id":"pa-117",
+    "name":"Absol",
+    "element":"Darkness",
+    "type":"Pokemon",
+    "subtype":"Basic",
+    "health":80.0,
+    "set":"Promos-A (P-A)",
+    "pack":"All",
+    "attacks":[
+        {
+        "name":"Leap Over",
+        "effect":"This attack does 30 damage to 1 of your opponent's Benched Pokémon.",
+        "damage":null,
+        "cost":[
+            "Darkness"
+        ]
+        }
+    ],
+    "weakness":"Grass",
+    "abilities":[
+        
+    ],
+    "evolvesFrom":null,
+    "rarity":"Two Diamond"
+}]
