@@ -15,7 +15,10 @@
     <div id="app"></div>
 
     <script type="text/babel">
+        const collections = ['main', 'secondary'];
         const collectionName = window.location.pathname.replace('/', '');
+        const otherAccounts = collections.filter((collection) => collection !== collectionName)
+
         const collectionRequest = fetch(`./output/collection_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
         const missingCardsRequest = fetch(`./output/missing_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
         const tradeCardsRequest = fetch(`./output/trade_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
@@ -26,6 +29,11 @@
         const decksCreatorRequest = fetch(`./output/deck_cards_${collectionName}.json`, {cache: "no-store"}).then((response) => response.json());
         const collectionsRequest = fetch(`./collection/collections.json`, {cache: "no-store"}).then((response) => response.json());
         const duplicateCards = fetch(`./utils/duplicates.json`, {cache: "no-store"}).then((response) => response.json());
+
+        const otherAccountMissingCardsRequest = [];
+        for(const otherAccount of otherAccounts) {
+            otherAccountMissingCardsRequest.push(fetch(`./output/missing_cards_${otherAccount}.json`, {cache: "no-store"}).then((response) => response.json()))
+        }
         
     // GLOBALS
         // CONFIGUTRATION
@@ -131,6 +139,9 @@
                 }
                 if(filters.lastExtension !== undefined && !filters.lastExtension) {
                     conditions.push(!card.set.toUpperCase().includes(lastExtension.toUpperCase()));
+                }
+                if(filters.unTradableOnly !== undefined && filters.unTradableOnly) {
+                    conditions.push(!card.tradeAvailable);
                 }
                 return conditions.reduce(
                     (previousValue, currentValue) => previousValue && currentValue,
@@ -299,6 +310,7 @@
                 fourDiamonds: true,
                 oneStar: !!init ? init.oneStar : true,
                 veryRare: true,
+                unTradableOnly: false,
                 lastExtension: true
             });
 
@@ -321,6 +333,7 @@
                         {show && show.fourDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/> : <></>}
                         {show && show.oneStar ? <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/> : <></>}
                         {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
+                        {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable only' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
                     </div>
                 </div>
@@ -441,8 +454,16 @@
                             />
                         </div>
                         <div className="card-name">
-                            {missingCard.card_id} - {missingCard.displayName}
+                            {missingCard.card_id} - {missingCard.displayName}  {`${missingCard.tradeAvailable}`}
                         </div>
+
+                        {
+                            missingCard.tradeAvailable ? <div className="card-tradable">
+                                <img src="./img/trade.webp" />
+                            </div> : <></>
+                        }
+
+
                         <div className="card-costs">
                             <div className="trade">Trade: {missingCard.tradeCost}</div>
                             <div className="pack">Pack points: {missingCard.pointCost}</div>
@@ -504,10 +525,10 @@
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
             const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false, oneStar: false}));
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false, oneStar: false, unTradableOnly: false}));
             const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
             const [packPullsFull, setPackPullsFull] = React.useState(() => formatPulls(pullsFull, globalFilters));
-            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false, oneStar: false}));
+            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false, oneStar: false, unTradableOnly: false}));
 
             React.useEffect(() => {
                 setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
@@ -526,11 +547,13 @@
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
-                            lastExtension: true
+                            lastExtension: true,
+                            unTradableOnly: true
                         }}
                         init={{
                             oneCardOnly: false,
-                            oneStar: false
+                            oneStar: false,
+                            unTradableOnly: false
                         }}
                     />
                     <MissingCards missingCards={missingCards} pulls={packPulls} pullsFull={packPullsFull}/>
@@ -1178,11 +1201,39 @@
         const container = document.getElementById('app');
         const root = ReactDOM.createRoot(container);
 
-        Promise.all([collectionRequest, missingCardsRequest, tradeCardsRequest, recycleCardsRequest, pullRequest, pullFullRequest, decksRequest, decksCreatorRequest, collectionsRequest, duplicateCards]).then((results) => {
+        Promise.all([
+            collectionRequest,
+            missingCardsRequest,
+            tradeCardsRequest,
+            recycleCardsRequest,
+            pullRequest,
+            pullFullRequest,
+            decksRequest,
+            decksCreatorRequest,
+            collectionsRequest,
+            duplicateCards,
+            ...otherAccountMissingCardsRequest
+        ]).then((results) => {
+            // BUILD TRADE FROM OTHER ACCOUNTS
+            let requestCounter = 10;
+            let otherAccountTradeCards = []
+            for(const otherAccount in otherAccounts) {
+                otherAccountTradeCards = otherAccountTradeCards.concat(results[requestCounter]);
+                requestCounter = requestCounter + 1;
+            }
+            otherAccountTradeCards = otherAccountTradeCards
+                .filter(otherAccountTradeCard => otherAccountTradeCard.quantity === 0)
+                .map(otherAccountTradeCard => `${otherAccountTradeCard.set} - ${otherAccountTradeCard.card_id}`)
+            let missingCards = results[1];
+            missingCards = missingCards.map(missingCard => ({
+                ...missingCard,
+                tradeAvailable: !otherAccountTradeCards.includes(`${missingCard.set} - ${missingCard.card_id}`)
+            }))
+            // END
             setLastExtension(results[0]);
             root.render(<App 
                 collection={results[0]}
-                missingCards={results[1]}
+                missingCards={missingCards}
                 tradeCards={results[2]}
                 recycleCards={results[3]}
                 pulls={results[4]}

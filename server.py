@@ -113,15 +113,15 @@ def groupMissingCards(cards):
         value['quantity'] = cards['quantity'].sum()
     return value
 
-def getMissingCards(collection, collectionName):
+def getMissingCards(collection, collectionName, fullCollection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    
+    deluxeExCards = fullCollection.query(f'set_id == "A4B" and quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
     if not missingCards.empty:
         missingCards = missingCards.reset_index()
         missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
         missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
         oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-        missingCards = pd.concat([missingCards, oneStarMissing])
+        missingCards = pd.concat([missingCards, oneStarMissing, deluxeExCards])
         missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
         missingCards.sort_values(by=['card_id']).to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
 
@@ -318,12 +318,14 @@ def refreshAppData(collectionName):
     # PREPARE DATA TO CALCULATE
     collectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
     collectionWithInfo.fillna(-1, inplace = True)
+    fullCollectionWithInfo = pd.merge(collection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['rarityCode', 'code'])
+    fullCollectionWithInfo.fillna(-1, inplace = True)
 
     # FILTER PACK DUPLICATE CARDS
     collectionWithInfo = filterPackDuplicates(collectionWithInfo)
 
     # GET MISSING CARDS
-    missingCards = getMissingCards(collectionWithInfo, collectionName)
+    missingCards = getMissingCards(collectionWithInfo, collectionName, fullCollectionWithInfo)
 
     # GET DECKS
     getDecks(missingCards, fullCollection, collectionWithInfo, collectionName)
