@@ -134,6 +134,15 @@
                 if(filters.oneStar !== undefined && !filters.oneStar && card.rarityOrder === 5) {
                     conditions.push(false);
                 }
+                if(filters.oneShiny !== undefined && !filters.oneShiny && card.rarityOrder === 6) {
+                    conditions.push(false);
+                }
+                if(filters.twoStars !== undefined && !filters.twoStars && card.rarityOrder === 7) {
+                    conditions.push(false);
+                }
+                if(filters.twoShinies !== undefined && !filters.twoShinies && card.rarityOrder === 8) {
+                    conditions.push(false);
+                }
                 if(filters.veryRare !== undefined && !filters.veryRare && card.rarityOrder >= tradeThreshold) {
                     conditions.push(false);
                 }
@@ -309,6 +318,9 @@
                 threeDiamonds: true,
                 fourDiamonds: true,
                 oneStar: !!init ? init.oneStar : true,
+                oneShiny: true,
+                twoStars: true,
+                twoShinies: true,
                 veryRare: true,
                 unTradableOnly: false,
                 lastExtension: true
@@ -332,6 +344,9 @@
                         {show && show.threeDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;' value={filters.threeDiamonds} filterName='threeDiamonds' handleChange={handleChange}/> : <></>}
                         {show && show.fourDiamonds ? <CheckBoxfilter label='&#9830;&#9830;&#9830;&#9830;' value={filters.fourDiamonds} filterName='fourDiamonds' handleChange={handleChange}/> : <></>}
                         {show && show.oneStar ? <CheckBoxfilter label='&#11088;' value={filters.oneStar} filterName='oneStar' handleChange={handleChange}/> : <></>}
+                        {show && show.oneShiny ? <CheckBoxfilter label='&#128973;' value={filters.oneShiny} filterName='oneShiny' handleChange={handleChange}/> : <></>}
+                        {show && show.twoStars ? <CheckBoxfilter label='&#11088;&#11088;' value={filters.twoStars} filterName='twoStars' handleChange={handleChange}/> : <></>}
+                        {show && show.twoShinies ? <CheckBoxfilter label='&#128973;&#128973;' value={filters.twoShinies} filterName='twoShinies' handleChange={handleChange}/> : <></>}
                         {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
                         {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable only' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
@@ -454,7 +469,7 @@
                             />
                         </div>
                         <div className="card-name">
-                            {missingCard.card_id} - {missingCard.displayName}  {`${missingCard.tradeAvailable}`}
+                            {missingCard.card_id} - {missingCard.displayName}
                         </div>
 
                         {
@@ -650,6 +665,9 @@
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
+                            oneShiny: true,
+                            twoStars: true,
+                            twoShinies: true,
                             lastExtension: true
                         }}
                     />

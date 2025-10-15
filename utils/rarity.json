@@ -40,17 +40,33 @@
         "pointCost": 400
     },
     {
+        "code": "One Shiny",
+        "rarity": "✹",
+        "rarityOrder": 6,
+        "recycle": 250,
+        "tradeCost": -1,
+        "pointCost": 1000
+    },
+    {
         "code": "Two Star",
         "rarity": "★★",
-        "rarityOrder": 6,
+        "rarityOrder": 7,
         "recycle": 300,
         "tradeCost": -1,
         "pointCost": 1250
     },
     {
+        "code": "Two Shiny",
+        "rarity": "✹✹",
+        "rarityOrder": 8,
+        "recycle": 650,
+        "tradeCost": -1,
+        "pointCost": 1350
+    },
+    {
         "code": "Three Star",
         "rarity": "★★★",
-        "rarityOrder": 7,
+        "rarityOrder": 9,
         "recycle": 300,
         "tradeCost": -1,
         "pointCost": 1500
@@ -58,26 +74,10 @@
     {
         "code": "Crown",
         "rarity": "♛",
-        "rarityOrder": 8,
+        "rarityOrder": 10,
         "recycle": 1500,
         "tradeCost": -1,
         "pointCost": 2500
-    },
-    {
-        "code": "One Shiny",
-        "rarity": "✹",
-        "rarityOrder": 9,
-        "recycle": 250,
-        "tradeCost": -1,
-        "pointCost": 1000
-    },
-    {
-        "code": "Two Shiny",
-        "rarity": "✹✹",
-        "rarityOrder": 10,
-        "recycle": 650,
-        "tradeCost": -1,
-        "pointCost": 1350
     },
     {
         "code": "Promo",
