@@ -313,8 +313,8 @@
             const {init, refresh, show} = filtersProps;
             const [filters, setFilters] = React.useState({
                 oneCardOnly: !!init ? init.oneCardOnly : undefined,
-                oneDiamond: true,
-                twoDiamonds: true,
+                oneDiamond: !!init ? init.oneDiamond : true,
+                twoDiamonds: !!init ? init.twoDiamonds : true,
                 threeDiamonds: true,
                 fourDiamonds: true,
                 oneStar: !!init ? init.oneStar : true,
@@ -662,6 +662,8 @@
                     <Filters
                         refresh={(filters) => setFilters(filters)}
                         show={{
+                            oneDiamond: true,
+                            twoDiamonds: true,
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
@@ -669,6 +671,11 @@
                             twoStars: true,
                             twoShinies: true,
                             lastExtension: true
+                        }}
+                        init={{
+                            oneDiamond: false,
+                            twoDiamonds: false,
+                            oneStar: true
                         }}
                     />
                     <TradeCards tradeCards={tradeCards}/>

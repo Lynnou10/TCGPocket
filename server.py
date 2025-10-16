@@ -156,7 +156,7 @@ def getTradeCards(collection, collectionName):
     tradeCards = collection[collection['quantity'] > 0]
     tradeCards = tradeCards.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupTradeCards)
     if not tradeCards.empty:
-        tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder > 2 and rarityOrder < {trade_rarity_threshold}')
+        tradeCards = tradeCards.query(f'quantity > 0 and rarityOrder < {trade_rarity_threshold}')
         tradeCards = tradeCards.sort_values(by=['rarityOrder', 'quantity', 'set_id', 'card_id'], ascending=[False, False, True, True])
         tradeCards = tradeCards.drop(columns=['set_id', 'recycle', 'pack', 'element', 'subtype', 'health', 'attacks', 'weakness', 'abilities'])
         tradeCards.sort_values(by=['card_id']).to_json(f'./output/trade_cards_{collectionName}.json', orient="records", force_ascii=False)
