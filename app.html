@@ -445,7 +445,7 @@
             const [showMessage, setShowMessage] = React.useState(false);
 
             const handleCardClick = () => {
-                navigator.clipboard.writeText(`${missingCard.displayName} ${missingCard.rarity} (${set})`).then(function() {
+                navigator.clipboard.writeText(`${missingCard.displayName} ${missingCard.rarity} (${set}-${missingCard.card_id})`).then(function() {
                     setShowMessage(true);
                     setTimeout(() => setShowMessage(false), 3000);
                 }, function(err) {
@@ -540,10 +540,20 @@
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
             const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
-            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {...globalFilters, oneCardOnly: false, oneStar: false, unTradableOnly: false}));
+            const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {
+                ...globalFilters,
+                oneCardOnly: false,
+                oneStar: false,
+                unTradableOnly: false
+            }));
             const [packPulls, setPackPulls] = React.useState(() => formatPulls(pulls, globalFilters));
             const [packPullsFull, setPackPullsFull] = React.useState(() => formatPulls(pullsFull, globalFilters));
-            const [filters, setFilters] = React.useState(() => ({...globalFilters, oneCardOnly: false, oneStar: false, unTradableOnly: false}));
+            const [filters, setFilters] = React.useState(() => ({
+                ...globalFilters,
+                oneCardOnly: false,
+                oneStar: false,
+                unTradableOnly: false
+            }));
 
             React.useEffect(() => {
                 setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
@@ -566,6 +576,8 @@
                             unTradableOnly: true
                         }}
                         init={{
+                            oneDiamond: true,
+                            twoDiamonds: true,
                             oneCardOnly: false,
                             oneStar: false,
                             unTradableOnly: false
@@ -621,7 +633,7 @@
                         content={
                             Object.keys(tradeCards).sort().map(
                                 set => tradeCards[set].cards.map(
-                                    card => `${card.displayName} ${card.rarity} (${set})`
+                                    card => `${card.displayName} ${card.rarity} (${set}-${card.card_id})`
                                 ).join('\r\n')
                             ).join('\r\n')
                         }
