@@ -45,7 +45,7 @@
         const tradeThreshold = 6;
         const promos = ['PA'];
         let lastExtension = '';
-
+getBackupCardUrl
         // FUNCTIONS
         const getSetFromCards = (setName) => {
             if(setName.includes("(")) {
@@ -60,8 +60,8 @@
             extensions = extensions.filter(extension => !promos.includes(extension));
             lastExtension = extensions[extensions.length -1]
         };
-        const getCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
-        const getBackupCardUrl = (set, cardId, language) => `${cardsBackupBaseUrl}/${set.replace('romo', '')}/${set.replace('romo', '')}_${getCardNumberForDisplay(cardId)}_EN.webp`;
+        const getBackupCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
+        const getCardUrl = (set, cardId, language) => `${cardsBackupBaseUrl}/${set.replace('romo', '')}/${set.replace('romo', '')}_${getCardNumberForDisplay(cardId)}_EN.webp`;
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
             if(recycleCard.rarityOrder < 5) {
@@ -71,6 +71,7 @@
         };
         const getCardNumberForDisplay = (cardNumber) => cardNumber < 10 ? `00${cardNumber}` : cardNumber < 100 ? `0${cardNumber}` : cardNumber;
         const calculateTotalTradePoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.tradeCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
+        const calculateTotalPackPoint = (cards) => Object.keys(cards).map(set => cards[set].cards.map(card => card.pointCost).reduce((previousValue, currentValue) => previousValue + currentValue,0)).reduce((previousValue, currentValue) => previousValue + currentValue,0);
         const formatCards = (cardsData, filters) => {
             const cards = {};
             cardsData.forEach((card) => {
@@ -502,7 +503,8 @@
                 <div key="missing-cards">
                     <div className="global-stats">
                         <div className="global-stats-element">Cards: <strong>{Object.keys(missingCards).map(set => missingCards[set].cards.length).reduce((partialSum, a) => partialSum + a, 0)}</strong></div> 
-                        <div className="global-stats-element">Trade points needed: <strong>{calculateTotalTradePoint(missingCards)}</strong></div> 
+                        <div className="global-stats-element">Trade: <strong>{calculateTotalTradePoint(missingCards)}</strong></div> 
+                        <div className="global-stats-element">Pack: <strong>{calculateTotalPackPoint(missingCards)}</strong></div> 
                     </div>
                     <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(missingCards)} defaultOpened={true}/>
                     {
@@ -807,13 +809,13 @@
 
             const handleClick = (e) => {
                 if (e.type === 'click') {
-                    setCard({...card, quantity: card.quantity + 1})
-                    updateCardQuantity(set, collectionCard.card_id, 1);
+                    const newQuantity = updateCardQuantity(set, collectionCard.card_id, 1);
+                    setCard({...card, quantity: newQuantity})
+                    
                 } else if (e.type === 'contextmenu') {
-                    const newQuantity = card.quantity - 1;
+                    const newQuantity = updateCardQuantity(set, collectionCard.card_id, -1);
                     if (newQuantity >= 0) {
-                        setCard({...card, quantity: newQuantity})
-                        updateCardQuantity(set, collectionCard.card_id, -1);
+                        setCard({...card, quantity: newQuantity}) 
                     }
                 }
             };
@@ -851,24 +853,38 @@
             const [refreshCounter, setRefreshCounter] = React.useState(1)
 
             const updateCardQuantity = (set, cardId, deltaQuantity) => {
-                const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
-                if (cardIndex !== undefined) {
-                    collection[set].cards[cardIndex].quantity += deltaQuantity;
-                }
 
                 const duplicates = collectionCardDuplicates(set, cardId, duplicatedCards)
+                const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
+                const targetQuantity = collection[set].cards[cardIndex].quantity;
+
                 if (duplicates) {
+                    let newQuantity = targetQuantity;
+
                     for (const duplicate of duplicates) {
                         const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
-                         if (cardIndex !== undefined) {
-                            collection[duplicate.set_id].cards[duplicatedCardIndex].quantity = collection[set].cards[cardIndex].quantity;
+                        if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity > newQuantity) {
+                            newQuantity = collection[duplicate.set_id].cards[duplicatedCardIndex].quantity;
                         }
                     }
+
+                    collection[set].cards[cardIndex].quantity = newQuantity + deltaQuantity;
+
+                    for (const duplicate of duplicates) {
+                        const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
+                        if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity !== 0) {
+                            collection[duplicate.set_id].cards[duplicatedCardIndex].quantity = newQuantity + deltaQuantity;
+                        }
+                    }
+                } else {
+                    collection[set].cards[cardIndex].quantity += deltaQuantity;
                 }
 
                 setCollection(collection);
                 setShowSaveCollection(true);
                 setRefreshCounter(refreshCounter + 1);
+
+                return collection[set].cards[cardIndex].quantity;
             };
 
             const saveCollection = () => 
