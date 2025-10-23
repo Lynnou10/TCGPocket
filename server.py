@@ -122,6 +122,7 @@ def getMissingCards(collection, collectionName, fullCollection):
         missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
         oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
         missingCards = pd.concat([missingCards, oneStarMissing, deluxeExCards])
+        missingCards = missingCards.drop_duplicates(subset=['set_id', 'card_id'])
         missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
         missingCards.sort_values(by=['card_id']).to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
 

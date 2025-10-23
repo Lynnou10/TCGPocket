@@ -15,7 +15,7 @@
     <div id="app"></div>
 
     <script type="text/babel">
-        const collections = ['main', 'secondary'];
+        const collections = ['main', 'secondary', 'brooklyn'];
         const collectionName = window.location.pathname.replace('/', '');
         const otherAccounts = collections.filter((collection) => collection !== collectionName)
 
@@ -45,7 +45,7 @@
         const tradeThreshold = 6;
         const promos = ['PA'];
         let lastExtension = '';
-getBackupCardUrl
+
         // FUNCTIONS
         const getSetFromCards = (setName) => {
             if(setName.includes("(")) {
@@ -1270,13 +1270,27 @@ getBackupCardUrl
             // BUILD TRADE FROM OTHER ACCOUNTS
             let requestCounter = 10;
             let otherAccountTradeCards = []
-            for(const otherAccount in otherAccounts) {
-                otherAccountTradeCards = otherAccountTradeCards.concat(results[requestCounter]);
-                requestCounter = requestCounter + 1;
+            for(const otherAccount of otherAccounts) {
+                let accountToAdd = results[requestCounter];
+
+                accountToAdd = accountToAdd
+                    .filter(card => card.quantity === 0)
+                    .map(card => ({
+                        id: `${card.set} - ${card.card_id}`,
+                        account: otherAccount,
+                        quantity: card.quantity
+                    }));
+
+                if(otherAccountTradeCards.length === 0){
+                    otherAccountTradeCards = [...accountToAdd];
+                } else {
+                    otherAccountTradeCards = otherAccountTradeCards
+                        .filter(otherAccountTradeCard => accountToAdd.map(card => card.id).includes(otherAccountTradeCard.id));
+                }
+                requestCounter += 1;
             }
-            otherAccountTradeCards = otherAccountTradeCards
-                .filter(otherAccountTradeCard => otherAccountTradeCard.quantity === 0)
-                .map(otherAccountTradeCard => `${otherAccountTradeCard.set} - ${otherAccountTradeCard.card_id}`)
+
+            otherAccountTradeCards = otherAccountTradeCards.map(otherAccountTradeCard => otherAccountTradeCard.id)
             let missingCards = results[1];
             missingCards = missingCards.map(missingCard => ({
                 ...missingCard,
