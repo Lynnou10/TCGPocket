@@ -302,12 +302,13 @@ def refreshAppData(collectionName):
 
     # EXPORT COLLECTION DATA
     fullCollection = pd.merge(cards, collection, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')
+    fullCollection = pd.merge(fullCollection, rarity, left_on=['rarityCode'], right_on=['code'], how='left').drop(columns=['code'])
     fullCollection['quantity'] = fullCollection['quantity'].astype(float).fillna(value=0)
     fullCollection.fillna(-1, inplace = True)
     fullCollection.replace({'pack': -1}, 'All', inplace=True)
     fullCollection['french_name'] = fullCollection['name'].map(translateName)
     fullCollection['pack_french_name'] = fullCollection['pack'].map(translateName)
-    fullCollection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity']].sort_values(by=['card_id']).to_json(f'./output/collection_{collectionName}.json', orient="records", force_ascii=False)
+    fullCollection[['set_id', 'card_id', 'set', 'name', 'french_name', 'quantity', 'rarityOrder']].sort_values(by=['card_id']).to_json(f'./output/collection_{collectionName}.json', orient="records", force_ascii=False)
 
     # PREPARE COLLECTION FOR CALCULATION
     collection = pd.merge(collection, cards, left_on=['set_id', 'card_id'], right_on=['set_id', 'card_id'], how='left')

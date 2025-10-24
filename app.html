@@ -144,6 +144,12 @@
                 if(filters.twoShinies !== undefined && !filters.twoShinies && card.rarityOrder === 8) {
                     conditions.push(false);
                 }
+                if(filters.threeStars !== undefined && !filters.threeStars && card.rarityOrder === 9) {
+                    conditions.push(false);
+                }
+                if(filters.crown !== undefined && !filters.crown && card.rarityOrder === 10) {
+                    conditions.push(false);
+                }
                 if(filters.veryRare !== undefined && !filters.veryRare && card.rarityOrder >= tradeThreshold) {
                     conditions.push(false);
                 }
@@ -186,11 +192,6 @@
             const quantities = [];
             const cardQuantity = collection[set].cards.find(card => card.card_id === cardId).quantity;
 
-            // 6518
-
-
-            console.log('SET: ', set, 'CARD: ', cardId);
-
             // IF QUANTITY IS 0, RETURN 0
             if(cardQuantity === 0)
                 return 0;
@@ -198,14 +199,7 @@
             for (const duplicatedCard of duplicatedCards) {
                 for (const duplicate of duplicatedCard) {
                     if (set === duplicate.set_id && cardId === duplicate.card_id) {
-
-                        console.log(duplicatedCard)
-
-
                         const duplicateIndex = duplicatedCard.findIndex(duplicate => set === duplicate.set_id && cardId === duplicate.card_id)
-
-                        console.log(duplicateIndex);
-
                         // IF FIRST ELEMENT OF DUPLICATE, RETURN QUANTITY
                         if(duplicateIndex === 0) {
                             return cardQuantity;
@@ -354,9 +348,11 @@
                 threeDiamonds: true,
                 fourDiamonds: true,
                 oneStar: !!init ? init.oneStar : true,
-                oneShiny: true,
+                oneShiny: !!init ? init.oneShiny : true,
                 twoStars: true,
                 twoShinies: true,
+                threeStars: true,
+                crown: true,
                 veryRare: true,
                 unTradableOnly: false,
                 lastExtension: true
@@ -383,6 +379,8 @@
                         {show && show.oneShiny ? <CheckBoxfilter label='&#128973;' value={filters.oneShiny} filterName='oneShiny' handleChange={handleChange}/> : <></>}
                         {show && show.twoStars ? <CheckBoxfilter label='&#11088;&#11088;' value={filters.twoStars} filterName='twoStars' handleChange={handleChange}/> : <></>}
                         {show && show.twoShinies ? <CheckBoxfilter label='&#128973;&#128973;' value={filters.twoShinies} filterName='twoShinies' handleChange={handleChange}/> : <></>}
+                        {show && show.threeStars ? <CheckBoxfilter label='&#11088;&#11088;&#11088;' value={filters.threeStars} filterName='threeStars' handleChange={handleChange}/> : <></>}
+                        {show && show.crown ? <CheckBoxfilter label='&#128081;' value={filters.crown} filterName='crown' handleChange={handleChange}/> : <></>}
                         {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
                         {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable only' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
@@ -423,6 +421,7 @@
                         <button onClick={() => setPage('Collection')}>Collection</button>
                         <button onClick={() => setPage('Missing Cards')}>Missing Cards</button>
                         <button onClick={() => setPage('Trade Cards')}>Trade Cards</button>
+                        <button onClick={() => setPage('Rare Cards')}>Rare Cards</button>
                         <button onClick={() => setPage('Decks')}>Decks</button>
                         <button onClick={() => setPage('Creator')}>Creator</button>
                     </div>
@@ -430,6 +429,7 @@
                         page === 'Missing Cards' ? <MissingCardsDashboard cards={missingCards} pulls={pulls} pullsFull={pullsFull} globalFilters={globalFilters}/> :
                         page === 'Trade Cards' ? <TradeCardsDashboard cards={tradeCards} globalFilters={globalFilters}/> :
                         page === 'Recycle Cards' ? <RecycleCardsDashboard cards={recycleCards} globalFilters={globalFilters}/> :
+                        page === 'Rare Cards' ? <RareCardsDashboard cards={collection} globalFilters={globalFilters}/> :
                         page === 'Decks' ? <DecksDashboard decks={decks} globalFilters={globalFilters}/> :
                         page === 'Creator' ? <DeckCreatorDashboard deckCards={deckCards} globalFilters={globalFilters}/> :
                         <CollectionDashboard cards={collection} globalFilters={globalFilters} duplicatedCards={duplicatedCards}/>
@@ -820,6 +820,107 @@
                         }}
                     />
                     <RecycleCards recycleCards={recycleCards}/>
+                </div>
+            )
+        };
+        // **********
+
+        //RARE CARDS
+        const RareCard = (cardProps) => {
+            const {set, rareCard} = cardProps;
+            return (
+                <div className="card">
+                    <div className={`card-image`}>
+                        <img
+                            src={getCardUrl(set, rareCard.card_id, rareCard.language)}
+                            onError={({ currentTarget }) => {
+                                currentTarget.onerror = null;
+                                currentTarget.src=getBackupCardUrl(set, rareCard.card_id, rareCard.language)
+                            }}
+                        />
+                    </div>
+                    <div className="card-name">
+                        {rareCard.card_id} - {rareCard.displayName}
+                    </div>
+                    <div className="card-counter">
+                        {rareCard.quantity}
+                    </div>
+                </div>
+            )
+        };
+
+        const RareCards = (cardsProps) => {
+            const {rareCards} = cardsProps;
+            const [hideSet, setHideSet] = React.useState({});
+
+            return (
+                <div key="rare-cards">
+                    <SetsHider setHideSet={setHideSet} hideSet={hideSet} sets={Object.keys(rareCards)} defaultOpened={true}/>
+                    {
+                        Object.keys(rareCards).sort().map(set => 
+                            <div key={set} className="set">
+                                <div className = "set-container">
+                                    <div className="set-name">{rareCards[set].setName}</div>
+                                    <SetHider set={set} hideSet={hideSet} setHideSet={setHideSet} defaultOpened={!!hideSet[set]}/>
+                                </div>
+                                {
+                                    hideSet[set] ? 
+                                        <></> : rareCards[set].cards.map(
+                                        rareCard => <RareCard
+                                            key={`${set}-${rareCard.card_id}`}
+                                            set={set}
+                                            rareCard={rareCard}
+                                        />
+                                    )
+                                }
+                            </div> 
+                        )
+                    }
+                </div>
+            )
+        };
+
+        const RareCardsDashboard = (cardsDashboardProps) => {
+            const {cards, globalFilters} = cardsDashboardProps;
+            const rareCardsBase = cards.filter(card => card.rarityOrder > 4 && card.rarityOrder < 100 && card.quantity > 0)
+            const [rareCards, setRareCards] = React.useState(() => formatCards(rareCardsBase, {
+                ...globalFilters,
+                oneStar: false,
+                oneShiny: false
+            }));
+
+            const [filters, setFilters] = React.useState(() => ({
+                ...globalFilters,
+                oneStar: false,
+                oneShiny: false
+            }));
+
+            React.useEffect(() => setRareCards(formatCards(rareCardsBase, {...filters, ...globalFilters})), [globalFilters, filters]);
+
+            return (
+                <div>
+                    <Filters
+                        refresh={(filters) => setFilters(filters)}
+                        show={{
+                            oneStar: true,
+                            oneShiny: true,
+                            twoStars: true,
+                            twoShinies: true,
+                            threeStars: true,
+                            crown: true,
+                            lastExtension: true
+                        }}
+                        init={{
+                            oneStar: false,
+                            oneShiny: false,
+                            twoStars: true,
+                            threeStars: true,
+                            crown: true,
+                            twoShinies: true,
+                            lastExtension: true
+                        }}
+                    />
+                    <RareCards rareCards={rareCards}/>
                 </div>
             )
         };
