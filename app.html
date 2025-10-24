@@ -182,15 +182,50 @@
             }
             return null;
         }
-        const isDuplicatedCardCounted = (set, cardId, duplicatedCards) => {
+        const duplicatedCardQuantity = (set, cardId, duplicatedCards, collection) => {
+            const quantities = [];
+            const cardQuantity = collection[set].cards.find(card => card.card_id === cardId).quantity;
+
+            // 6518
+
+
+            console.log('SET: ', set, 'CARD: ', cardId);
+
+            // IF QUANTITY IS 0, RETURN 0
+            if(cardQuantity === 0)
+                return 0;
+
             for (const duplicatedCard of duplicatedCards) {
-                for (const duplicate in duplicatedCard) {
-                    if (set === duplicatedCard[duplicate].set_id && cardId === duplicatedCard[duplicate].card_id) {
-                        return duplicate <= 0;
+                for (const duplicate of duplicatedCard) {
+                    if (set === duplicate.set_id && cardId === duplicate.card_id) {
+
+                        console.log(duplicatedCard)
+
+
+                        const duplicateIndex = duplicatedCard.findIndex(duplicate => set === duplicate.set_id && cardId === duplicate.card_id)
+
+                        console.log(duplicateIndex);
+
+                        // IF FIRST ELEMENT OF DUPLICATE, RETURN QUANTITY
+                        if(duplicateIndex === 0) {
+                            return cardQuantity;
+                        } 
+                        //IF NOT RETURN QUANTITY IF ALL DUPLICATES ARE 0 
+                        else {
+                            const duplicatesQuantity = duplicatedCard
+                                .filter(duplicate => set !== duplicate.set_id || cardId !== duplicate.card_id)
+                                .map(duplicate => collection[duplicate.set_id].cards.find(card => card.card_id === duplicate.card_id).quantity)
+                                .reduce((partialSum, a) => partialSum + a, 0)
+                            if(duplicatesQuantity === 0) {
+                                return cardQuantity
+                            } else {
+                                return 0;
+                            }                            
+                        }
                     }
                 }
             }
-            return true;
+            return cardQuantity;
         }
 
         // COMPONENTS
@@ -905,13 +940,7 @@
                         <strong>
                             { refreshCounter > 0 ? Object.keys(collection).map(set => 
                                 collection[set].cards.map(
-                                    card => {
-                                        if(isDuplicatedCardCounted(set, card.card_id, duplicatedCards)) {
-                                            return card.quantity;
-                                        } else {
-                                            return 0;
-                                        }
-                                    }
+                                    card => duplicatedCardQuantity(set, card.card_id, duplicatedCards, collection)
                                 ).reduce(
                                     (partialSum, a) => partialSum + a, 0)
                                 ).reduce(
