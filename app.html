@@ -701,8 +701,14 @@
 
         const TradeCardsDashboard = (cardsDashboardProps) => {
             const {cards, globalFilters} = cardsDashboardProps;
-            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards, globalFilters));
-            const [filters, setFilters] = React.useState(() => globalFilters);
+            const [tradeCards, setTradeCards] = React.useState(() => formatCards(cards, {...globalFilters,
+                oneDiamond: false,
+                twoDiamonds: false
+            }));
+            const [filters, setFilters] = React.useState(() => ({...globalFilters,
+                oneDiamond: false,
+                twoDiamonds: false
+            }));
 
             React.useEffect(() => setTradeCards(formatCards(cards, {...filters, ...globalFilters})), [globalFilters, filters]);
 

@@ -1,6 +1,7 @@
 CARD DATA DB: https://pocket.limitlesstcg.com/cards/
 CARD IMAGE DB: https://pocket.limitlesstcg.com/cards/
 
+0 - Fix decks
 1 - Import cards from https://pocket.limitlesstcg.com/cards/
 2 - Filter Deluxe Ex (A4b) (Missing tab)
 4 - Baby probability
