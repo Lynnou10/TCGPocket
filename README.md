@@ -1,13 +1,11 @@
 CARD DATA DB: https://pocket.limitlesstcg.com/cards/
 CARD IMAGE DB: https://pocket.limitlesstcg.com/cards/
 
-0 - Fix decks
-1 - Import cards from https://pocket.limitlesstcg.com/cards/
-2 - Filter Deluxe Ex (A4b) (Missing tab)
-4 - Baby probability
-5 - Automatic get collection
-6 - Delete deck
-7 - Translate
+1 - Fix decks
+2 - Baby probability
+3 - Automatic get collection
+4 - Delete deck
+5 - Translate
 
 - PYTHON VERSION
 
