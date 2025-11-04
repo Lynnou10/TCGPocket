@@ -706,8 +706,6 @@
                 twoDiamonds: false
             }));
 
-            console.log(tradeCards)
-
             const [filters, setFilters] = React.useState(() => ({...globalFilters,
                 oneDiamond: false,
                 twoDiamonds: false
@@ -733,7 +731,8 @@
                         init={{
                             oneDiamond: false,
                             twoDiamonds: false,
-                            oneStar: true
+                            oneStar: true,
+                            oneShiny: true
                         }}
                     />
                     <TradeCards tradeCards={tradeCards}/>
