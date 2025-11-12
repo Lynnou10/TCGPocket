@@ -1,11 +1,7 @@
 CARD DATA DB: https://pocket.limitlesstcg.com/cards/
 CARD IMAGE DB: https://pocket.limitlesstcg.com/cards/
 
-1 - Fix decks
-2 - Baby probability
-3 - Automatic get collection
-4 - Delete deck
-5 - Translate
+0 - Translate trainers
 
 - PYTHON VERSION
 

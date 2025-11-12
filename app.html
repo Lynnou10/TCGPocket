@@ -221,6 +221,14 @@
             }
             return cardQuantity;
         }
+        const deleteDeck = (deckName) => {
+            fetch(`/deck`, {
+                method: 'DELETE',
+                body: JSON.stringify({
+                    "deck": deckName
+                })
+            }).then((response) => location.reload(true));
+        }
 
         // COMPONENTS
         const ContentToClipboard = (contentToClipboardProps) => {
@@ -1158,6 +1166,9 @@
                                     { 
                                         deckMissingCardsCount(decksContent[deck]) === 0 ? <></> : <div className="set-info">Missing cards: <strong>{deckMissingCardsCount(decksContent[deck])}</strong></div>
                                     }
+                                    <div className="delete-deck">
+                                        <button onClick={() => deleteDeck(decksContent[deck].name)}>&#128465;</button>
+                                    </div>
                                 </div>
                                 { 
                                     hideDeck[deck] ? 

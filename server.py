@@ -244,7 +244,7 @@ def getDecks(missingCards, fullCollection, collectionWithInfo, collectionName):
                 value['quantity'] = cards['quantity'].sum()
                 return value
 
-            collectionWithRare = collectionWithInfo.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupRarityCards)
+            collectionWithRare = fullCollection.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupRarityCards)
 
             deckCards = []
 
@@ -257,7 +257,8 @@ def getDecks(missingCards, fullCollection, collectionWithInfo, collectionName):
                     deckCards.append(card_info)
                 else:
                     cardWithRareCount = collectionWithRare[(collectionWithRare["set"] == card["set"]) & (collectionWithRare["card_id"] == card["card_id"])]
-                    card_info["quantity"] = cardWithRareCount["quantity"].values[0].tolist()
+                    quantity = cardWithRareCount["quantity"].values[0].tolist()
+                    card_info["quantity"] = quantity if quantity <= card_info["count"] else card_info["count"]
                     deckCards.append(card_info)
 
             decks.append({
@@ -382,6 +383,24 @@ class ServerRequestHandler(http.server.SimpleHTTPRequestHandler):
             newCollection.to_csv(f'./collection/collection_{collection_name}.csv', index=False, encoding='utf-8')
         
             refreshGlobalAppData(collection_name)
+
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain")
+        self.send_header("Content-Length", str(len("OK")))
+        self.end_headers()
+        self.wfile.write("OK".encode('utf-8'))
+
+    def do_DELETE(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+
+        if self.path == '/deck':
+            # DELETE DECK
+            deckName = json.loads(post_data.decode('utf-8'))['deck']
+            print(f'DELETE DECK: {deckName}')
+            os.remove(f"./decks/{deckName}.json")
+            refreshGlobalAppData('ALL')
+
 
         self.send_response(200)
         self.send_header("Content-Type", "text/plain")
