@@ -13,12 +13,12 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'B1'
-set_title = 'Mega Rising'
-set_name = 'Mega Rising (B1)'
+set_id = 'P-B'
+set_title = 'Promos-B'
+set_name = 'Promos-B (P-B)'
 
 i = 1
-max_card_id = 331
+max_card_id = 11
 
 shiniy_limit = 287
 
@@ -137,14 +137,14 @@ while i <= max_card_id:
 
     card_type = unidecode(re.findall(f'<p class="card-text-type">(.*)</p>', contents)[0].split('-')[0].split('<')[0].strip())
     card = {
-        "id": f'{set_id}-{"{:03d}".format(i)}'.lower().strip(),
+        "id": f'{set_id.replace('-', '')}-{"{:03d}".format(i)}'.lower().strip(),
         "name": re.findall(f'<span class="card-text-name"><a href="/cards/{set_id}/{i}">(.*)</a></span>', contents)[0].strip(),
         "element": re.findall(f'</a></span>(.*)</p>', contents)[0].split('-')[1].strip() if card_type != 'Trainer' else None,
         "type": card_type,
         "subtype": unidecode(re.findall(f'<p class="card-text-type">(.*)</p>', contents)[0].split('-')[1].split('<')[0].strip()) if card_type != 'Trainer' else None,
         "health": float(re.findall(f'</a></span>(.*)</p>', contents)[0].split('-')[2].split('<')[0].strip().split(' ')[0]) if card_type != 'Trainer' else None,
         "set": set_name,
-        "pack": getPack(re.findall(f'<div class="prints-current-details">.*<span class="text-lg">(.*)</div>', contents)[0].split('·')),
+        "pack": "All" if "Promo" in set_title else getPack(re.findall(f'<div class="prints-current-details">.*<span class="text-lg">(.*)</div>', contents)[0].split('·')),
         "attacks": getAttacks(contents) if card_type != 'Trainer' else [],
         "weakness": re.findall(f'<p class="card-text-wrr">(.*)</p>', contents)[0].split('Weakness:')[1].split('<br>')[0].strip() if card_type != 'Trainer' else None,
         "abilities": getAbility(re.findall(f'<div class="card-text-ability">(.*)</p>', contents)) if card_type != 'Trainer' else [],

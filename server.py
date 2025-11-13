@@ -13,7 +13,7 @@ warnings.simplefilter(action='ignore', category=SettingWithCopyWarning)
  
 pd.set_option("display.max_rows", 500)
 
-promo_sets = ['PA']
+promo_sets = ['PA', 'PB']
 trade_rarity_threshold = 9
 pull_shinies_rarity_threshold = 8
 excluded_packs = ['All']
