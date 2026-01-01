@@ -13,12 +13,12 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'B1a'
-set_title = 'Crimson Blaze'
-set_name = 'Crimson Blaze (B1a)'
+set_id = 'P-B'
+set_title = 'Promos-B'
+set_name = 'Promos-B (P-B)'
 
 i = 1
-max_card_id = 103
+max_card_id = 24
 
 shiniy_limit = 88
 
