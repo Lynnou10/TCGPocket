@@ -18,7 +18,7 @@ set_title = 'Promos-B'
 set_name = 'Promos-B (P-B)'
 
 i = 1
-max_card_id = 24
+max_card_id = 32
 
 shiniy_limit = 88
 
