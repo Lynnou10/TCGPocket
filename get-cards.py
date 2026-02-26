@@ -13,14 +13,14 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'P-B'
-set_title = 'Promos-B'
-set_name = 'Promos-B (P-B)'
+set_id = 'B2a'
+set_title = 'Paldean Wonders'
+set_name = 'Paldean Wonders (B2a)'
 
 i = 1
-max_card_id = 32
+max_card_id = 131
 
-shiniy_limit = 88
+shiniy_limit = 116
 
 def getType(character):
     match character:
