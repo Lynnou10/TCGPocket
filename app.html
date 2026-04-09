@@ -60,7 +60,7 @@
             extensions = extensions.filter(extension => !promos.includes(extension));
             lastExtension = extensions[extensions.length -1]
         };
-        const getBackupCardUrl = (set, cardId, language) => `${cardsBaseUrl}/${language}/tcgp/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}/low.png`;
+        const getBackupCardUrl = (set, cardId, language) => `/img/cards/${set.replace('romo', '')}/${getCardNumberForDisplay(cardId)}.webp`;
         const getCardUrl = (set, cardId, language) => `${cardsBackupBaseUrl}/${set.replace('romo', '')}/${set.replace('romo', '')}_${getCardNumberForDisplay(cardId)}_EN.webp`;
         const isKeyInCardsCollection = (cardsCollection, key) => Object.keys(cardsCollection).includes(key);
         const isRecycleCardTradeble = (recycleCard) => {
