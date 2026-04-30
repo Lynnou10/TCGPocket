@@ -1237,9 +1237,7 @@
          }
       ],
       "weakness":"Lightning",
-      "abilities":[
-         
-      ],
+      "abilities":[],
       "evolvesFrom":null,
       "rarity":"One Diamond"
    },
@@ -1291,10 +1289,201 @@
          }
       ],
       "weakness":"Fighting",
+      "abilities":[],
+      "evolvesFrom":"Jigglypuff",
+      "rarity":"One Diamond"
+   },
+   {
+      "id":"pb-049",
+      "name":"Victini",
+      "element":"Fire",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":70.0,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"V-Flame",
+            "effect":null,
+            "damage":"40",
+            "cost":[
+               "Colorless",
+               "Colorless"
+            ]
+         }
+      ],
+      "weakness":"Water",
+      "abilities":[
+         {
+            "name":"Victory Star",
+            "effect":"Once during your turn, after you flip any coins for an attack of 1 of your [R] Pok\u00e9mon, you may ignore all results of those coin flips and begin flipping those coins again. You can't use more than 1 Victory Star Ability each turn."
+         }
+      ],
+      "evolvesFrom":null,
+      "rarity":"One Star"
+   },
+   {
+      "id":"pb-050",
+      "name":"Meloetta",
+      "element":"Psychic",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":70.0,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Psyshot",
+            "effect":null,
+            "damage":"50",
+            "cost":[
+               "Psychic",
+               "Psychic"
+            ]
+         }
+      ],
+      "weakness":"Darkness",
+      "abilities":[
+         {
+            "name":"Strange Singing",
+            "effect":"At the beginning of your turn, if this Pok\u00e9mon is in the Active Spot, put a random Psychic Pok\u00e9mon from your deck into your hand."
+         }
+      ],
+      "evolvesFrom":null,
+      "rarity":"Two Diamond"
+   },
+   {
+      "id":"pb-51",
+      "name":"Zygarde",
+      "element":"Fighting",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":80,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Bite",
+            "effect":null,
+            "damage":"30",
+            "cost":[
+               "Fighting"
+            ]
+         }
+      ],
+      "weakness":"Grass",
       "abilities":[
          
       ],
-      "evolvesFrom":"Jigglypuff",
+      "evolvesFrom":null,
       "rarity":"One Diamond"
+   },
+   {
+      "id":"pb-52",
+      "name":"Zygarde",
+      "element":"Fighting",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":120,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Cell Storm",
+            "effect":"Heal 20 damage from this Pokémon.",
+            "damage":"60",
+            "cost":[
+               "Fighting",
+               "Fighting",
+               "Colorless"
+            ]
+         }
+      ],
+      "weakness":"Grass",
+      "abilities":[],
+      "evolvesFrom":null,
+      "rarity":"Three Diamond"
+   },
+   {
+      "id":"pb-53",
+      "name":"Zygarde ex",
+      "element":"Fighting",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":170,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Land Laser",
+            "effect":"Flip 2 coins. This attack does 100 damage for each heads",
+            "damage":"100x",
+            "cost":[
+               "Fighting",
+               "Fighting",
+               "Fighting"
+            ]
+         }
+      ],
+      "weakness":"Grass",
+      "abilities":[],
+      "evolvesFrom":null,
+      "rarity":"Four Diamond"
+   },
+   {
+      "id":"pb-054",
+      "name":"Eevee",
+      "element":"Colorless",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":50.0,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Stampede",
+            "effect":null,
+            "damage":"10",
+            "cost":[
+               "Colorless"
+            ]
+         }
+      ],
+      "weakness":"Fighting",
+      "abilities":[
+         {
+            "name":"Boosted Evolution",
+            "effect":"As long as this Pok\u00e9mon is in the Active Spot, it can evolve during your first turn or the turn you play it."
+         }
+      ],
+      "evolvesFrom":null,
+      "rarity":"One Diamond"
+   },
+   {
+      "id":"pb-55",
+      "name":"Zygarde ex",
+      "element":"Fighting",
+      "type":"Pokemon",
+      "subtype":"Basic",
+      "health":170,
+      "set":"Promos-B (P-B)",
+      "pack":"All",
+      "attacks":[
+         {
+            "name":"Land Laser",
+            "effect":"Flip 2 coins. This attack does 100 damage for each heads",
+            "damage":"100x",
+            "cost":[
+               "Fighting",
+               "Fighting",
+               "Fighting"
+            ]
+         }
+      ],
+      "weakness":"Grass",
+      "abilities":[],
+      "evolvesFrom":null,
+      "rarity":"Two Star"
    }
 ]
