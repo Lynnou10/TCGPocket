@@ -13,23 +13,23 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'B3'
-set_title = 'Pulsing Aura'
-set_name = 'Pulsing Aura (B3)'
-
-i = 1
-max_card_id = 234
-
-shiniy_limit = 205
-
-# set_id = 'P-B'
-# set_title = 'Promos-B (P-B)'
-# set_name = 'Promos-B (P-B)'
+# set_id = 'B3'
+# set_title = 'Pulsing Aura'
+# set_name = 'Pulsing Aura (B3)'
 
 # i = 1
-# max_card_id = 40
+# max_card_id = 234
 
-# shiniy_limit = 116
+# shiniy_limit = 205
+
+set_id = 'P-B'
+set_title = 'Promos-B (P-B)'
+set_name = 'Promos-B (P-B)'
+
+i = 1
+max_card_id = 62
+
+shiniy_limit = 116
 
 def getType(character):
     match character:
