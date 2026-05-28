@@ -15,7 +15,7 @@ import json
 
 set_id = 'B3a'
 set_title = 'Paradox Drive'
-set_name = 'Paradox Drive (B3A)'
+set_name = 'Paradox Drive (B3a)' # minuscule dans le a ou b
 
 i = 1
 max_card_id = 109
