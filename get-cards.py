@@ -13,23 +13,23 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'B3a'
-set_title = 'Paradox Drive'
-set_name = 'Paradox Drive (B3a)' # minuscule dans le a ou b
-
-i = 1
-max_card_id = 109
-
-shiniy_limit = 94
-
-# set_id = 'P-B'
-# set_title = 'Promos-B (P-B)'
-# set_name = 'Promos-B (P-B)'
+# set_id = 'B3a'
+# set_title = 'Paradox Drive'
+# set_name = 'Paradox Drive (B3a)' # minuscule dans le a ou b
 
 # i = 1
-# max_card_id = 62
+# max_card_id = 109
 
-# shiniy_limit = 116
+# shiniy_limit = 94
+
+set_id = 'P-B'
+set_title = 'Promos-B'
+set_name = 'Promos-B (P-B)'
+
+i = 1
+max_card_id = 70
+
+shiniy_limit = 1000
 
 def getType(character):
     match character:
