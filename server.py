@@ -115,17 +115,23 @@ def groupMissingCards(cards):
 
 def getMissingCards(collection, collectionName, fullCollection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    deluxeExCards = fullCollection.query(f'set_id == "A4B" and quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
+    deluxeExCards = fullCollection.query('set_id == "A4B" and quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
     if not missingCards.empty:
         missingCards = missingCards.reset_index()
         missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-        missingCards = missingCards.query(f'quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
-        oneStarMissing = collection.query(f'quantity == 0 and rarityOrder == 5 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
-        missingCards = pd.concat([missingCards, oneStarMissing, deluxeExCards])
+        missingCards = missingCards.query('quantity < 2 and rarity != -1 and rarityOrder < 100').sort_values(by=['quantity', 'rarityOrder', 'rarity', 'set', 'card_id'], ascending=[True, True, False, True, True])
+        rarityThresholdMissing = collection.query('quantity == 0 and rarityOrder >= 5 and rarityOrder < 100 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
+        missingCards = pd.concat([missingCards, rarityThresholdMissing, deluxeExCards])
         missingCards = missingCards.drop_duplicates(subset=['set_id', 'card_id'])
-        missingCards = missingCards.replace(-1, 'No Data').drop(columns=['set_id'])
-        missingCards.sort_values(by=['card_id']).to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
 
+        text_columns = ['name', 'french_name', 'pack', 'pack_french_name', 'rarity']
+        for column in text_columns:
+            missingCards[column] = missingCards[column].replace(-1, 'No Data')
+            missingCards[column] = missingCards[column].fillna('No Data')
+
+        missingCards = missingCards.loc[~missingCards['name'].isin(['No Data', ''])]
+        missingCards = missingCards.drop(columns=['set_id'])
+        missingCards.sort_values(by=['rarityOrder', 'card_id']).to_json(f'./output/missing_cards_{collectionName}.json', orient="records", force_ascii=False)
         return missingCards
     else:
         emptyMissingCards = pd.DataFrame(columns=["card_id", "set", "name", "french_name" ,"pack", "pack_french_name", "quantity", "rarity", "rarityOrder", "tradeCost", "pointCost"])

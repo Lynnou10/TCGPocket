@@ -116,6 +116,9 @@
         };
         const filterCard = (card, filters) => {
             const conditions = [true]
+            if(card.rarityOrder >= 100) {
+                return false;
+            }
             if(filters) {
                 if(filters.oneCardOnly !== undefined && !filters.oneCardOnly) {
                     conditions.push(card.quantity === 0);
@@ -150,11 +153,11 @@
                 if(filters.crown !== undefined && !filters.crown && card.rarityOrder === 10) {
                     conditions.push(false);
                 }
-                if(filters.veryRare !== undefined && !filters.veryRare && card.rarityOrder >= tradeThreshold) {
-                    conditions.push(false);
-                }
                 if(filters.lastExtension !== undefined && !filters.lastExtension) {
                     conditions.push(!card.set.toUpperCase().includes(lastExtension.toUpperCase()));
+                }
+                if(filters.tradableOnly !== undefined && filters.tradableOnly) {
+                    conditions.push(card.tradeAvailable);
                 }
                 if(filters.unTradableOnly !== undefined && filters.unTradableOnly) {
                     conditions.push(!card.tradeAvailable);
@@ -361,7 +364,7 @@
                 twoShinies: true,
                 threeStars: true,
                 crown: true,
-                veryRare: true,
+                tradableOnly: false,
                 unTradableOnly: false,
                 lastExtension: true
             });
@@ -389,8 +392,8 @@
                         {show && show.twoShinies ? <CheckBoxfilter label='&#128973;&#128973;' value={filters.twoShinies} filterName='twoShinies' handleChange={handleChange}/> : <></>}
                         {show && show.threeStars ? <CheckBoxfilter label='&#11088;&#11088;&#11088;' value={filters.threeStars} filterName='threeStars' handleChange={handleChange}/> : <></>}
                         {show && show.crown ? <CheckBoxfilter label='&#128081;' value={filters.crown} filterName='crown' handleChange={handleChange}/> : <></>}
-                        {show && show.veryRare ? <CheckBoxfilter label='&#10024;' value={filters.veryRare} filterName='veryRare' handleChange={handleChange}/> : <></>}
-                        {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable only' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
+                        {show && show.tradableOnly ? <CheckBoxfilter label='Tradable' value={filters.tradableOnly} filterName='tradableOnly' handleChange={handleChange}/> : <></>}
+                        {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
                     </div>
                 </div>
@@ -617,14 +620,28 @@
                             threeDiamonds: true,
                             fourDiamonds: true,
                             oneStar: true,
+                            oneShiny: true,
+                            twoStars: true,
+                            twoShinies: true,
+                            threeStars: true,
+                            crown: true,
                             lastExtension: true,
+                            tradableOnly: true,
                             unTradableOnly: true
                         }}
                         init={{
                             oneDiamond: true,
                             twoDiamonds: true,
-                            oneCardOnly: false,
+                            threeDiamonds: true,
+                            fourDiamonds: true,
                             oneStar: false,
+                            oneShiny: true,
+                            twoStars: true,
+                            twoShinies: true,
+                            threeStars: true,
+                            crown: true,
+                            oneCardOnly: false,
+                            tradableOnly: false,
                             unTradableOnly: false
                         }}
                     />
@@ -1443,7 +1460,7 @@
             let missingCards = results[1];
             missingCards = missingCards.map(missingCard => ({
                 ...missingCard,
-                tradeAvailable: !otherAccountTradeCards.includes(`${missingCard.set} - ${missingCard.card_id}`)
+                tradeAvailable: missingCard.tradeCost !== -1 && !otherAccountTradeCards.includes(`${missingCard.set} - ${missingCard.card_id}`)
             }))
             // END
             setLastExtension(results[0]);
