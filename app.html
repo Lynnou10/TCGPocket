@@ -30,9 +30,9 @@
         const collectionsRequest = fetch(`./collection/collections.json`, {cache: "no-store"}).then((response) => response.json());
         const duplicateCards = fetch(`./utils/duplicates.json`, {cache: "no-store"}).then((response) => response.json());
 
-        const otherAccountMissingCardsRequest = [];
+        const otherAccountCollectionCardsRequest = [];
         for(const otherAccount of otherAccounts) {
-            otherAccountMissingCardsRequest.push(fetch(`./output/missing_cards_${otherAccount}.json`, {cache: "no-store"}).then((response) => response.json()))
+            otherAccountCollectionCardsRequest.push(fetch(`./output/collection_${otherAccount}.json`, {cache: "no-store"}).then((response) => response.json()))
         }
         
     // GLOBALS
@@ -519,12 +519,13 @@
                             {missingCard.card_id} - {missingCard.displayName}
                         </div>
 
-                        {
-                            missingCard.tradeAvailable ? <div className="card-tradable">
-                                <img src="./img/trade.webp" />
-                            </div> : <></>
-                        }
-
+                        <div className="card-tradables">
+                            {
+                                missingCard.tradeAccounts.map(account => <div key={account} className="card-tradable">
+                                    <img src={`./img/${account}.png`} />
+                                </div>)
+                            }
+                        </div>
 
                         <div className="card-costs">
                             <div className="trade">Trade: {missingCard.tradeCost}</div>
@@ -634,7 +635,7 @@
                             twoDiamonds: true,
                             threeDiamonds: true,
                             fourDiamonds: true,
-                            oneStar: false,
+                            oneStar: true,
                             oneShiny: true,
                             twoStars: true,
                             twoShinies: true,
@@ -1431,37 +1432,41 @@
             decksCreatorRequest,
             collectionsRequest,
             duplicateCards,
-            ...otherAccountMissingCardsRequest
+            ...otherAccountCollectionCardsRequest
         ]).then((results) => {
             // BUILD TRADE FROM OTHER ACCOUNTS
             let requestCounter = 10;
-            let otherAccountTradeCards = []
-            for(const otherAccount of otherAccounts) {
-                let accountToAdd = results[requestCounter];
+            let otherAccountCollectionCards = []
 
-                accountToAdd = accountToAdd
-                    .filter(card => card.quantity === 0)
+            for(const otherAccount of otherAccounts) {
+                let accountCollectionToCheck = results[requestCounter];
+                accountCollectionToCheck = accountCollectionToCheck.filter(card => card.quantity > 0)
                     .map(card => ({
                         id: `${card.set} - ${card.card_id}`,
                         account: otherAccount,
                         quantity: card.quantity
                     }));
 
-                if(otherAccountTradeCards.length === 0){
-                    otherAccountTradeCards = [...accountToAdd];
+                if(otherAccountCollectionCards.length === 0){
+                    otherAccountCollectionCards = [...accountCollectionToCheck];
                 } else {
-                    otherAccountTradeCards = otherAccountTradeCards
-                        .filter(otherAccountTradeCard => accountToAdd.map(card => card.id).includes(otherAccountTradeCard.id));
+                    otherAccountCollectionCards = [...otherAccountCollectionCards, ...accountCollectionToCheck]
                 }
                 requestCounter += 1;
             }
 
-            otherAccountTradeCards = otherAccountTradeCards.map(otherAccountTradeCard => otherAccountTradeCard.id)
+            let collections = results[8];
+            let otherAccountCollectionCardsRaw = otherAccountCollectionCards.map(otherAccountCollectionCard => otherAccountCollectionCard.id)
             let missingCards = results[1];
             missingCards = missingCards.map(missingCard => ({
                 ...missingCard,
-                tradeAvailable: missingCard.tradeCost !== -1 && !otherAccountTradeCards.includes(`${missingCard.set} - ${missingCard.card_id}`)
-            }))
+                tradeAvailable: missingCard.tradeCost !== -1 && otherAccountCollectionCardsRaw.includes(`${missingCard.set} - ${missingCard.card_id}`),
+                tradeAccounts: otherAccountCollectionCards
+                    .filter(otherAccountCollectionCard => otherAccountCollectionCard.id === `${missingCard.set} - ${missingCard.card_id}`)
+                    .map(otherAccountCollectionCard => collections.find(collection => collection.name === otherAccountCollectionCard.account)?.image)
+            }));
+
+            console.log(missingCards.filter(missingCard => missingCard.tradeAvailable));
             // END
             setLastExtension(results[0]);
             root.render(<App 
