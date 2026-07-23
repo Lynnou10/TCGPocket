@@ -422,7 +422,8 @@ body {
 
 .save-collection {
     position: fixed;
-    width: 100%;
+    width: 20%;
+    margin-left: 40%;
     bottom: 15px;
     text-align: center;
     z-index: 100000;

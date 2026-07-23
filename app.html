@@ -116,9 +116,6 @@
         };
         const filterCard = (card, filters) => {
             const conditions = [true]
-            if(card.rarityOrder >= 100) {
-                return false;
-            }
             if(filters) {
                 if(filters.oneCardOnly !== undefined && !filters.oneCardOnly) {
                     conditions.push(card.quantity === 0);
