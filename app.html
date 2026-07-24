@@ -525,7 +525,7 @@
                         </div>
 
                         <div className="card-costs">
-                            <div className="trade">Trade: {missingCard.tradeCost}</div>
+                            { missingCard.tradeCost !== -1 ? <div className="trade">Trade: {missingCard.tradeCost}</div> : <></>}
                             <div className="pack">Pack points: {missingCard.pointCost}</div>
                         </div>
                         <div className="card-counter">
