@@ -49,6 +49,8 @@ def manageRegionalName(name):
         name = f'{name.replace("Alolan ", "")} d\'Alola'
     if('Origin Forme ' in name):
         name = f'{name.replace("Origin Forme ", "")} Forme Originelle'
+    if('Hisuian ' in name):
+            name = f'{name.replace("Hisuian ", "")} de Hisui'
     if(isEx):
         name = f'{name} EX'
     return name

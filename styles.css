@@ -35,6 +35,13 @@ textarea {
     font-family: "Nunito Sans", sans-serif;
 }
 
+select {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+    text-align-last: center;
+}
+
 .content {
     margin-top: 58px;
 }
