@@ -36,6 +36,7 @@ textarea {
 }
 
 select {
+    padding-top: 2px;
     padding-left: 0;
     padding-right: 0;
     text-align: center;
@@ -409,7 +410,7 @@ select {
     position: fixed;
     z-index: 10000000000;
     top: 65px;
-    right: 20px;
+    right: 10px;
 
     button {
         background-color: var(--secondary-1);
@@ -435,7 +436,7 @@ select {
     position: fixed;
     z-index: 10000000000;
     top: 120px;
-    right: 20px;
+    right: 10px;
 }
 
 /* COLLECTION */
