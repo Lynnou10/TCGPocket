@@ -13,26 +13,26 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-# set_id = 'B4'
-# set_title = 'Ruler of the Skies'
-# set_name = 'Ruler of the Skies (B4)' # minuscule dans le a ou b
-
-# i = 1
-# max_card_id = 233
-
-# shiniy_limit = 204
-
-
-
-
-set_id = 'P-B'
-set_title = 'Promos-B'
-set_name = 'Promos-B (P-B)'
+set_id = 'B4a' # minuscule dans le a ou b
+set_title = 'Team Rocket\'s Ambition'
+set_name = 'Team Rocket\'s Ambition (B4a)' # minuscule dans le a ou b
 
 i = 1
-max_card_id = 86
+max_card_id = 110
 
-shiniy_limit = 1000
+shiniy_limit = 95
+
+
+
+
+# set_id = 'P-B'
+# set_title = 'Promos-B'
+# set_name = 'Promos-B (P-B)'
+
+# i = 1
+# max_card_id = 86
+
+# shiniy_limit = 1000
 
 
 
@@ -164,8 +164,7 @@ while i <= max_card_id:
         "weakness": re.findall(f'<p class="card-text-wrr">(.*)</p>', contents)[0].split('Weakness:')[1].split('<br>')[0].strip() if card_type != 'Trainer' else None,
         "abilities": getAbility(re.findall(f'<div class="card-text-ability">(.*)</p>', contents)) if card_type != 'Trainer' else [],
         "evolvesFrom": getEvolvesFrom(unidecode(re.findall(f'<p class="card-text-type">(.*)</p>', contents)[0].split('-')[2].strip())) if card_type != 'Trainer' else None,
-        "rarity": None 
-        # getRarity(re.findall(f'<div class="prints-current-details">.*<span class="text-lg">(.*)</div>', contents)[0].split('·')[1].split('</span>')[0].strip(), i)
+        "rarity": getRarity(re.findall(f'<div class="prints-current-details">.*<span class="text-lg">(.*)</div>', contents)[0].split('·')[1].split('</span>')[0].strip(), i)
     }
 
     newSet.append(card)
