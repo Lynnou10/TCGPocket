@@ -107,4 +107,48 @@
 "abilities": [],
 "evolvesFrom": "Cubone",
 "rarity": null
-}]
+},
+{
+    "id": "pb-093",
+    "name": "Fennekin",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Promos-B (P-B)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Scratch",
+        "effect": null,
+        "damage": "10",
+        "cost": ["Colorless"]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": null
+  },
+  {
+    "id": "pb-094",
+    "name": "Meowstic",
+    "element": "Psychic",
+    "type": "Pokemon",
+    "subtype": "Stage 1",
+    "health": 90.0,
+    "set": "Promos-B (P-B)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Super Psy Bolt",
+        "effect": null,
+        "damage": "70",
+        "cost": ["Psychic", "Psychic"]
+      }
+    ],
+    "weakness": "Darkness",
+    "abilities": [],
+    "evolvesFrom": "Espurr",
+    "rarity": null
+  }]
