@@ -153,6 +153,10 @@
                 if(filters.lastExtension !== undefined && !filters.lastExtension) {
                     conditions.push(!card.set.toUpperCase().includes(lastExtension.toUpperCase()));
                 }
+                if(filters.selectedOnly) {
+                    const selectedCardKey = `${getSetFromCards(card.set)}-${card.card_id}`;
+                    conditions.push(Array.isArray(filters.selectedCards) && filters.selectedCards.includes(selectedCardKey));
+                }
                 if(filters.tradableOnly !== undefined && filters.tradableOnly) {
                     conditions.push(card.tradeAvailable);
                 }
@@ -351,6 +355,7 @@
             const {init, refresh, show} = filtersProps;
             const [filters, setFilters] = React.useState({
                 oneCardOnly: !!init ? init.oneCardOnly : undefined,
+                selectedOnly: !!init ? init.selectedOnly : false,
                 oneDiamond: !!init ? init.oneDiamond : true,
                 twoDiamonds: !!init ? init.twoDiamonds : true,
                 threeDiamonds: true,
@@ -391,6 +396,7 @@
                         {show && show.crown ? <CheckBoxfilter label='&#128081;' value={filters.crown} filterName='crown' handleChange={handleChange}/> : <></>}
                         {show && show.tradableOnly ? <CheckBoxfilter label='Tradable' value={filters.tradableOnly} filterName='tradableOnly' handleChange={handleChange}/> : <></>}
                         {show && show.unTradableOnly ? <CheckBoxfilter label='Untradable' value={filters.unTradableOnly} filterName='unTradableOnly' handleChange={handleChange}/> : <></>}
+                        {show && show.selectedOnly ? <CheckBoxfilter label='Selected' value={filters.selectedOnly} filterName='selectedOnly' handleChange={handleChange}/> : <></>}
                         {show && show.lastExtension ? <CheckBoxfilter label='Last extension' value={filters.lastExtension} filterName='lastExtension' handleChange={handleChange}/> : <></>}
                     </div>
                 </div>
@@ -485,7 +491,7 @@
         };
 
         const MissingCard = (cardProps) => {
-            const {set, missingCard} = cardProps;
+            const {set, missingCard, isSelected, toggleSelection} = cardProps;
             const [showMessage, setShowMessage] = React.useState(false);
 
             const handleCardClick = () => {
@@ -497,8 +503,19 @@
                 });
             }
 
+            const handleContextMenu = (event) => {
+                event.preventDefault();
+                toggleSelection(`${set}-${missingCard.card_id}`);
+            };
+
             return (
-                <button className="clickable-card" onClick={handleCardClick}>
+                <button
+                    className={`clickable-card ${isSelected ? 'selected-missing-card' : ''}`}
+                    onClick={handleCardClick}
+                    onContextMenu={handleContextMenu}
+                    aria-pressed={isSelected}
+                    title="Right-click to highlight or unhighlight this card; click to copy its details"
+                >
                     <div className="copy-clipboard-message">
                         {showMessage ? <span>Card copied to clipboard!</span> : <></>} 
                     </div>
@@ -540,7 +557,7 @@
         };
 
         const MissingCards = (cardsProps) => {
-            const {missingCards, pulls, pullsFull} = cardsProps;
+            const {missingCards, pulls, pullsFull, selectedCards, toggleSelection} = cardsProps;
             const [hideSet, setHideSet] = React.useState({});
 
             return (
@@ -574,6 +591,8 @@
                                             key={`${set}-${missingCard.card_id}`}
                                             set={set}
                                             missingCard={missingCard}
+                                            isSelected={selectedCards.includes(`${set}-${missingCard.card_id}`)}
+                                            toggleSelection={toggleSelection}
                                         />
                                     )
                                 }
@@ -586,6 +605,24 @@
 
         const MissingCardsDashboard = (cardsDashboardProps) => {
             const {cards, pulls, pullsFull, globalFilters} = cardsDashboardProps;
+            const selectedCardsStorageKey = `selected-missing-cards-${collectionName}`;
+            const [selectedCards, setSelectedCards] = React.useState(() => {
+                try {
+                    const storedCards = window.localStorage.getItem(selectedCardsStorageKey);
+                    if (!storedCards) {
+                        return [];
+                    }
+                    const parsedCards = JSON.parse(storedCards);
+                    if (!Array.isArray(parsedCards) || !parsedCards.every(cardKey => typeof cardKey === 'string')) {
+                        console.error('Stored selected missing cards have an invalid format.');
+                        return [];
+                    }
+                    return parsedCards;
+                } catch (err) {
+                    console.error('Could not load selected missing cards: ', err);
+                    return [];
+                }
+            });
             const [missingCards, setMissingCards] = React.useState(() => formatCards(cards, {
                 ...globalFilters,
                 oneCardOnly: false,
@@ -602,10 +639,25 @@
             }));
 
             React.useEffect(() => {
-                setMissingCards(formatCards(cards, {...filters, ...globalFilters}));
+                try {
+                    window.localStorage.setItem(selectedCardsStorageKey, JSON.stringify(selectedCards));
+                } catch (err) {
+                    console.error('Could not save selected missing cards: ', err);
+                }
+            }, [selectedCards]);
+
+            const toggleSelection = (cardKey) => {
+                setSelectedCards(currentSelection => currentSelection.includes(cardKey)
+                    ? currentSelection.filter(selectedCard => selectedCard !== cardKey)
+                    : [...currentSelection, cardKey]
+                );
+            };
+
+            React.useEffect(() => {
+                setMissingCards(formatCards(cards, {...filters, ...globalFilters, selectedCards}));
                 setPackPulls(formatPulls(pulls, {...filters, ...globalFilters}));
                 setPackPullsFull(formatPulls(pullsFull, {...filters, ...globalFilters}));
-            }, [globalFilters, filters]);
+            }, [globalFilters, filters, selectedCards]);
 
             return (
                 <div>
@@ -613,6 +665,7 @@
                         refresh={(filters) => setFilters(filters)}
                         show={{
                             oneCardOnly: true,
+                            selectedOnly: true,
                             oneDiamond: true,
                             twoDiamonds: true,
                             threeDiamonds: true,
@@ -623,7 +676,6 @@
                             twoShinies: true,
                             threeStars: true,
                             crown: true,
-                            lastExtension: true,
                             tradableOnly: true,
                             unTradableOnly: true
                         }}
@@ -639,11 +691,18 @@
                             threeStars: true,
                             crown: true,
                             oneCardOnly: false,
+                            selectedOnly: false,
                             tradableOnly: false,
                             unTradableOnly: false
                         }}
                     />
-                    <MissingCards missingCards={missingCards} pulls={packPulls} pullsFull={packPullsFull}/>
+                    <MissingCards
+                        missingCards={missingCards}
+                        pulls={packPulls}
+                        pullsFull={packPullsFull}
+                        selectedCards={selectedCards}
+                        toggleSelection={toggleSelection}
+                    />
                 </div>
             )
         };
