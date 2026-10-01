@@ -1006,9 +1006,9 @@
 
                     for (const duplicate of duplicates) {
                         const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
-                        if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity !== 0) {
+                        // if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity !== 0) {
                             collection[duplicate.set_id].cards[duplicatedCardIndex].quantity = newQuantity + deltaQuantity;
-                        }
+                        //}
                     }
                 } else {
                     collection[set].cards[cardIndex].quantity += deltaQuantity;

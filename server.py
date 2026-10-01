@@ -117,7 +117,7 @@ def groupMissingCards(cards):
 
 def getMissingCards(collection, collectionName, fullCollection):
     missingCards = collection.groupby(by=["name", "element", "subtype", "health", "attacks", "weakness", "abilities"], as_index=False).apply(groupMissingCards)
-    deluxeExCards = fullCollection.query('set_id == "A4B" and quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
+    deluxeExCards = fullCollection.query('(set_id == "A4B" or set_id == "B4B") and quantity < 2 and rarityOrder < 5 and rarity != -1').sort_values(by=['quantity', 'rarity', 'set', 'card_id'], ascending=[True, False, True, True])
     if not missingCards.empty:
         missingCards = missingCards.reset_index()
         missingCards = missingCards[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name','quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
