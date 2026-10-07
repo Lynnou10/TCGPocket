@@ -124,7 +124,7 @@ def getMissingCards(collection, collectionName, fullCollection):
         missingCards = missingCards.query('quantity < 2 and rarity != -1 and rarityOrder < 100').sort_values(by=['quantity', 'rarityOrder', 'rarity', 'set', 'card_id'], ascending=[True, True, False, True, True])
         rarityThresholdMissing = collection.query('quantity == 0 and rarityOrder >= 5 and rarityOrder < 100 and rarity != -1')[['set_id', 'card_id', 'set', 'name', 'french_name', 'pack', 'pack_french_name', 'quantity', 'rarity', 'rarityOrder', 'tradeCost', 'pointCost']]
         missingCards = pd.concat([missingCards, rarityThresholdMissing, deluxeExCards])
-        missingCards = missingCards.drop_duplicates(subset=['set_id', 'card_id'])
+        missingCards = missingCards.drop_duplicates(subset=['set_id', 'card_id'], keep='last')
 
         text_columns = ['name', 'french_name', 'pack', 'pack_french_name', 'rarity']
         for column in text_columns:

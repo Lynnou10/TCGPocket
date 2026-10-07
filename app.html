@@ -939,39 +939,32 @@
 
         const CollectionCard = (cardProps) => {
             const {set, collectionCard, updateCardQuantity} = cardProps;
-            const [card, setCard] = React.useState(collectionCard);
-
-            const handleClick = (e) => {
-                if (e.type === 'click') {
-                    const newQuantity = updateCardQuantity(set, collectionCard.card_id, 1);
-                    setCard({...card, quantity: newQuantity})
-                    
-                } else if (e.type === 'contextmenu') {
-                    const newQuantity = updateCardQuantity(set, collectionCard.card_id, -1);
-                    if (newQuantity >= 0) {
-                        setCard({...card, quantity: newQuantity}) 
-                    }
-                }
+            const handleClick = () => {
+                updateCardQuantity(set, collectionCard.card_id, 1);
+            };
+            const handleContextMenu = (event) => {
+                event.preventDefault();
+                updateCardQuantity(set, collectionCard.card_id, -1);
             };
 
             return (
-                <button className={`clickable-card ${card.quantity === 0 ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleClick}>
+                <button className={`clickable-card ${collectionCard.quantity === 0 ? 'missing-card' : ''}`} onClick={handleClick} onContextMenu={handleContextMenu}>
                     <div className="card">
                         <div className="card-image">
                             <img
-                                id={`${set}_${card.card_id}`}
-                                src={getCardUrl(set, card.card_id, card.language)}
+                                id={`${set}_${collectionCard.card_id}`}
+                                src={getCardUrl(set, collectionCard.card_id, collectionCard.language)}
                                 onError={({ currentTarget }) => {
                                     currentTarget.onerror = null;
-                                    currentTarget.src=getBackupCardUrl(set, card.card_id, card.language)
+                                    currentTarget.src=getBackupCardUrl(set, collectionCard.card_id, collectionCard.language)
                                 }}
                             />
                         </div>
                         <div className="card-name">
-                            {card.card_id} - {card.displayName}
+                            {collectionCard.card_id} - {collectionCard.displayName}
                         </div>
                         <div className="card-counter">
-                            {card.quantity}
+                            {collectionCard.quantity}
                         </div>
                     </div>
                 </button>
@@ -987,38 +980,37 @@
             const [refreshCounter, setRefreshCounter] = React.useState(1)
 
             const updateCardQuantity = (set, cardId, deltaQuantity) => {
-
                 const duplicates = collectionCardDuplicates(set, cardId, duplicatedCards)
-                const cardIndex = collection[set].cards.findIndex(card => card.card_id === cardId);
-                const targetQuantity = collection[set].cards[cardIndex].quantity;
+                setCollection(currentCollection => {
+                    const cardIndex = currentCollection[set].cards.findIndex(card => card.card_id === cardId);
+                    let newQuantity = currentCollection[set].cards[cardIndex].quantity;
 
-                if (duplicates) {
-                    let newQuantity = targetQuantity;
-
-                    for (const duplicate of duplicates) {
-                        const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
-                        if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity > newQuantity) {
-                            newQuantity = collection[duplicate.set_id].cards[duplicatedCardIndex].quantity;
+                    if (duplicates) {
+                        for (const duplicate of duplicates) {
+                            const duplicateCard = currentCollection[duplicate.set_id].cards.find(card => card.card_id === duplicate.card_id);
+                            newQuantity = Math.max(newQuantity, duplicateCard.quantity);
                         }
                     }
 
-                    collection[set].cards[cardIndex].quantity = newQuantity + deltaQuantity;
+                    newQuantity = Math.max(0, newQuantity + deltaQuantity);
+                    const cardsToUpdate = [{set_id: set, card_id: cardId}, ...(duplicates || [])];
+                    const updatedCollection = {...currentCollection};
 
-                    for (const duplicate of duplicates) {
-                        const duplicatedCardIndex = collection[duplicate.set_id].cards.findIndex(card => card.card_id === duplicate.card_id);
-                        // if(collection[duplicate.set_id].cards[duplicatedCardIndex].quantity !== 0) {
-                            collection[duplicate.set_id].cards[duplicatedCardIndex].quantity = newQuantity + deltaQuantity;
-                        //}
+                    for (const cardToUpdate of cardsToUpdate) {
+                        updatedCollection[cardToUpdate.set_id] = {
+                            ...updatedCollection[cardToUpdate.set_id],
+                            cards: updatedCollection[cardToUpdate.set_id].cards.map(card =>
+                                card.card_id === cardToUpdate.card_id
+                                    ? {...card, quantity: newQuantity}
+                                    : card
+                            )
+                        };
                     }
-                } else {
-                    collection[set].cards[cardIndex].quantity += deltaQuantity;
-                }
 
-                setCollection(collection);
+                    return updatedCollection;
+                });
                 setShowSaveCollection(true);
-                setRefreshCounter(refreshCounter + 1);
-
-                return collection[set].cards[cardIndex].quantity;
+                setRefreshCounter(counter => counter + 1);
             };
 
             const saveCollection = () => 
