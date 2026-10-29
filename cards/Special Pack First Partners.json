@@ -1,0 +1,747 @@
+[
+  {
+    "id": "sp1-001",
+    "name": "Bulbasaur",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Leech Seed",
+        "effect": "Heal 10 damage from this Pokémon.",
+        "damage": "30",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-002",
+    "name": "Charmander",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Ember",
+        "effect": "Discard a Fire Energy from this Pokémon.",
+        "damage": "50",
+        "cost": [
+          "Fire",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-003",
+    "name": "Squirtle",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Bubble",
+        "effect": "Flip a coin. If heads, your opponent's Active Pokémon is now Paralyzed.",
+        "damage": "10",
+        "cost": [
+          "Water"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-004",
+    "name": "Chikorita",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Razor Leaf",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-005",
+    "name": "Cyndaquil",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Tackle",
+        "effect": null,
+        "damage": "20",
+        "cost": [
+          "Fire"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-006",
+    "name": "Totodile",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Bite",
+        "effect": null,
+        "damage": "60",
+        "cost": [
+          "Water",
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-007",
+    "name": "Treecko",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Pound",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-008",
+    "name": "Torchic",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Peck",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Fire",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-009",
+    "name": "Mudkip",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Mud-Slap",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-010",
+    "name": "Turtwig",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Razor Leaf",
+        "effect": null,
+        "damage": "60",
+        "cost": [
+          "Grass",
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-011",
+    "name": "Chimchar",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Fury Swipes",
+        "effect": "Flip 3 coins. This attack does 10 damage for each heads.",
+        "damage": "10",
+        "cost": [
+          "Fire"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-012",
+    "name": "Piplup",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Peck",
+        "effect": null,
+        "damage": "20",
+        "cost": [
+          "Water"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-013",
+    "name": "Snivy",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Vine Whip",
+        "effect": null,
+        "damage": "20",
+        "cost": [
+          "Grass"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-014",
+    "name": "Tepig",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Ember",
+        "effect": "Discard a Fire Energy from this Pokémon.",
+        "damage": "30",
+        "cost": [
+          "Fire"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-015",
+    "name": "Oshawott",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Razor Shell",
+        "effect": "Flip a coin. If heads, this attack does 30 more damage.",
+        "damage": "20+",
+        "cost": [
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-016",
+    "name": "Chespin",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Pin Missile",
+        "effect": "Flip 4 coins. This attack does 20 damage for each heads.",
+        "damage": "20",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-017",
+    "name": "Fennekin",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Scratch",
+        "effect": null,
+        "damage": "20",
+        "cost": [
+          "Fire"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-018",
+    "name": "Froakie",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Pound",
+        "effect": null,
+        "damage": "20",
+        "cost": [
+          "Water"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-019",
+    "name": "Rowlet",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Tackle",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-020",
+    "name": "Litten",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Fire Fang",
+        "effect": "Your opponent's Active Pokémon is now Burned.",
+        "damage": "40",
+        "cost": [
+          "Fire",
+          "Fire",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-021",
+    "name": "Popplio",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Disarming Voice",
+        "effect": "Your opponent's Active Pokémon is now Confused.",
+        "damage": "30",
+        "cost": [
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-022",
+    "name": "Grookey",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Branch Poke",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-023",
+    "name": "Scorbunny",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Double Kick",
+        "effect": "Flip 2 coins. This attack does 40 damage for each heads.",
+        "damage": "40",
+        "cost": [
+          "Fire",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-024",
+    "name": "Sobble",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Water Gun",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-025",
+    "name": "Sprigatito",
+    "element": "Grass",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Leafage",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Grass",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Fire",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-026",
+    "name": "Fuecoco",
+    "element": "Fire",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Flamethrower",
+        "effect": "Discard a Fire Energy from this Pokémon.",
+        "damage": "50",
+        "cost": [
+          "Fire",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Water",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-027",
+    "name": "Quaxly",
+    "element": "Water",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 60.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Wing Attack",
+        "effect": null,
+        "damage": "40",
+        "cost": [
+          "Water",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Lightning",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "One Star"
+  },
+  {
+    "id": "sp1-028",
+    "name": "Mew",
+    "element": "Psychic",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Psychic",
+        "effect": "This attack does 20 more damage for each Energy attached to your opponent's Active Pokémon.",
+        "damage": "30+",
+        "cost": [
+          "Psychic",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Darkness",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "Anomaly"
+  },
+  {
+    "id": "sp1-029",
+    "name": "Mew",
+    "element": "Psychic",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Psychic",
+        "effect": "This attack does 20 more damage for each Energy attached to your opponent's Active Pokémon.",
+        "damage": "30+",
+        "cost": [
+          "Psychic",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Darkness",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "Anomaly"
+  },
+  {
+    "id": "sp1-030",
+    "name": "Mew",
+    "element": "Psychic",
+    "type": "Pokemon",
+    "subtype": "Basic",
+    "health": 70.0,
+    "set": "Special Pack: First Partners (SP1)",
+    "pack": "All",
+    "attacks": [
+      {
+        "name": "Psychic",
+        "effect": "This attack does 20 more damage for each Energy attached to your opponent's Active Pokémon.",
+        "damage": "30+",
+        "cost": [
+          "Psychic",
+          "Colorless"
+        ]
+      }
+    ],
+    "weakness": "Darkness",
+    "abilities": [],
+    "evolvesFrom": null,
+    "rarity": "Anomaly"
+  }
+]

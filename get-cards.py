@@ -13,26 +13,26 @@ from unidecode import unidecode
 import json
 # https://pocket.limitlesstcg.com/cards/A4b/1
 
-set_id = 'B4b' # minuscule dans le a ou b
-set_title = 'Deluxe Pack Mega'
-set_name = 'Deluxe Pack: Mega (B4b)' # minuscule dans le a ou b
-
-i = 1
-max_card_id = 429
-
-shiniy_limit = 426
-
-
-
-
-# set_id = 'P-B'
-# set_title = 'Promos-B'
-# set_name = 'Promos-B (P-B)'
+# set_id = 'B4b' # minuscule dans le a ou b
+# set_title = 'Deluxe Pack Mega'
+# set_name = 'Deluxe Pack: Mega (B4b)' # minuscule dans le a ou b
 
 # i = 1
-# max_card_id = 86
+# max_card_id = 429
 
-# shiniy_limit = 1000
+# shiniy_limit = 426
+
+
+
+
+set_id = 'P-C' # minuscule dans le a ou b
+set_title = 'Promos-C'
+set_name = 'Promos-C (Promos-C)' # minuscule dans le a ou b
+
+i = 1
+max_card_id = 13
+
+shiniy_limit = 1000
 
 
 
