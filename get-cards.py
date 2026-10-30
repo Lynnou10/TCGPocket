@@ -27,7 +27,7 @@ import json
 
 set_id = 'P-C' # minuscule dans le a ou b
 set_title = 'Promos-C'
-set_name = 'Promos-C (Promos-C)' # minuscule dans le a ou b
+set_name = 'Promos-C (P-C)' # minuscule dans le a ou b
 
 i = 1
 max_card_id = 13
